@@ -9,4 +9,5 @@
 int main()
 {
     std::cout << "Hello World" << std::endl;
+    std::cout << "Just a Dynamcis" << std::endl;
 }
