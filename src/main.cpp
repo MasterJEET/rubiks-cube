@@ -1,5 +1,5 @@
 /*
- * @author: masterjeet
+ * @author: MasterJEET
  * @mail  : masterjeet9@gmail.com
  *
  * */
@@ -9,5 +9,6 @@
 int main()
 {
     std::cout << "Hello World" << std::endl;
-    std::cout << "Just a Dynamcis" << std::endl;
+    std::cout << "Jungle Dynamics" << std::endl;
+    return 0;
 }
