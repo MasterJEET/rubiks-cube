@@ -10,8 +10,14 @@
 
 int main()
 {
-    Position P = Position(Front, Right, Up);
-    std::vector<Face> *vface = P.getFace();
-    std::cout << (*vface)[1] << std::endl;
+    try{
+    Position P = Position(Right);
+    //P.setSide(Up,Left,Back);
+    PositionType *ptype = P.getType();
+    std::cout << *ptype << std::endl;
+    }
+    catch(std::runtime_error& err){
+        std::cout << err.what() << std::endl;
+    }
     return 0;
 }
