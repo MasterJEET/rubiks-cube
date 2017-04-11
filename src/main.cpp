@@ -1,14 +1,17 @@
 /*
  * @author: MasterJEET
- * @mail  : masterjeet9@gmail.com
+ * @email : masterjeet9@gmail.com
+ * @date  : 10th Apr 2017
  *
  * */
 
 #include <iostream>
+#include "Position.h"
 
 int main()
 {
-    std::cout << "Hello World" << std::endl;
-    std::cout << "Jungle Dynamics" << std::endl;
+    Position P = Position(Front, Right, Up);
+    std::vector<Face> *vface = P.getFace();
+    std::cout << (*vface)[1] << std::endl;
     return 0;
 }

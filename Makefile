@@ -2,22 +2,18 @@
 # @email : masterjeet9@gmail.com
 
 CXX := g++
-CXXFLAGS := -g -std=c++11
+C11 := -std=c++11
+CXXFLAGS := -g $(C11)
 SRC := src
 OBJ := obj
 BIN := bin
 INCLUDES := -I ./include
+OBJECTS := $(OBJ)/main.o $(OBJ)/Position.o
 
 # Linking command:
-main : main.o
-	$(CXX) $(OBJ)/main.o -o $(BIN)/main
+$(BIN)/cube : $(OBJECTS)
+	$(CXX) $(C11) $^ -o $@
 
-Position : Position.o
-	$(CXX) $(OBJ)/Position.o -o $(BIN)/Position
+$(OBJ)/%.o : $(SRC)/%.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
 
-# Compiling command:
-main.o : $(SRC)/main.cpp
-	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $(SRC)/main.cpp -o $(OBJ)/main.o
-
-Position.o : $(SRC)/Position.cpp
-	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $(SRC)/Position.cpp -o $(OBJ)/Position.o
