@@ -8,29 +8,30 @@
 #include "Position.h"
 #include <iostream>
 
-Position::Position():
-    Position(F_UNDEFINED, F_UNDEFINED, F_UNDEFINED){
+Position::Position():ptype(P_UNDEFINED){
     std::cout << "No arguments passed..." << std::endl;
 }
 
+/*
 Position::Position(PositionType ptype):
-    Position(F_UNDEFINED, F_UNDEFINED, F_UNDEFINED){
-    setType(ptype);
+    ptype(ptype){
+        //Nothing for now
 }
+*/
 
 Position::Position(FaceSide first):
-    Position(first, F_UNDEFINED, F_UNDEFINED){
+    vecSide{first}, ptype(Center){
         //Noting for now
     }
 
 Position::Position(FaceSide first, FaceSide second):
-    Position(first, second, F_UNDEFINED){
+    vecSide{first, second}, ptype(Edge){
         //Nothig for now
     }
 
 Position::Position(FaceSide first, FaceSide second, FaceSide third):
-    vecSide(SIZE, F_UNDEFINED){
-    setSide(first, second, third);
+    vecSide{first, second, third}, ptype(Corner){
+        //Nothing for now
 }
 
 PositionType *Position::getType()
@@ -43,6 +44,8 @@ std::vector<FaceSide> *Position::getSide()
     return &(this->vecSide);
 }
 
+/*
+ * Uncommenting won't work as logic is not completed, not required for this function
 void Position::setSide(std::size_t pos, FaceSide face){
     if(pos < 0 || pos >= SIZE){
         std::cout << "pos: 0 <= pos < " << SIZE << "..." << std::endl;
@@ -50,6 +53,7 @@ void Position::setSide(std::size_t pos, FaceSide face){
     }
     vecSide[pos]=face;
 }
+*/
 
 void Position::setSide(FaceSide first){
     setSide(first, F_UNDEFINED, F_UNDEFINED);
@@ -60,28 +64,34 @@ void Position::setSide(FaceSide first, FaceSide second){
 }
 
 void Position::setSide(FaceSide first, FaceSide second, FaceSide third){
+    if(vecSide.size()){
+        std::cout << "Faces are already set..." << std::endl;
+        return;
+    }
     if(anyOpposite(first, second, third))
         throw std::runtime_error(__func__ + std::string(": Contain opposite faces."));
     if(first != F_UNDEFINED)
     {
-        vecSide[0]=first;
-        setType(Center);
+        vecSide.push_back(first);
+        ptype = Center;
     }
     if(second != F_UNDEFINED)
     {
-        vecSide[1]=second;
-        setType(Edge);
+        vecSide.push_back(second);
+        ptype = Edge;
     }
     if(third != F_UNDEFINED)
     {
-        vecSide[2]=third;
-        setType(Corner);
+        vecSide.push_back(third);
+        ptype = Corner;
     }
 }
 
+/*
 void Position::setType(PositionType ptype){
     this->ptype = ptype;
 }
+*/
 
 bool Position::areOpposite(FaceSide first, FaceSide second)
 {
@@ -98,12 +108,3 @@ bool Position::anyOpposite(FaceSide first, FaceSide second, FaceSide third)
 {
     return (areOpposite(first, second) || areOpposite(first, third) || areOpposite(second, third));
 }
-/*
-int main(int argc, char **argv)
-{
-    Position P = Position(Edge);
-    PositionType *ptype = P.getType();
-    std::cout << Center << std::endl;
-    std::cout << argv[0] << std::endl;
-    return 0;
-}*/

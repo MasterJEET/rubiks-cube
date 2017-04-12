@@ -11,10 +11,13 @@
 int main()
 {
     try{
-    Position P = Position(Right);
-    //P.setSide(Up,Left,Back);
+    Position P = Position();
+    P.setSide(Front, Up);
+    P.setSide(Down);
     PositionType *ptype = P.getType();
+    std::vector<FaceSide> *vecSide = P.getSide();
     std::cout << *ptype << std::endl;
+    std::cout << vecSide->size() << std::endl;
     }
     catch(std::runtime_error& err){
         std::cout << err.what() << std::endl;
