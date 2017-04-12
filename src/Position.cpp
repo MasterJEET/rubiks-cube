@@ -44,6 +44,14 @@ std::vector<FaceSide> *Position::getSide()
     return &(this->vecSide);
 }
 
+FaceSide Position::getFirstSide(){
+    if(!vecSide.size()){
+        std::cout << __func__ << ": FaceSides not yet assigned..." << std::endl;
+        return F_UNDEFINED;
+    }
+    return vecSide[0];
+}
+
 /*
  * Uncommenting won't work as logic is not completed, not required for this function
 void Position::setSide(std::size_t pos, FaceSide face){
