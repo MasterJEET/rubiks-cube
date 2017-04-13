@@ -31,7 +31,7 @@ class Position {
         Position(FaceSide first, FaceSide second);                                  //For initializing two FaceSides from parameter list, specifies which edge
         Position(FaceSide first, FaceSide second, FaceSide third);                  //For initializing all three FaceSides from parameter list, specifies which corner
         std::vector<FaceSide> *getSide();                                           //Returns pointer to 'vecSide'
-        FaceSide getFirstSide();                                                    //Returns first FaceSide of vecSide i.e. vecSide[0]
+        FaceSide *getFirstSide();                                                    //Returns first FaceSide of vecSide i.e. vecSide[0]
         PositionType *getType();                                                    //Returns pointer to 'ptype'
         //void setSide(std::size_t pos, FaceSide face);                             //Unimplemented as not required
         void setSide(FaceSide first);                                               //Sets FaceSide, which Center
