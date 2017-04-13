@@ -23,6 +23,8 @@ class Facelet {
         Facelet(Color col, Position pos);                                           //Initialization from Color and Position
         Color getColor();
         Position *getPosition();
+        PositionType *getPositionType();
+        FaceSide *getFaceSide();
         void setColor(Color col);
         void setPosition(Position pos);
 };

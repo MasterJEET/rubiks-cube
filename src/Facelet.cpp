@@ -31,6 +31,12 @@ Position *Facelet::getPosition(){
     return &pos;
 }
 
+PositionType *Position::getPositionType(){
+    return pos.getType();
+}
+
+
+
 void Facelet::setColor(Color col){
     this->col = col;
 }
