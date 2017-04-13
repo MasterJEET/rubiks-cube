@@ -44,12 +44,12 @@ std::vector<FaceSide> *Position::getSide()
     return &(this->vecSide);
 }
 
-FaceSide Position::getFirstSide(){
+FaceSide *Position::getFirstSide(){
     if(!vecSide.size()){
         std::cout << __func__ << ": FaceSides not yet assigned..." << std::endl;
-        return F_UNDEFINED;
+        return NULL;
     }
-    return vecSide[0];
+    return &vecSide[0];
 }
 
 /*
