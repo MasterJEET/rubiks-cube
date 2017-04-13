@@ -12,6 +12,9 @@
 # endif
 #endif
 
+#ifndef POSITION_H
+#define POSITION_H
+
 #include <vector>
 #include <stdexcept>
 
@@ -39,3 +42,5 @@ class Position {
         void setSide(FaceSide first, FaceSide second, FaceSide third);              //Sets all FaceSides, which Corner
         //void setType(PositionType ptype);                                         //Sets PositionType, Unimplemented
 };
+
+#endif

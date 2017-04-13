@@ -6,10 +6,15 @@
  * */
 
 #include <iostream>
-#include "Position.h"
+#include "Facelet.h"
+
+//Just for few testing
 
 int main()
 {
+    Position pos(Front);
+    Facelet F({Front,Left,Up});
+    /*
     try{
     Position P = Position();
     P.setSide(Front, Up);
@@ -21,6 +26,6 @@ int main()
     }
     catch(std::runtime_error& err){
         std::cout << err.what() << std::endl;
-    }
+    }*/
     return 0;
 }

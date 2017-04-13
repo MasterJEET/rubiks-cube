@@ -8,7 +8,7 @@ SRC := src
 OBJ := obj
 BIN := bin
 INCLUDES := -I./include
-OBJECTS := $(OBJ)/main.o $(OBJ)/Position.o
+OBJECTS := $(OBJ)/main.o $(OBJ)/Position.o $(OBJ)/Facelet.o
 
 # Linking command:
 $(BIN)/cube : $(OBJECTS)
