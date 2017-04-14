@@ -23,19 +23,21 @@ Facelet::Facelet(Color col, Position pos): col(col), pos(pos){
     //Nothing for now
 }
 
-Color Facelet::getColor(){
-    return col;
+Color *Facelet::getColor(){
+    return &col;
 }
 
 Position *Facelet::getPosition(){
     return &pos;
 }
 
-PositionType *Position::getPositionType(){
+PositionType *Facelet::getPositionType(){
     return pos.getType();
 }
 
-
+FaceSide *Facelet::getFaceSide(){
+    return pos.getFirstSide();
+}
 
 void Facelet::setColor(Color col){
     this->col = col;

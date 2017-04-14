@@ -21,9 +21,9 @@ class Facelet {
         Facelet(Color col);                                                         //Initialization from Color
         Facelet(Position pos);                                                      //Initialization from Position
         Facelet(Color col, Position pos);                                           //Initialization from Color and Position
-        Color getColor();
-        Position *getPosition();
-        PositionType *getPositionType();
+        Color *getColor();                                                          //Returns pointer to 'col'
+        Position *getPosition();                                                    //Returns pointer to 'pos'
+        PositionType *getPositionType();                                            //Returns pointer to 'ptype of pos'
         FaceSide *getFaceSide();
         void setColor(Color col);
         void setPosition(Position pos);

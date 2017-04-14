@@ -19,19 +19,16 @@ Position::Position(PositionType ptype):
 }
 */
 
-Position::Position(FaceSide first):
-    vecSide{first}, ptype(Center){
+Position::Position(FaceSide first): Position(first, F_UNDEFINED, F_UNDEFINED){
         //Noting for now
     }
 
-Position::Position(FaceSide first, FaceSide second):
-    vecSide{first, second}, ptype(Edge){
+Position::Position(FaceSide first, FaceSide second): Position(first, second, F_UNDEFINED){
         //Nothig for now
     }
 
-Position::Position(FaceSide first, FaceSide second, FaceSide third):
-    vecSide{first, second, third}, ptype(Corner){
-        //Nothing for now
+Position::Position(FaceSide first, FaceSide second, FaceSide third){
+        setSide(first, second, third);
 }
 
 PositionType *Position::getType()
