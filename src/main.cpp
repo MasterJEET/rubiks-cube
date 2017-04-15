@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include "Facelet.h"
+#include "common.h"
 
 //Just for few testing
 

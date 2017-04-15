@@ -10,7 +10,7 @@
 
 #include "Position.h"
 
-enum Color { White, Yellow, Orange, Red, Green, Blue, C_UNDEFINED = -1 };
+//enum Color { White, Yellow, Orange, Red, Green, Blue, C_UNDEFINED = -1 };
 
 class Facelet {
     private:

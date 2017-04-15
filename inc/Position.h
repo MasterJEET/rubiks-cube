@@ -17,9 +17,10 @@
 
 #include <vector>
 #include <stdexcept>
+#include "common.h"
 
-enum FaceSide { Front, Back, Up, Down, Left, Right, F_UNDEFINED = -1 };
-enum PositionType { Center, Edge, Corner, P_UNDEFINED = -1 };
+//enum FaceSide { Front, Back, Up, Down, Left, Right, F_UNDEFINED = -1 };
+//enum PositionType { Center, Edge, Corner, P_UNDEFINED = -1 };
 
 class Position {
     private:
