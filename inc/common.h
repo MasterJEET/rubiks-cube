@@ -20,13 +20,9 @@ enum Color { White, Yellow, Orange, Red, Green, Blue, C_UNDEFINED = -1 };
 enum FaceSide { Front, Back, Up, Down, Left, Right, F_UNDEFINED = -1 };
 enum PositionType { Center, Edge, Corner, P_UNDEFINED = -1 };
 
-std::string _Color(Color col){
-    switch (col){
-        case White:
-            return std::string("White");
-        default:
-            return std::string("C_UNDEFINED");
-    }
-}
+#define X(a, b) b
+//#include "Color.def"
+
+#define MIN(a,b) a<b?a:b
 
 #endif

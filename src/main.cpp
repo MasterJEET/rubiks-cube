@@ -21,6 +21,8 @@ int main()
     std::cout << *pptype << std::endl;
     FaceSide *FS = F.getFaceSide();
     std::cout << *FS << std::endl;
+    int num = MIN(12,34);
+    std::cout << "MIN: " << num << std::endl;
     }
     catch(std::runtime_error& err){
         std::cout << err.what() << std::endl;
