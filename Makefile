@@ -7,7 +7,7 @@ CXXFLAGS := -g $(C11)
 SRC := src
 OBJ := obj
 BIN := bin
-INCLUDES := -I./inc -I./obj
+INCLUDES := -I./inc
 OBJECTS := $(OBJ)/main.o $(OBJ)/Position.o $(OBJ)/Facelet.o $(OBJ)/common.o
 TARGET := $(BIN)/cube
 
