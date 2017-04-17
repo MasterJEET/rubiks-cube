@@ -14,13 +14,13 @@
 class Facelet {
     private:
         const Color col;
-        FaceSide *fac;
+        const FaceSide *fac;
     public:
         Facelet(Color col);                                                         //Initialization from Color
-        Facelet(Color col, FaceSide fac);                                           //Initialization from Color and Position
+        Facelet(Color col, FaceSide &fac);                                           //Initialization from Color and Position
         Facelet(Color col, FaceSide *fac);                                          //Initialization from Color and Position
         const Color *getColor();                                                    //Returns pointer to 'col'
-        FaceSide *getFaceSide();                                                    //Returns 'fac'
+        const FaceSide *getFaceSide();                                                    //Returns 'fac'
         void setFaceSide(FaceSide *fac);                                            //Sets 'fac'
 };
 
