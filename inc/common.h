@@ -7,22 +7,44 @@
 
 #ifndef COMMON_H
 #define COMMON_H
+#include <ostream>
 
-#if __STDC_VERSION__ < 199901L
-# if __GNUC__ >= 2
-#  define __func__ __FUNCTION__
-# else
-#  define __func__ "<unknown>"
-# endif
-#endif
+#   if __STDC_VERSION__ < 199901L
+#    if __GNUC__ >= 2
+#     define __func__ __FUNCTION__
+#    else
+#     define __func__ "<unknown>"
+#    endif
+#   endif
 
-enum Color { White, Yellow, Orange, Red, Green, Blue, C_UNDEFINED = -1 };
-enum FaceSide { Front, Back, Up, Down, Left, Right, F_UNDEFINED = -1 };
-enum PositionType { Center, Edge, Corner, P_UNDEFINED = -1 };
+enum Color {
+#   define X(a) a
+#   include "Color.def"
+#   undef X
+};
 
-#define X(a, b) b
-//#include "Color.def"
+enum FaceSide {
+#   define X(a) a
+#   include "FaceSide.def"
+#   undef X
+};
 
-#define MIN(a,b) a<b?a:b
+enum PositionType {
+#   define X(a) a
+#   include "PositionType.def"
+#   undef X
+};
+
+extern const char *Color_str[];
+
+extern const char *FaceSide_str[];
+
+extern const char *PositionType_str[];
+
+extern std::ostream& operator <<(std::ostream& os, Color);
+
+extern std::ostream& operator <<(std::ostream& os, FaceSide);
+
+extern std::ostream& operator <<(std::ostream& os, PositionType);
 
 #endif

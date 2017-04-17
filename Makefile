@@ -7,13 +7,22 @@ CXXFLAGS := -g $(C11)
 SRC := src
 OBJ := obj
 BIN := bin
-INCLUDES := -I./inc
-OBJECTS := $(OBJ)/main.o $(OBJ)/Position.o $(OBJ)/Facelet.o
+INCLUDES := -I./inc -I./obj
+OBJECTS := $(OBJ)/main.o $(OBJ)/Position.o $(OBJ)/Facelet.o $(OBJ)/common.o
+TARGET := $(BIN)/cube
 
-# Linking command:
-$(BIN)/cube : $(OBJECTS)
+all: $(TARGET)
+
+$(TARGET) : $(OBJECTS)
 	$(CXX) $(C11) $^ -o $@
 
 $(OBJ)/%.o : $(SRC)/%.cpp
 	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
 
+clean:
+	rm -r obj bin
+
+makedir:
+	mkdir bin obj
+
+.PHONY: all clean makedir 

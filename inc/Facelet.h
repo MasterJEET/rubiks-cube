@@ -9,6 +9,7 @@
 #define FACELET_H
 
 #include "Position.h"
+#include "common.h"
 
 //enum Color { White, Yellow, Orange, Red, Green, Blue, C_UNDEFINED = -1 };
 
