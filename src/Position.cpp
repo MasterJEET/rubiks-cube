@@ -98,7 +98,7 @@ void Position::setType(PositionType ptype){
 }
 */
 
-bool Position::areOpposite(FaceSide first, FaceSide second)
+/*bool Position::areOpposite(FaceSide first, FaceSide second)
 {
     if((first == Front && second == Back) || (first == Back && second == Front))
         return true;
@@ -112,4 +112,4 @@ bool Position::areOpposite(FaceSide first, FaceSide second)
 bool Position::anyOpposite(FaceSide first, FaceSide second, FaceSide third)
 {
     return (areOpposite(first, second) || areOpposite(first, third) || areOpposite(second, third));
-}
+}*/

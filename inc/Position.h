@@ -19,8 +19,8 @@ class Position {
     private:
         std::vector<FaceSide> vecSide;                                              //Holds FaceSides
         PositionType ptype;                                                         //Holds PositionType
-        bool areOpposite(FaceSide first, FaceSide second);                          //Check if given pair of FaceSides are opposite of each other
-        bool anyOpposite(FaceSide first, FaceSide second, FaceSide third);          //Check if any of the given FaceSides form opposite FaceSides
+//        bool areOpposite(FaceSide first, FaceSide second);                          //Check if given pair of FaceSides are opposite of each other
+//        bool anyOpposite(FaceSide first, FaceSide second, FaceSide third);          //Check if any of the given FaceSides form opposite FaceSides
     public:
         Position();                                                                 //Default constructor
         //Position(PositionType ptype);                                             //For initializing PsoitionType
