@@ -31,3 +31,14 @@ const std::vector<FaceSide> *Position::getSide()
 {
     return &(this->vecSide);
 }
+
+std::ostream& operator<<(std::ostream& os, Position P){
+    os << "Position: ptype = " << *P.getType();
+    auto pvecSide = P.getSide();
+    os << ", vecSide = { ";
+    for(const auto& face : *pvecSide){
+        os << face << " ";
+    }
+    os << "}";
+    return os;
+}

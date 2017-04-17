@@ -24,4 +24,6 @@ class Position {
         const PositionType *getType();                                                    //Returns pointer to 'ptype'
 };
 
+std::ostream& operator<<(std::ostream& os, Position P);
+
 #endif
