@@ -6,18 +6,20 @@
  * */
 
 #include <iostream>
-#include "Position.h"
+#include "Facelet.h"
+
+//Just for few testing
 
 int main()
 {
     try{
-    Position P = Position();
-    P.setSide(Front, Up);
-    P.setSide(Down);
-    PositionType *ptype = P.getType();
-    std::vector<FaceSide> *vecSide = P.getSide();
-    std::cout << *ptype << std::endl;
-    std::cout << vecSide->size() << std::endl;
+    Position pos(Right,Up,Front);
+    Facelet F = Facelet(pos);
+    std::cout << *(F.getColor()) << std::endl;
+    PositionType *pptype = F.getPositionType();
+    std::cout << *pptype << std::endl;
+    FaceSide *FS = F.getFaceSide();
+    std::cout << *FS << std::endl;
     }
     catch(std::runtime_error& err){
         std::cout << err.what() << std::endl;

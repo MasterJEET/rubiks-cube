@@ -4,19 +4,16 @@
  * @date  : 10th Apr 2017
  *
  * */
-#if __STDC_VERSION__ < 199901L
-# if __GNUC__ >= 2
-#  define __func__ __FUNCTION__
-# else
-#  define __func__ "<unknown>"
-# endif
-#endif
+
+#ifndef POSITION_H
+#define POSITION_H
 
 #include <vector>
 #include <stdexcept>
+#include "common.h"
 
-enum FaceSide { Front, Back, Up, Down, Left, Right, F_UNDEFINED = -1 };
-enum PositionType { Center, Edge, Corner, P_UNDEFINED = -1 };
+//enum FaceSide { Front, Back, Up, Down, Left, Right, F_UNDEFINED = -1 };
+//enum PositionType { Center, Edge, Corner, P_UNDEFINED = -1 };
 
 class Position {
     private:
@@ -39,3 +36,5 @@ class Position {
         void setSide(FaceSide first, FaceSide second, FaceSide third);              //Sets all FaceSides, which Corner
         //void setType(PositionType ptype);                                         //Sets PositionType, Unimplemented
 };
+
+#endif
