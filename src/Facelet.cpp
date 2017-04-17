@@ -7,42 +7,22 @@
 
 #include "Facelet.h"
 
-Facelet::Facelet(): col(C_UNDEFINED){
+Facelet::Facelet(Color col): Facelet(col, nullptr){
     //Nothing for now
 }
 
-Facelet::Facelet(Color col): col(col){
+Facelet::Facelet(Color col, FaceSide *fac): col(col), fac(fac){
     //Nothing for now
 }
 
-Facelet::Facelet(Position pos): col(C_UNDEFINED), pos(pos){
-    //Nothing for now
-}
-
-Facelet::Facelet(Color col, Position pos): col(col), pos(pos){
-    //Nothing for now
-}
-
-Color *Facelet::getColor(){
+const Color *Facelet::getColor(){
     return &col;
 }
 
-Position *Facelet::getPosition(){
-    return &pos;
-}
-
-PositionType *Facelet::getPositionType(){
-    return pos.getType();
-}
-
 FaceSide *Facelet::getFaceSide(){
-    return pos.getFirstSide();
+    return fac;
 }
 
-void Facelet::setColor(Color col){
-    this->col = col;
-}
-
-void Facelet::setPosition(Position pos){
-    this->pos = pos;
+void Facelet::setFaceSide(FaceSide *fac){
+    this->fac = fac;
 }
