@@ -11,6 +11,10 @@ Facelet::Facelet(Color col): Facelet(col, nullptr){
     //Nothing for now
 }
 
+Facelet::Facelet(Color col, FaceSide fac): Facelet(col, &fac){
+    //Nothing for now
+}
+
 Facelet::Facelet(Color col, FaceSide *fac): col(col), fac(fac){
     //Nothing for now
 }
@@ -26,3 +30,8 @@ FaceSide *Facelet::getFaceSide(){
 void Facelet::setFaceSide(FaceSide *fac){
     this->fac = fac;
 }
+
+std::ostream& operator<<(std::ostream& os, Facelet F){
+    return os << "Facelet: col = " << *F.getColor() << ", *fac = " << *F.getFaceSide() << ",";
+}
+

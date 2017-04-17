@@ -8,8 +8,8 @@
 #ifndef FACELET_H
 #define FACELET_H
 
-#include "Position.h"
 #include "common.h"
+#include <ostream>
 
 class Facelet {
     private:
@@ -17,10 +17,13 @@ class Facelet {
         FaceSide *fac;
     public:
         Facelet(Color col);                                                         //Initialization from Color
+        Facelet(Color col, FaceSide fac);                                           //Initialization from Color and Position
         Facelet(Color col, FaceSide *fac);                                          //Initialization from Color and Position
         const Color *getColor();                                                    //Returns pointer to 'col'
         FaceSide *getFaceSide();                                                    //Returns 'fac'
         void setFaceSide(FaceSide *fac);                                            //Sets 'fac'
 };
+
+std::ostream& operator<<(std::ostream& os, Facelet F);
 
 #endif
