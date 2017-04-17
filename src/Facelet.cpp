@@ -7,17 +7,17 @@
 
 #include "Facelet.h"
 
-Facelet::Facelet(Color col): Facelet(col, nullptr){
+/*Facelet::Facelet(Color col): Facelet(col, nullptr){
+    //Nothing for now
+}*/
+
+Facelet::Facelet(Color col, FaceSide &fac): col(col), fac(&fac){
     //Nothing for now
 }
 
-Facelet::Facelet(Color col, FaceSide &fac): Facelet(col, &fac){
+/*Facelet::Facelet(Color col, FaceSide *fac): col(col), fac(fac){
     //Nothing for now
-}
-
-Facelet::Facelet(Color col, FaceSide *fac): col(col), fac(fac){
-    //Nothing for now
-}
+}*/
 
 const Color *Facelet::getColor(){
     return &col;
