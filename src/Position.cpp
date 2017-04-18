@@ -17,7 +17,7 @@ Position::Position(FaceSide first, FaceSide second): vecSide{first, second}, pty
         throw std::runtime_error(__func__ + std::string(": Contain opposite faces."));
 }
 
-Position::Position(FaceSide first, FaceSide second, FaceSide third): vecSide{first, second, third}, ptype(Center){
+Position::Position(FaceSide first, FaceSide second, FaceSide third): vecSide{first, second, third}, ptype(Corner){
     if(anyOpposite(first, second, third))
         throw std::runtime_error(__func__ + std::string(": Contain opposite faces."));
 }
