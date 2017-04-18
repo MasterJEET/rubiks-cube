@@ -8,7 +8,7 @@ SRC := src
 OBJ := obj
 BIN := bin
 INCLUDES := -I./inc
-OBJECTS := $(OBJ)/main.o $(OBJ)/Position.o $(OBJ)/Facelet.o $(OBJ)/common.o
+OBJECTS := $(OBJ)/main.o $(OBJ)/Position.o $(OBJ)/Facelet.o $(OBJ)/common.o $(OBJ)/Face.o
 TARGET := $(BIN)/cube
 
 all: $(TARGET)

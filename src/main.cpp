@@ -1,25 +1,35 @@
 /*
  * @author: MasterJEET
  * @email : masterjeet9@gmail.com
- * @date  : 10th Apr 2017
  *
  * */
 
 #include <iostream>
-#include "Facelet.h"
-#include "Position.h"
+#include "Face.h"
 
 //Just for few testing
 
 int main()
 {
-    try{
+    /*
+    FaceSide d = Down;
+    FaceSide l = Left;
+    FaceSide f = Front;
+    Facelet F(Red, d);
+    Facelet F2(White, l);
+    Facelet F3(Green, f);
+    Position pos(d, f, l);
+    Cubelet cub(pos,F,F2,F3);
+    //auto fac = (*cub.getFacelet())[0];
+    //std::cout << *fac.getColor() << std::endl;
+    std::cout << cub << std::endl;
+    Position pos2(l,d,f);
+    cub.setPosition(&pos2);
+    std::cout << cub << std::endl;
+    */
 
-        Facelet fac(White, Up);
-        std::cout << fac << std::endl;
-    }
-    catch(std::runtime_error& err){
-        std::cout << err.what() << std::endl;
-    }
+    //Testcases for Face.h
+    const FaceSide fac = Front;
+    Face F = Face(fac);
     return 0;
 }
