@@ -11,6 +11,14 @@ Cubelet::Cubelet(Position &pos, Facelet fac1): ppos(&pos), vecFac{fac1}{
     //Nothing for now
 }
 
+Cubelet::Cubelet(Position &pos, Facelet fac1, Facelet fac2): ppos(&pos), vecFac{fac1, fac2}{
+    //Nothing for now
+}
+
+Cubelet::Cubelet(Position &pos, Facelet fac1, Facelet fac2, Facelet fac3): ppos(&pos), vecFac{fac1, fac2, fac3}{
+    //Nothing for now
+}
+
 const std::vector<Facelet> *Cubelet::getFacelet(){
     return &vecFac;
 };
@@ -24,6 +32,11 @@ void Cubelet::setPosition(Position *ppos){
 }
 
 std::ostream& operator<<(std::ostream& os, Cubelet C){
-    return os << *C.getPosition();
+    os << "Colors: { ";
+    for(auto it: *C.getFacelet())
+        os << *it.getColor() << " ";
+    os << "} ";
+    os << *C.getPosition();
+    return os;
 };
 

@@ -17,9 +17,9 @@ class Cubelet{
         const std::vector<Facelet> vecFac;
         const Position *ppos;
     public:
-        Cubelet(Position &pos, Facelet fac1);
-        //Cubelet(Position &pos, Facelet fac1, Facelet fac2);
-        //Cubelet(Position &pos, Facelet fac1, Facelet fac2, Facelet fac3);
+        Cubelet(Position &pos, Facelet fac1);                                                           //Constructor for Center cubelets
+        Cubelet(Position &pos, Facelet fac1, Facelet fac2);                                             //Constructor for Edge cubelets
+        Cubelet(Position &pos, Facelet fac1, Facelet fac2, Facelet fac3);                               //Constructor for Corner cubelets
         const std::vector<Facelet> *getFacelet();
         const Position *getPosition();
         void setPosition(Position *ppos);
