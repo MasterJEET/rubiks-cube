@@ -20,9 +20,7 @@ class Face{
         mapFacelet mFace;
     public:
         Face(FaceSide &fs);
-        Face(FaceSide &fs, std::istream &is): fs(fs){
-            //Nothing for now
-        };
+        Face(FaceSide &fs, std::istream &is);
 };
 
 #endif

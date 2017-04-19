@@ -1,3 +1,3 @@
-X(Center),
-X(Edge),
-X(Corner)
+X(Center,"CE")
+X(Edge,"ED")
+X(Corner,"CO")

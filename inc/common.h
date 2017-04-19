@@ -18,23 +18,24 @@
 #    endif
 #   endif
 
+//============ Define enum start ===========
+#   define X(a,b) a,
 enum Color {
-#   define X(a) a
 #   include "Color.def"
-#   undef X
+    C_UNDEFINED
 };
 
 enum FaceSide {
-#   define X(a) a
 #   include "FaceSide.def"
-#   undef X
+    F_UNDEFINED
 };
 
 enum PositionType {
-#   define X(a) a
 #   include "PositionType.def"
-#   undef X
+    P_UNDEFINED
 };
+#   undef X
+//=========== Define enum end =============
 
 extern const char *Color_str[];
 
@@ -51,5 +52,10 @@ extern std::ostream& operator <<(std::ostream& os, PositionType);
 bool areOpposite(FaceSide first, FaceSide second);                          //Check if given pair of FaceSides are opposite of each other
 bool anyOpposite(FaceSide first, FaceSide second, FaceSide third);          //Check if any of the given FaceSides form opposite FaceSides
 
+extern void createmapColor();
+extern void createmapFaceSide();
+
+extern Color ColorFromStr(std::string col);
+extern FaceSide FaceSideFromStr(std::string fs);
 
 #endif

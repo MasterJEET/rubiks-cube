@@ -7,23 +7,27 @@
 
 #include "common.h"
 
+std::map<std::string, Color> toColor;                                                   //Maps first letter of Color to Color itself
+std::map<std::string, FaceSide> toFaceSide;                                             //Maps first letter of FaceSide to FaceSide itself
+
+//============ Define <index,type> pair start ===========
+#   define X(a,b) #a,
 const char *Color_str[] = {
-#   define X(a) #a
 #   include "Color.def"
-#   undef X
+    "C_UNDEFINED"
 };
 
 const char *FaceSide_str[] = {
-#   define X(a) #a
 #   include "FaceSide.def"
-#   undef X
+    "F_UNDEFINED"
 };
 
 const char *PositionType_str[] = {
-#   define X(a) #a
 #   include "PositionType.def"
-#   undef X
+    "P_UNDEFINED"
 };
+#   undef X
+//==================== Define end ======================
 
 std::ostream& operator <<(std::ostream& os, Color col){
     return os << Color_str[col];
@@ -52,3 +56,31 @@ bool anyOpposite(FaceSide first, FaceSide second, FaceSide third)
 {
     return (areOpposite(first, second) || areOpposite(first, third) || areOpposite(second, third));
 }
+
+//======== Create maps | Start =========
+void createmapColor(){
+    if(!toColor.size())
+        return;
+#   define X(a,b)   toColor.insert( std::pair<std::string,Color>(b,a) );
+#   include "Color.def"
+#   undef X
+}
+
+void createmapFaceSide(){
+    if(!toFaceSide.size())
+        return;
+#   define X(a,b)   toFaceSide.insert( std::pair<std::string,FaceSide>(b,a) );
+#   include "FaceSide.def"
+#   undef X
+}
+//======== Create maps | End =========
+
+
+
+Color ColorFromStr(std::string col){
+    return toColor[col];
+};
+
+FaceSide FaceSideFromStr(std::string fs){
+    return toFaceSide[fs];
+};

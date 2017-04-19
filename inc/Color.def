@@ -1,6 +1,6 @@
-X(White),
-X(Yellow),
-X(Orange),
-X(Red),
-X(Green),
-X(Blue)
+X(White,"W")
+X(Yellow,"Y")
+X(Orange,"O")
+X(Red,"R")
+X(Green,"G")
+X(Blue,"B")
