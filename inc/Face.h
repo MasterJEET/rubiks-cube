@@ -12,13 +12,17 @@
 #include <map>
 #include <istream>
 
+typedef std::map<std::tuple<FaceSide, FaceSide, FaceSide>, Facelet> mapFacelet;
+
 class Face{
     private:
         const FaceSide fs;
-        std::map<std::pair<FaceSide, FaceSide>, Facelet> face;
+        mapFacelet mFace;
     public:
         Face(FaceSide &fs);
-        Face(FaceSide fs, std::istream &is);
+        Face(FaceSide &fs, std::istream &is): fs(fs){
+            //Nothing for now
+        };
 };
 
 #endif
