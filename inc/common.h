@@ -8,6 +8,7 @@
 #ifndef COMMON_H
 #define COMMON_H
 #include <ostream>
+#include <map>
 
 #   if __STDC_VERSION__ < 199901L
 #    if __GNUC__ >= 2
@@ -49,5 +50,6 @@ extern std::ostream& operator <<(std::ostream& os, PositionType);
 
 bool areOpposite(FaceSide first, FaceSide second);                          //Check if given pair of FaceSides are opposite of each other
 bool anyOpposite(FaceSide first, FaceSide second, FaceSide third);          //Check if any of the given FaceSides form opposite FaceSides
+
 
 #endif
