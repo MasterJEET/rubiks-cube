@@ -12,7 +12,13 @@ Face::Face(FaceSide &fs): fs(fs){
 }
 
 Face::Face(FaceSide &fs, std::istream &is): fs(fs){
-    std::string fac1,fac2,col;
-    is >> fac1 >> col;
+    std::string strfs1,strfs2,col;
+    createmapColor();
+    createmapFaceSide();
+    //Center FaceSide
+    is >> strfs1 >> col;
+    FaceSide cfac = FaceSideFromStr(strfs1);
+    Facelet fl = Facelet( ColorFromStr(col), fs);
+    mFace.insert( std::pair<FaceSide,FaceSide>(cfac, F_UNDEFINED), fl );
     
 }

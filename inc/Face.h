@@ -12,7 +12,7 @@
 #include <map>
 #include <istream>
 
-typedef std::map<std::tuple<FaceSide, FaceSide, FaceSide>, Facelet> mapFacelet;
+typedef std::map<std::pair<FaceSide, FaceSide>, Facelet> mapFacelet;
 
 class Face{
     private:
