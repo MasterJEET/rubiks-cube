@@ -24,7 +24,7 @@ $(OBJ)/%.o : $(SRC)/%.cpp
 clean:
 	rm -r obj bin
 
-makedir:
+dir:
 	mkdir bin obj
 
-.PHONY: all clean makedir 
+.PHONY: all clean dir 

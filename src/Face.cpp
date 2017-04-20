@@ -6,19 +6,33 @@
  * */
 
 #include "Face.h"
-
-Face::Face(FaceSide &fs): fs(fs){
+/*
+Face::Face(){
     //Nothing for now
-}
+}*/
 
-Face::Face(FaceSide &fs, std::istream &is): fs(fs){
-    std::string strfs1,strfs2,col;
+Face::Face(std::istream &is){
+    std::string strfs1,strfs2,scol;
     createmapColor();
     createmapFaceSide();
     //Center FaceSide
-    is >> strfs1 >> col;
+    is >> strfs1 >> scol;
+    if(FaceSideFromStr(strfs1)==F_UNDEFINED)
+        ~Face();
+    fs = FaceSideFromStr(strfs1);
     FaceSide cfac = FaceSideFromStr(strfs1);
-    Facelet fl = Facelet( ColorFromStr(col), fs);
-    mFace.insert( std::pair<FaceSide,FaceSide>(cfac, F_UNDEFINED), fl );
+    FaceSide ufac =  F_UNDEFINED;
+    Facelet val = Facelet( ColorFromStr(scol), fs);
+    mpair key = mpair(cfac, ufac);
+    mFace.insert( std::pair<mpair, Facelet>(key, val) );
     
 }
+
+Facelet *Face::getFacelet(std::string sfac1, std::string sfac2){
+    //Nothing for now
+};
+
+void Face::addToMap(std::string sfac1,  std::string scol){
+    //Color col = ColorFromStr();
+    //Facelet val = Facelet(ColorFromStr())
+};

@@ -12,15 +12,18 @@
 #include <map>
 #include <istream>
 
-typedef std::map<std::pair<FaceSide, FaceSide>, Facelet> mapFacelet;
+typedef std::pair<FaceSide&,FaceSide> mpair;
+typedef std::map<mpair, Facelet> mapFacelet;
 
 class Face{
     private:
         const FaceSide fs;
         mapFacelet mFace;
     public:
-        Face(FaceSide &fs);
-        Face(FaceSide &fs, std::istream &is);
+        //Face();
+        Face(std::istream &is);
+        void addToMap(std::string sfac1, std::string col);
+        Facelet *getFacelet(std::string sfac1, std::string sfac2);
 };
 
 #endif

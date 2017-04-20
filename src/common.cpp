@@ -82,5 +82,8 @@ Color ColorFromStr(std::string col){
 };
 
 FaceSide FaceSideFromStr(std::string fs){
-    return toFaceSide[fs];
+    auto it = toFaceSide.find(fs);
+    if(it == toFaceSide.end())
+        return F_UNDEFINED;
+    return it->second;
 };
