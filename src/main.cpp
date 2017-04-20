@@ -6,20 +6,17 @@
  * */
 
 #include <iostream>
-#include "Facelet.h"
-#include "Position.h"
+#include <fstream>
+#include "Face.h"
+#include "common.h"
 
 //Just for few testing
 
-int main()
+int main(int argc, char **argv)
 {
-    try{
-
-        Facelet fac(White, Up);
-        std::cout << fac << std::endl;
-    }
-    catch(std::runtime_error& err){
-        std::cout << err.what() << std::endl;
-    }
+    signal(SIGABRT, handler);
+    std::ifstream in("/home/masterjeet/rubiks-cube/dat/front.dat");
+    Face F = Face(in);
+    F.printAllFacelet();
     return 0;
 }

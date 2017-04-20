@@ -7,8 +7,11 @@
 
 #ifndef COMMON_H
 #define COMMON_H
-#include <ostream>
+#include <iostream>
 #include <map>
+#include <execinfo.h>
+#include <signal.h>
+#include <unistd.h>
 
 #   if __STDC_VERSION__ < 199901L
 #    if __GNUC__ >= 2
@@ -57,5 +60,14 @@ extern void createmapFaceSide();
 
 extern Color ColorFromStr(std::string col);
 extern FaceSide FaceSideFromStr(std::string fs);
+
+//SIGTERM handler
+void handler(int sig);
+
+//Print all elements of toColor map
+void printAllColor();
+
+//Print all elemensts of toFaceSide map
+void printAllFaceSide();
 
 #endif

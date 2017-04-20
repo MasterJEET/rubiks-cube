@@ -3,7 +3,7 @@
 
 CXX := g++
 C11 := -std=c++11
-CXXFLAGS := -g $(C11)
+CXXFLAGS := -g -rdynamic $(C11)
 SRC := src
 OBJ := obj
 BIN := bin
@@ -16,7 +16,7 @@ TARGET := $(BIN)/cube
 all: $(TARGET)
 
 $(TARGET) : $(OBJECTS)
-	$(CXX) $(C11) $^ -o $@
+	$(CXX) $(CXXFLAGS) $^ -o $@
 
 $(OBJ)/%.o : $(SRC)/%.cpp
 	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@

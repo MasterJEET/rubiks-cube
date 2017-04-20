@@ -6,33 +6,53 @@
  * */
 
 #include "Face.h"
+#include <stdexcept>
+#include <iostream>
 /*
 Face::Face(){
     //Nothing for now
 }*/
 
 Face::Face(std::istream &is){
-    std::string strfs1,strfs2,scol;
+    std::string sfac0,sfac1,sfac2,scol;
     createmapColor();
     createmapFaceSide();
+
     //Center FaceSide
-    is >> strfs1 >> scol;
-    if(FaceSideFromStr(strfs1)==F_UNDEFINED)
-        ~Face();
-    fs = FaceSideFromStr(strfs1);
-    FaceSide cfac = FaceSideFromStr(strfs1);
-    FaceSide ufac =  F_UNDEFINED;
-    Facelet val = Facelet( ColorFromStr(scol), fs);
-    mpair key = mpair(cfac, ufac);
-    mFace.insert( std::pair<mpair, Facelet>(key, val) );
-    
+    is >> sfac0 >> scol;
+    fs = FaceSideFromStr(sfac0);
+    addToMap(sfac0, sfac0, scol);
+
+    //Edge 1-4
+    for(size_t i = 0; i<4; i++){
+        is >> sfac2 >> scol;
+        addToMap(sfac0, sfac2, scol);
+    }
+
+    //Corner 1-4
+    for(size_t i = 0; i<4; i++){
+        is >> sfac1 >> sfac2 >> scol;
+        addToMap(sfac1, sfac2, scol);
+    }
 }
 
-Facelet *Face::getFacelet(std::string sfac1, std::string sfac2){
-    //Nothing for now
+void Face::addToMap(std::string sfac1, std::string sfac2, std::string scol){
+    FaceSide fac1 = FaceSideFromStr(sfac1);
+    FaceSide fac2 = FaceSideFromStr(sfac2);
+    mFacePair key = mFacePair(fac1, fac2);
+    Color col = ColorFromStr(scol);
+    Facelet val = Facelet( col, fs);
+    mFace.insert( std::pair<mFacePair, Facelet>(key, val) );
 };
 
-void Face::addToMap(std::string sfac1,  std::string scol){
-    //Color col = ColorFromStr();
-    //Facelet val = Facelet(ColorFromStr())
+Facelet *Face::getFacelet(std::string sfac1, std::string sfac2){
+    FaceSide fac1 = FaceSideFromStr(sfac1);
+    FaceSide fac2 = FaceSideFromStr(sfac2);
+    mFacePair key = mFacePair(fac1, fac2);
+    return &mFace.at(key);
+};
+
+void Face::printAllFacelet(){
+    for(auto& it: mFace)
+        std::cout << "(" << it.first.first << ", " << it.first.second << ")" << " --> " << *it.second.getColor() << std::endl;
 };
