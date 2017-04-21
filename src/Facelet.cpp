@@ -15,9 +15,9 @@ Facelet::Facelet(Color &col, FaceSide &fac): col(col), fac(&fac){
     //Nothing for now
 }
 
-/*Facelet::Facelet(Color col, FaceSide *fac): col(col), fac(fac){
+Facelet::Facelet(Color col, FaceSide *fac): col(col), fac(fac){
     //Nothing for now
-}*/
+}
 
 const Color *Facelet::getColor(){
     return &col;
