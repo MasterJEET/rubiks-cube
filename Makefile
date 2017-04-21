@@ -9,7 +9,7 @@ OBJ := obj
 BIN := bin
 INCLUDES := -I./inc
 
-OBJECTS := $(OBJ)/main.o $(OBJ)/Position.o $(OBJ)/Facelet.o $(OBJ)/common.o $(OBJ)/Face.o
+OBJECTS := $(OBJ)/main.o $(OBJ)/Position.o $(OBJ)/Facelet.o $(OBJ)/common.o $(OBJ)/Face.o $(OBJ)/Cubelet.o
 
 TARGET := $(BIN)/cube
 
