@@ -13,15 +13,23 @@
 
 class Facelet {
     private:
-        const Color col;
-        const FaceSide *fac;
+
+        //Holds face color
+        const Color * const col;
+        const FaceSide *side;
     public:
-        //Facelet(Color col);                                                         //Initialization from Color
-        Facelet(Color &col, FaceSide &fac);                                           //Initialization from Color and Position
-        Facelet(Color col, FaceSide *fac);                                          //Initialization from Color and Position
-        const Color *getColor();                                                    //Returns pointer to 'col'
-        const FaceSide *getFaceSide();                                                    //Returns 'fac'
-        void setFaceSide(FaceSide *fac);                                            //Sets 'fac'
+        
+        //Initialization from Color and FaceSice
+        Facelet(const Color * const col, const FaceSide *side);
+        
+        //Returns pointer to 'col'
+        const Color * const getColor();
+        
+        //Returns 'side'
+        const FaceSide * const getFaceSide();
+        
+        //Sets 'side'
+        void setFaceSide(const FaceSide * const side);
 };
 
 std::ostream& operator<<(std::ostream& os, Facelet F);

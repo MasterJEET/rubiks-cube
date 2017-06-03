@@ -7,31 +7,23 @@
 
 #include "Facelet.h"
 
-/*Facelet::Facelet(Color col): Facelet(col, nullptr){
-    //Nothing for now
-}*/
-
-Facelet::Facelet(Color &col, FaceSide &fac): col(col), fac(&fac){
+Facelet::Facelet(const Color * const col, const FaceSide *side): col(col), side(side){
     //Nothing for now
 }
 
-Facelet::Facelet(Color col, FaceSide *fac): col(col), fac(fac){
-    //Nothing for now
+const Color * const Facelet::getColor(){
+    return col;
 }
 
-const Color *Facelet::getColor(){
-    return &col;
+const FaceSide * const Facelet::getFaceSide(){
+    return side;
 }
 
-const FaceSide *Facelet::getFaceSide(){
-    return fac;
-}
-
-void Facelet::setFaceSide(FaceSide *fac){
-    this->fac = fac;
+void Facelet::setFaceSide(const FaceSide *const side){
+    this->side = side;
 }
 
 std::ostream& operator<<(std::ostream& os, Facelet F){
-    return os << "Facelet: col = " << *F.getColor() << ", *fac = " << *F.getFaceSide();
+    return os << "Facelet: col = " << *F.getColor() << ", *side = " << *F.getFaceSide();
 }
 
