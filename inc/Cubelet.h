@@ -14,15 +14,33 @@
 
 class Cubelet{
     private:
-        const std::vector<Facelet*> vecFac;
+
+        //Holds Facelets for a given cubelet
+        const std::vector<Facelet *> vecFac;
+
+        //Holds Position of a given cubelet
         const Position *ppos;
+
     public:
-        Cubelet(Position &pos, Facelet *fac1);                                                           //Constructor for Center cubelets
-        Cubelet(Position &pos, Facelet *fac1, Facelet *fac2);                                             //Constructor for Edge cubelets
-        Cubelet(Position &pos, Facelet *fac1, Facelet *fac2, Facelet *fac3);                               //Constructor for Corner cubelets
-        const std::vector<Facelet*> *getFacelet();
-        const Position *getPosition();
-        void setPosition(Position *ppos);
+        
+        //Constructor for Center cubelets
+        //Cubelet(const Position * const ppos, Facelet * const fac1);
+        Cubelet(Facelet * const fac1);
+        
+        //Constructor for Edge cubelets
+        Cubelet(const Position * const ppos, Facelet * const fac1, Facelet * const fac2);
+        
+        //Constructor for Corner cubelets
+        Cubelet(const Position * const ppos, Facelet * const fac1, Facelet * const fac2, Facelet * const fac3);
+       
+        //Returns vector of facelets for the cubelet
+        const std::vector<Facelet *> * const getFacelet();
+        
+        //Returns pointer to Position
+        const Position * const getPosition();
+
+        //Sets Position for cubelet
+        void setPosition(const Position * const ppos);
 };
 
 std::ostream& operator<<(std::ostream& os, Cubelet C);
