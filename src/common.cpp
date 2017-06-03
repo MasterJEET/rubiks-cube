@@ -41,7 +41,7 @@ std::ostream& operator <<(std::ostream& os, PositionType ptype){
     return os << PositionType_str[ptype];
 };
 
-bool areOpposite(FaceSide* first, FaceSide* second)
+bool areOpposite(const FaceSide *first,const FaceSide *second)
 {
     if((*first == Front && *second == Back) || (*first == Back && *second == Front))
         return true;
@@ -52,7 +52,7 @@ bool areOpposite(FaceSide* first, FaceSide* second)
     return false;
 }
 
-bool anyOpposite(FaceSide* first, FaceSide* second, FaceSide* third)
+bool anyOpposite(const FaceSide *first,const FaceSide *second,const FaceSide *third)
 {
     return (areOpposite(first, second) || areOpposite(first, third) || areOpposite(second, third));
 }
