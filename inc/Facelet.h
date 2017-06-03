@@ -17,7 +17,7 @@ class Facelet {
         const FaceSide *fac;
     public:
         //Facelet(Color col);                                                         //Initialization from Color
-        Facelet(Color col, FaceSide &fac);                                           //Initialization from Color and Position
+        Facelet(Color &col, FaceSide &fac);                                           //Initialization from Color and Position
         //Facelet(Color col, FaceSide *fac);                                          //Initialization from Color and Position
         const Color *getColor();                                                    //Returns pointer to 'col'
         const FaceSide *getFaceSide();                                                    //Returns 'fac'

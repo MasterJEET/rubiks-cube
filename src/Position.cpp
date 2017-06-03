@@ -8,16 +8,16 @@
 #include "Position.h"
 #include <iostream>
 
-Position::Position(FaceSide first): vecSide{first}, ptype(Center){
+Position::Position(FaceSide* first): vecSide{first}, ptype(Center){
         //Noting for now
 }
 
-Position::Position(FaceSide first, FaceSide second): vecSide{first, second}, ptype(Edge){
+Position::Position(FaceSide* first, FaceSide* second): vecSide{first, second}, ptype(Edge){
     if(areOpposite(first, second))
         throw std::runtime_error(__func__ + std::string(": Contain opposite faces."));
 }
 
-Position::Position(FaceSide first, FaceSide second, FaceSide third): vecSide{first, second, third}, ptype(Corner){
+Position::Position(FaceSide* first, FaceSide* second, FaceSide* third): vecSide{first, second, third}, ptype(Corner){
     if(anyOpposite(first, second, third))
         throw std::runtime_error(__func__ + std::string(": Contain opposite faces."));
 }
@@ -27,7 +27,7 @@ const PositionType *Position::getType()
     return &(this->ptype);
 }
 
-const std::vector<FaceSide> *Position::getSide()
+const std::vector<FaceSide*> *Position::getSide()
 {
     return &(this->vecSide);
 }
@@ -37,7 +37,7 @@ std::ostream& operator<<(std::ostream& os, Position P){
     auto pvecSide = P.getSide();
     os << ", vecSide = { ";
     for(const auto& face : *pvecSide){
-        os << face << " ";
+        os << *face << " ";
     }
     os << "}";
     return os;

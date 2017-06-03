@@ -41,25 +41,25 @@ std::ostream& operator <<(std::ostream& os, PositionType ptype){
     return os << PositionType_str[ptype];
 };
 
-bool areOpposite(FaceSide first, FaceSide second)
+bool areOpposite(FaceSide* first, FaceSide* second)
 {
-    if((first == Front && second == Back) || (first == Back && second == Front))
+    if((*first == Front && *second == Back) || (*first == Back && *second == Front))
         return true;
-    if((first == Up && second == Down) || (first == Down && second == Up))
+    if((*first == Up && *second == Down) || (*first == Down && *second == Up))
         return true;
-    if((first == Left && second == Right) || (first == Right && second == Left))
+    if((*first == Left && *second == Right) || (*first == Right && *second == Left))
         return true;
     return false;
 }
 
-bool anyOpposite(FaceSide first, FaceSide second, FaceSide third)
+bool anyOpposite(FaceSide* first, FaceSide* second, FaceSide* third)
 {
     return (areOpposite(first, second) || areOpposite(first, third) || areOpposite(second, third));
 }
 
 //======== Create maps | Start =========
 void createmapColor(){
-    if(!toColor.size())
+    if(toColor.size())
         return;
 #   define X(a,b)   toColor.insert( std::pair<std::string,Color>(b,a) );
 #   include "Color.def"
@@ -67,7 +67,7 @@ void createmapColor(){
 }
 
 void createmapFaceSide(){
-    if(!toFaceSide.size())
+    if(toFaceSide.size())
         return;
 #   define X(a,b)   toFaceSide.insert( std::pair<std::string,FaceSide>(b,a) );
 #   include "FaceSide.def"
@@ -78,12 +78,45 @@ void createmapFaceSide(){
 
 
 Color ColorFromStr(std::string col){
-    return toColor[col];
+    auto it = toColor.find(col);
+    if(it == toColor.end())
+        throw std::invalid_argument("Invalid Argument: check b in X(a,b) of \"Color.def\" for allowed valid arguments");
+    return it->second;
 };
 
-FaceSide FaceSideFromStr(std::string fs){
-    auto it = toFaceSide.find(fs);
+FaceSide FaceSideFromStr(std::string fac){
+    auto it = toFaceSide.find(fac);
     if(it == toFaceSide.end())
-        return F_UNDEFINED;
+        throw std::invalid_argument("Invalid Argument: check b in X(a,b) of \"FaceSide.def\" for allowed arguments");
     return it->second;
+};
+
+//Handler for signal SIGABRT
+void handler(int sig) {
+      void *array[20];
+        size_t size;
+
+          // get void*'s for all entries on the stack
+          size = backtrace(array, 20);
+          
+          // print out all the frames to stderr
+          fprintf(stderr, "Error: signal %d:\n", sig);
+          backtrace_symbols_fd(array, size, STDERR_FILENO);
+          exit(1);
+};
+
+void printAllColor(){
+    createmapColor();
+    std::cout << "======= Colors | start =======" << std::endl;
+    for(auto& it: toColor)
+        std::cout << it.first << " --> " << it.second << std::endl;
+    std::cout << "======== Colors | end ========" << std::endl;
+};
+
+void printAllFaceSide(){
+    createmapFaceSide();
+    std::cout << "====== FaceSide | start ======" << std::endl;
+    for(auto& it: toFaceSide)
+        std::cout << it.first << " --> " << it.second << std::endl;
+    std::cout << "======= FaceSide | end =======" << std::endl;
 };
