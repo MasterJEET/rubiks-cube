@@ -82,15 +82,18 @@ int main(int argc, char **argv)
 
     // ============================    
     // ====== cubelet test ========
-    /*
+    
     try{
 
         //Center i.e. with one face
         Facelet fac1(&red, &right);
-        const Position r(&right);
+        //const Position r(&right);
         Cubelet cr(&fac1);
-        std::cout << cr << std::endl;
-
+        const Position * const ppos = cr.getPosition();
+        //const PositionType * ptype1 = ppos->getPositionType();
+        //std::cout << *ppos << std::endl;
+        //std::cout << cr << std::endl;
+        /*
         //Edge i.e. with two faces
         Facelet fac2(&white, &front);
         Facelet fac3(&blue, &up);
@@ -116,12 +119,13 @@ int main(int argc, char **argv)
         const Position frd(&front, &right, &down);
         cbld.setPosition(&frd);
         std::cout << *cbld.getPosition() << std::endl;
+        */
 
     }
     catch(std::runtime_error& err){
         std::cout << err.what() << std::endl;
     }
-    */
+    
     //======== cubelet ======== 
     return 0;
 }
