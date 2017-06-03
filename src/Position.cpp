@@ -22,7 +22,7 @@ Position::Position(const FaceSide* first,const FaceSide* second,const FaceSide* 
         throw std::runtime_error(__func__ + std::string(": Contain opposite faces."));
 }
 
-const PositionType * const Position::getType()
+const PositionType * const Position::getPositionType()
 {
     return &(this->ptype);
 }
@@ -33,7 +33,7 @@ const std::vector<const FaceSide *> * const Position::getSide()
 }
 
 std::ostream& operator<<(std::ostream& os, Position P){
-    os << "Position: ptype = " << *P.getType();
+    os << "Position: ptype = " << *P.getPositionType();
     auto pvecSide = P.getSide();
     os << ", vecSide = { ";
     for(const auto& face : *pvecSide){

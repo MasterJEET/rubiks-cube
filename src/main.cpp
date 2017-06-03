@@ -43,8 +43,6 @@ int main(int argc, char **argv)
     
     //std::cout << center << " " << edge << " " << corner << " " << undefptype << std::endl;
 
-    /*
-    
     // ================================
     // ========= position test ========
 
@@ -66,12 +64,22 @@ int main(int argc, char **argv)
     
     //down, front and back, opposite face error
     //Position dfb(&down, &front, &back);
-    */
+   
+    //Testing getSide() 
+    const std::vector<const FaceSide *> * pvecSide;
+    pvecSide = drf.getSide();
+    std::cout << *(*pvecSide)[1] << std::endl;
+    
+    //Testing getPositionType()
+    const PositionType * ptype;
+    ptype = bl.getPositionType();
+    std::cout << *ptype << std::endl;
+
     // ======== positon ========
 
     // ============================    
     // ====== cubelet test ========
-    
+    /*    
     try{
 
         //Center i.e. with one face
@@ -98,7 +106,7 @@ int main(int argc, char **argv)
     catch(std::runtime_error& err){
         std::cout << err.what() << std::endl;
     }
-    
+    */    
     //======== cubelet ======== 
     return 0;
 }
