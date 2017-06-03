@@ -6,12 +6,14 @@
  * */
 
 #include <iostream>
-#include "Cubelet.h"
+//#include "Cubelet.h"
+//#include <Position.h>
 
 //Just for few testing
 
 int main(int argc, char **argv)
 {
+    /* ====== cubelet test ========
     try{
         FaceSide up = Up;
         FaceSide right = Right;
@@ -26,5 +28,6 @@ int main(int argc, char **argv)
     catch(std::runtime_error& err){
         std::cout << err.what() << std::endl;
     }
+    ======== cubelet ======== */
     return 0;
 }

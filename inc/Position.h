@@ -14,14 +14,30 @@
 
 class Position {
     private:
-        const std::vector<FaceSide *> vecSide;                                              //Holds FaceSides
-        const PositionType ptype;                                                         //Holds PositionType
+        
+        //Holds FaceSides
+        const std::vector<const FaceSide *> vecSide;
+        
+        //Holds PositionType
+        const PositionType ptype;
+
     public:
-        Position(FaceSide *first);                                                   //For initailizing a FaceSide from parameter, specifies which center
-        Position(FaceSide *first, FaceSide *second);                                  //For initializing two FaceSides from parameter list, specifies which edge
-        Position(FaceSide *first, FaceSide *second, FaceSide *third);                  //For initializing all three FaceSides from parameter list, specifies which corner
-        const std::vector<FaceSide *> *getSide();                                           //Returns pointer to 'vecSide'
-        const PositionType *getType();                                                    //Returns pointer to 'ptype'
+        
+        //For initailizing a FaceSide from parameter, specifies which center
+        Position(const FaceSide *first);
+        
+        //For initializing two FaceSides from parameter list, specifies which edge
+        Position(const FaceSide *first,const FaceSide *second);
+        
+        //For initializing all three FaceSides from parameter list, specifies which corner
+        Position(const FaceSide *first,const FaceSide *second,const FaceSide *third);
+        
+        //Returns pointer to 'vecSide'
+        const std::vector<const FaceSide *> * const getSide();
+        
+        //Returns pointer to 'ptype'
+        const PositionType * const getType();
+
 };
 
 std::ostream& operator<<(std::ostream& os, Position P);

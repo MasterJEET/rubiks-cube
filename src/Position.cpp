@@ -8,26 +8,26 @@
 #include "Position.h"
 #include <iostream>
 
-Position::Position(FaceSide* first): vecSide{first}, ptype(Center){
+Position::Position(const FaceSide *first): vecSide{first}, ptype(Center){
         //Noting for now
 }
 
-Position::Position(FaceSide* first, FaceSide* second): vecSide{first, second}, ptype(Edge){
+Position::Position(const FaceSide* first,const FaceSide* second): vecSide{first, second}, ptype(Edge){
     if(areOpposite(first, second))
         throw std::runtime_error(__func__ + std::string(": Contain opposite faces."));
 }
 
-Position::Position(FaceSide* first, FaceSide* second, FaceSide* third): vecSide{first, second, third}, ptype(Corner){
+Position::Position(const FaceSide* first,const FaceSide* second,const FaceSide* third): vecSide{first, second, third}, ptype(Corner){
     if(anyOpposite(first, second, third))
         throw std::runtime_error(__func__ + std::string(": Contain opposite faces."));
 }
 
-const PositionType *Position::getType()
+const PositionType * const Position::getType()
 {
     return &(this->ptype);
 }
 
-const std::vector<FaceSide*> *Position::getSide()
+const std::vector<const FaceSide &> * const Position::getSide()
 {
     return &(this->vecSide);
 }
