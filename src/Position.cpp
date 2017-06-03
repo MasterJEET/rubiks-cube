@@ -22,7 +22,7 @@ Position::Position(const FaceSide* first,const FaceSide* second,const FaceSide* 
         throw std::runtime_error(__func__ + std::string(": Contain opposite faces."));
 }
 
-const PositionType * const Position::getPositionType()
+const PositionType *Position::getPositionType() const
 {
     return &(this->ptype);
 }

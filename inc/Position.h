@@ -36,7 +36,7 @@ class Position {
         const std::vector<const FaceSide *> * const getSide();
         
         //Returns pointer to 'ptype'
-        const PositionType * const getPositionType();
+        const PositionType *getPositionType() const;
 
 };
 
