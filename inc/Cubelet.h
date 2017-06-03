@@ -31,9 +31,14 @@ class Cubelet{
         
         //Constructor for Corner cubelets
         Cubelet(const Position * const ppos, Facelet * const fac1, Facelet * const fac2, Facelet * const fac3);
-        
+       
+        //Returns vector of facelets for the cubelet
         const std::vector<Facelet *> * const getFacelet();
+        
+        //Returns pointer to Position
         const Position * const getPosition();
+
+        //Sets Position for cubelet
         void setPosition(const Position * const ppos);
 };
 

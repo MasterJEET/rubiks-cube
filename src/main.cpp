@@ -46,7 +46,7 @@ int main(int argc, char **argv)
     // ================================
     // ========= position test ========
 
-    
+    /*
     //front center
     Position f(&front);
     std::cout << f << std::endl;
@@ -74,12 +74,12 @@ int main(int argc, char **argv)
     const PositionType * ptype;
     ptype = bl.getPositionType();
     std::cout << *ptype << std::endl;
-
+    */
     // ======== positon ========
 
     // ============================    
     // ====== cubelet test ========
-    /*    
+    /*
     try{
 
         //Center i.e. with one face
@@ -102,11 +102,23 @@ int main(int argc, char **argv)
         const Position bld(&back, &left, &down);
         Cubelet cbld(&bld, &fac4, &fac5, &fac6);
         std::cout << cbld << std::endl;
+
+        //Testing getFacelet()
+        std::cout << *(*cfu.getFacelet())[1]  << std::endl;
+
+        //Testing getPosition()
+        std::cout << *cbld.getPosition() << std::endl;
+
+        //Testing setPosition()
+        const Position frd(&front, &right, &down);
+        cbld.setPosition(&frd);
+        std::cout << *cbld.getPosition() << std::endl;
+
     }
     catch(std::runtime_error& err){
         std::cout << err.what() << std::endl;
     }
-    */    
+    */
     //======== cubelet ======== 
     return 0;
 }
