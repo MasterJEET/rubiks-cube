@@ -85,7 +85,7 @@ int main(int argc, char **argv)
         //Center i.e. with one face
         Facelet fac1(&red, &right);
         const Position r(&right);
-        Cubelet cr(&r, &fac1);
+        Cubelet cr(&fac1);
         std::cout << cr << std::endl;
 
         //Edge i.e. with two faces

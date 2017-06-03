@@ -6,9 +6,14 @@
  * */
 
 #include "Cubelet.h"
-
+/*
 Cubelet::Cubelet(const Position * const ppos, Facelet * const fac1): ppos(ppos), vecFac{fac1}{
     //Nothing for now
+}
+*/
+Cubelet::Cubelet(Facelet * const fac1):vecFac{fac1}{
+    Position pos(fac1->getFaceSide());
+    ppos = &pos;
 }
 
 Cubelet::Cubelet(const Position * const ppos, Facelet * const fac1, Facelet * const fac2): ppos(ppos), vecFac{fac1, fac2}{

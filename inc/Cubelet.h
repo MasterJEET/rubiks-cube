@@ -24,7 +24,8 @@ class Cubelet{
     public:
         
         //Constructor for Center cubelets
-        Cubelet(const Position * const ppos, Facelet * const fac1);
+        //Cubelet(const Position * const ppos, Facelet * const fac1);
+        Cubelet(Facelet * const fac1);
         
         //Constructor for Edge cubelets
         Cubelet(const Position * const ppos, Facelet * const fac1, Facelet * const fac2);
