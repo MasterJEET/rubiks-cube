@@ -6,6 +6,7 @@
  * */
 
 #include "common.h"
+#include <stdexcept>
 
 std::map<std::string, Color> toColor;                                                   //Maps first letter of Color to Color itself
 std::map<std::string, FaceSide> toFaceSide;                                             //Maps first letter of FaceSide to FaceSide itself
