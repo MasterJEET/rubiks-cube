@@ -37,7 +37,7 @@ class Cubelet{
         const std::vector<Facelet *> * const getFacelet();
         
         //Returns pointer to Position
-        const Position * const getPosition();
+        const Position * getPosition() const;
 
         //Sets Position for cubelet
         void setPosition(const Position * const ppos);

@@ -77,6 +77,9 @@ int main(int argc, char **argv)
     const PositionType * ptype;
     ptype = bl.getPositionType();
     std::cout << *ptype << std::endl;
+    
+    //Testing getSideAt()
+    std::cout << *drf.getSideAt(2) << std::endl;
     */
     // ======== positon ========
 
@@ -90,7 +93,12 @@ int main(int argc, char **argv)
         //const Position r(&right);
         Cubelet cr(&fac1);
         const Position * const ppos = cr.getPosition();
-        //const PositionType * ptype1 = ppos->getPositionType();
+        const PositionType * ptype1 = ppos->getPositionType();
+        const std::vector<const FaceSide *> * pvecFac = ppos->getSide();
+        const FaceSide *fac0 = (*pvecFac)[0];
+        //const FaceSide fac10 = *fac0;
+        //std::cout << *(*pvecFac)[0] << std::endl;
+        //std::cout << *ptype1 << std::endl;
         //std::cout << *ppos << std::endl;
         //std::cout << cr << std::endl;
         /*
