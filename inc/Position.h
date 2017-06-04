@@ -34,6 +34,9 @@ class Position {
         
         //Returns pointer to 'vecSide'
         const std::vector<const FaceSide *> * getSide() const;
+
+        //Returns pointer to FaceSide present at 'vecSide[index]'
+        const FaceSide *getSideAt(size_t index) const;
         
         //Returns pointer to 'ptype'
         const PositionType *getPositionType() const;

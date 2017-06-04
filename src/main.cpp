@@ -74,6 +74,9 @@ int main(int argc, char **argv)
     const PositionType * ptype;
     ptype = bl.getPositionType();
     std::cout << *ptype << std::endl;
+    
+    //Testing getSideAt()
+    std::cout << *drf.getSideAt(2) << std::endl;
     */
     // ======== positon ========
 

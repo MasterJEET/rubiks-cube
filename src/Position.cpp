@@ -32,6 +32,10 @@ const std::vector<const FaceSide *> * Position::getSide() const
     return &(this->vecSide);
 }
 
+const FaceSide *Position::getSideAt(size_t index) const{
+    return vecSide.at(index);
+};
+
 std::ostream& operator<<(std::ostream& os, Position P){
     os << "Position: ptype = " << *P.getPositionType();
     auto pvecSide = P.getSide();
