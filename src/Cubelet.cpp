@@ -28,6 +28,10 @@ const std::vector<Facelet *> * const Cubelet::getFacelet(){
     return &vecFac;
 };
 
+Facelet *Cubelet::getFaceletAt(size_t index) const {
+    return vecFac.at(index);
+};
+
 const Position * Cubelet::getPosition() const{
     return ppos;
 };

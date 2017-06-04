@@ -35,7 +35,10 @@ class Cubelet{
        
         //Returns vector of facelets for the cubelet
         const std::vector<Facelet *> * const getFacelet();
-        
+       
+        // Returns vecFac[index]
+        Facelet *getFaceletAt(size_t index) const;
+
         //Returns pointer to Position
         const Position * getPosition() const;
 

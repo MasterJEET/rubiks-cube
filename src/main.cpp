@@ -48,7 +48,7 @@ int main(int argc, char **argv)
     
     // ==============================
     // ======== FACELET TEST ========
-
+    /*
     // Testing constructor
     Facelet flet(&red, &left);
     std::cout << flet << std::endl;
@@ -62,7 +62,7 @@ int main(int argc, char **argv)
     // Testing setFaceSide()
     flet.setFaceSide(&down);
     std::cout << flet << std::endl;
-
+    */
     // =========== FACELET ==========
 
 
@@ -113,12 +113,11 @@ int main(int argc, char **argv)
         //const Position r(&right);
         Cubelet cr(&fac1);
         const Position * const ppos = cr.getPosition();
-        const PositionType * ptype1 = ppos->getPositionType();
-        const std::vector<const FaceSide *> * pvecFac = ppos->getSide();
-        const FaceSide *fac0 = (*pvecFac)[0];
-        //const FaceSide fac10 = *fac0;
-        //std::cout << *(*pvecFac)[0] << std::endl;
-        //std::cout << *ptype1 << std::endl;
+        std::cout << ppos->getSide()->size() << std::endl;
+        std::cout << *ppos->getPositionType() << std::endl;
+        //const std::vector<const FaceSide *> * pvecFac = ppos->getSide();
+        //std::cout << pvecFac->size() << std::endl;
+       
         //std::cout << *ppos << std::endl;
         //std::cout << cr << std::endl;
         /*
@@ -140,6 +139,9 @@ int main(int argc, char **argv)
         //Testing getFacelet()
         std::cout << *(*cfu.getFacelet())[1]  << std::endl;
 
+        //Testing getFaceletAt()
+        std::cout << *cr.getFaceletAt(0) << std::endl;
+        
         //Testing getPosition()
         std::cout << *cbld.getPosition() << std::endl;
 
@@ -147,6 +149,7 @@ int main(int argc, char **argv)
         const Position frd(&front, &right, &down);
         cbld.setPosition(&frd);
         std::cout << *cbld.getPosition() << std::endl;
+
         */
 
     }

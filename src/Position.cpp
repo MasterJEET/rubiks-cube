@@ -24,6 +24,7 @@ Position::Position(const FaceSide* first,const FaceSide* second,const FaceSide* 
 
 const PositionType *Position::getPositionType() const
 {
+    //std::cout << this->ptype << std::endl;
     return &(this->ptype);
 }
 
