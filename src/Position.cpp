@@ -27,7 +27,7 @@ const PositionType *Position::getPositionType() const
     return &(this->ptype);
 }
 
-const std::vector<const FaceSide *> * const Position::getSide()
+const std::vector<const FaceSide *> * Position::getSide() const
 {
     return &(this->vecSide);
 }

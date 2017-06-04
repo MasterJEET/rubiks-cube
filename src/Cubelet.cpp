@@ -14,7 +14,6 @@ Cubelet::Cubelet(const Position * const ppos, Facelet * const fac1): ppos(ppos),
 Cubelet::Cubelet(Facelet * const fac1):vecFac{fac1}{
     Position pos = Position(fac1->getFaceSide());
     ppos = &pos;
-    std::cout << *ppos->getPositionType() << std::endl;
 }
 
 Cubelet::Cubelet(const Position * const ppos, Facelet * const fac1, Facelet * const fac2): ppos(ppos), vecFac{fac1, fac2}{
@@ -29,7 +28,7 @@ const std::vector<Facelet *> * const Cubelet::getFacelet(){
     return &vecFac;
 };
 
-const Position * const Cubelet::getPosition(){
+const Position * Cubelet::getPosition() const{
     return ppos;
 };
 
