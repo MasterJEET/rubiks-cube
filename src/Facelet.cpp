@@ -11,15 +11,15 @@ Facelet::Facelet(const Color * const col, const FaceSide *side): col(col), side(
     //Nothing for now
 }
 
-const Color * const Facelet::getColor(){
+const Color * Facelet::getColor() const{
     return col;
 }
 
-const FaceSide * const Facelet::getFaceSide(){
+const FaceSide * Facelet::getFaceSide() const{
     return side;
 }
 
-void Facelet::setFaceSide(const FaceSide *const side){
+void Facelet::setFaceSide(const FaceSide *side){
     this->side = side;
 }
 

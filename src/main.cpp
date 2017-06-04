@@ -45,6 +45,26 @@ int main(int argc, char **argv)
     const PositionType undefptype = P_UNDEFINED;
     
     //std::cout << center << " " << edge << " " << corner << " " << undefptype << std::endl;
+    
+    // ==============================
+    // ======== FACELET TEST ========
+
+    // Testing constructor
+    Facelet flet(&red, &left);
+    std::cout << flet << std::endl;
+
+    // Testing getColor()
+    std::cout << *flet.getColor() << std::endl;
+
+    // Testing getFaceSide()
+    std::cout << *flet.getFaceSide() << std::endl;
+    
+    // Testing setFaceSide()
+    flet.setFaceSide(&down);
+    std::cout << flet << std::endl;
+
+    // =========== FACELET ==========
+
 
     // ================================
     // ========= position test ========
