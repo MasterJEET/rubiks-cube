@@ -16,7 +16,7 @@ class Position {
     private:
         
         //Holds FaceSides
-        const std::vector<const FaceSide *> vecSide;
+        const std::vector<const FaceSide> vecSide;
         
         //Holds PositionType
         const PositionType ptype;
@@ -24,22 +24,22 @@ class Position {
     public:
         
         //For initailizing a FaceSide from parameter, specifies which center
-        Position(const FaceSide *first);
+        Position(const FaceSide first);
         
         //For initializing two FaceSides from parameter list, specifies which edge
-        Position(const FaceSide *first,const FaceSide *second);
+        Position(const FaceSide first,const FaceSide second);
         
         //For initializing all three FaceSides from parameter list, specifies which corner
-        Position(const FaceSide *first,const FaceSide *second,const FaceSide *third);
+        Position(const FaceSide first,const FaceSide second,const FaceSide third);
         
         //Returns pointer to 'vecSide'
-        const std::vector<const FaceSide *> * getSide() const;
+        const std::vector<const FaceSide> * getSide() const;
 
-        //Returns pointer to FaceSide present at 'vecSide[index]'
-        const FaceSide *getSideAt(size_t index) const;
+        //Returns FaceSide present at 'vecSide[index]'
+        const FaceSide getSideAt(size_t index) const;
         
         //Returns pointer to 'ptype'
-        const PositionType *getPositionType() const;
+        const PositionType getPositionType() const;
 
 };
 

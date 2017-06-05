@@ -6,11 +6,10 @@
  * */
 
 #include <iostream>
-#include "Cubelet.h"
-#include <Position.h>
+//#include "Cubelet.h"
 //#include "Facelet.h"
 //#include "Position.h"
-//#include "common.h"
+#include "common.h"
 
 //Just for few testing
 
@@ -71,7 +70,7 @@ int main(int argc, char **argv)
 
     /*
     //front center
-    Position f(&front);
+    Position f(front);
     std::cout << f << std::endl;
     
     //back left edge
@@ -105,7 +104,7 @@ int main(int argc, char **argv)
 
     // ============================    
     // ====== cubelet test ========
-    
+    /*
     try{
 
         //Center i.e. with one face
@@ -120,7 +119,7 @@ int main(int argc, char **argv)
        
         //std::cout << *ppos << std::endl;
         //std::cout << cr << std::endl;
-        /*
+        
         //Edge i.e. with two faces
         Facelet fac2(&white, &front);
         Facelet fac3(&blue, &up);
@@ -150,13 +149,13 @@ int main(int argc, char **argv)
         cbld.setPosition(&frd);
         std::cout << *cbld.getPosition() << std::endl;
 
-        */
+        
 
     }
     catch(std::runtime_error& err){
         std::cout << err.what() << std::endl;
     }
-    
+    */
     //======== cubelet ======== 
     return 0;
 }
