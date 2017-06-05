@@ -112,9 +112,9 @@ int main(int argc, char **argv)
         Facelet fac1(&red, &right);
         //const Position r(&right);
         Cubelet cr(&fac1);
-        const Position * const ppos = cr.getPosition();
-        std::cout << ppos->getSide()->size() << std::endl;
-        std::cout << *ppos->getPositionType() << std::endl;
+        const Position * ppos = cr.getPosition();
+        std::cout << *(ppos->getPositionType()) << std::endl;
+        std::cout << (ppos->getSide())->size() << std::endl;
         //const std::vector<const FaceSide *> * pvecFac = ppos->getSide();
         //std::cout << pvecFac->size() << std::endl;
        
