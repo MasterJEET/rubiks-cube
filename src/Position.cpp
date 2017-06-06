@@ -24,11 +24,10 @@ Position::Position(const FaceSide first,const FaceSide second,const FaceSide thi
 
 const PositionType Position::getPositionType() const
 {
-    //std::cout << this->ptype << std::endl;
-    return &(this->ptype);
+    return ptype;
 }
 
-const std::vector<const FaceSide> * Position::getSide() const
+const std::vector< FaceSide> * Position::getSide() const
 {
     return &(this->vecSide);
 }

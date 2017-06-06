@@ -16,7 +16,7 @@ class Position {
     private:
         
         //Holds FaceSides
-        const std::vector<const FaceSide> vecSide;
+        const std::vector<FaceSide> vecSide;
         
         //Holds PositionType
         const PositionType ptype;
@@ -33,7 +33,7 @@ class Position {
         Position(const FaceSide first,const FaceSide second,const FaceSide third);
         
         //Returns pointer to 'vecSide'
-        const std::vector<const FaceSide> * getSide() const;
+        const std::vector<FaceSide> * getSide() const;
 
         //Returns FaceSide present at 'vecSide[index]'
         const FaceSide getSideAt(size_t index) const;
