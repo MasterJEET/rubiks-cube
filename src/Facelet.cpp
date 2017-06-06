@@ -24,6 +24,6 @@ void Facelet::setFaceSide(const FaceSide _side){
 }
 
 std::ostream& operator<<(std::ostream& os, Facelet F){
-    return os << "Facelet: col = " << F.getColor() << ", *side = " << F.getFaceSide();
+    return os << "Facelet: col = " << F.getColor() << ", side = " << F.getFaceSide();
 }
 

@@ -6,38 +6,33 @@
  * */
 
 #include "Cubelet.h"
-/*
-Cubelet::Cubelet(const Position * const ppos, Facelet * const fac1): ppos(ppos), vecFac{fac1}{
-    //Nothing for now
-}
-*/
-Cubelet::Cubelet(Facelet * const fac1):vecFac{fac1}{
-    Position pos = Position(fac1->getFaceSide());
-    ppos = &pos;
+
+Cubelet::Cubelet(Facelet  fac1):vecFac{fac1}{
+    Position pos = Position(fac1.getFaceSide());
 }
 
-Cubelet::Cubelet(const Position * const ppos, Facelet * const fac1, Facelet * const fac2): ppos(ppos), vecFac{fac1, fac2}{
-    //Nothing for now
+Cubelet::Cubelet(Facelet  fac1, Facelet  fac2):vecFac{fac1, fac2}{
+    Position pos = Position(fac1.getFaceSide(), fac2.getFaceSide());
 }
 
-Cubelet::Cubelet(const Position * const ppos, Facelet * const fac1, Facelet * const fac2, Facelet * const fac3): ppos(ppos), vecFac{fac1, fac2, fac3}{
-    //Nothing for now
+Cubelet::Cubelet(Facelet  fac1, Facelet  fac2, Facelet  fac3):vecFac{fac1, fac2, fac3}{
+    Position pos = Position(fac1.getFaceSide(), fac2.getFaceSide(), fac3.getFaceSide());
 }
 
-const std::vector<Facelet *> * const Cubelet::getFacelet(){
+const std::vector<Facelet>  Cubelet::getFacelet(){
     return &vecFac;
 };
 
 Facelet *Cubelet::getFaceletAt(size_t index) const {
-    return vecFac.at(index);
+    return &(vecFac.at(index));
 };
 
 const Position * Cubelet::getPosition() const{
-    return ppos;
+    return &pos;
 };
 
-void Cubelet::setPosition(const Position * const ppos){
-    this->ppos = ppos;
+void Cubelet::setPosition(Position  _pos){
+    pos = _pos;
 }
 
 std::ostream& operator<<(std::ostream& os, Cubelet C){
