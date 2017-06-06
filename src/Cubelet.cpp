@@ -43,7 +43,7 @@ void Cubelet::setPosition(const Position * const ppos){
 std::ostream& operator<<(std::ostream& os, Cubelet C){
     os << "Colors: { ";
     for(auto it: *C.getFacelet())
-        os << *it->getColor() << " ";
+        os << it->getColor() << " ";
     os << "} ";
     os << "Reached Here ";
     os << *C.getPosition();
