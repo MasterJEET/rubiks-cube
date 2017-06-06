@@ -7,8 +7,8 @@
 
 #include <iostream>
 //#include "Cubelet.h"
-//#include "Facelet.h"
-//#include "Position.h"
+#include "Facelet.h"
+#include "Position.h"
 #include "common.h"
 
 //Just for few testing
@@ -49,17 +49,17 @@ int main(int argc, char **argv)
     // ======== FACELET TEST ========
     /*
     // Testing constructor
-    Facelet flet(&red, &left);
+    Facelet flet(red, left);
     std::cout << flet << std::endl;
 
     // Testing getColor()
-    std::cout << *flet.getColor() << std::endl;
+    std::cout << flet.getColor() << std::endl;
 
     // Testing getFaceSide()
-    std::cout << *flet.getFaceSide() << std::endl;
+    std::cout << flet.getFaceSide() << std::endl;
     
     // Testing setFaceSide()
-    flet.setFaceSide(&down);
+    flet.setFaceSide(down);
     std::cout << flet << std::endl;
     */
     // =========== FACELET ==========
@@ -74,11 +74,11 @@ int main(int argc, char **argv)
     std::cout << f << std::endl;
     
     //back left edge
-    Position bl(&back, &left);
+    Position bl(back, left);
     std::cout << bl  << std::endl;
 
     //down right front corner
-    Position drf(&down, &right, &front);
+    Position drf(down, right, front);
     std::cout << drf << std::endl;
 
     //right left, opposite face error
@@ -88,23 +88,21 @@ int main(int argc, char **argv)
     //Position dfb(&down, &front, &back);
    
     //Testing getSide() 
-    const std::vector<const FaceSide *> * pvecSide;
+    const std::vector<FaceSide> *pvecSide;
     pvecSide = drf.getSide();
-    std::cout << *(*pvecSide)[1] << std::endl;
+    std::cout << (*pvecSide)[1] << std::endl;
     
     //Testing getPositionType()
-    const PositionType * ptype;
-    ptype = bl.getPositionType();
-    std::cout << *ptype << std::endl;
+    std::cout << bl.getPositionType() << std::endl;
     
     //Testing getSideAt()
-    std::cout << *drf.getSideAt(2) << std::endl;
+    std::cout << drf.getSideAt(2) << std::endl;
     */
     // ======== positon ========
 
     // ============================    
     // ====== cubelet test ========
-    /*
+    
     try{
 
         //Center i.e. with one face
@@ -155,7 +153,7 @@ int main(int argc, char **argv)
     catch(std::runtime_error& err){
         std::cout << err.what() << std::endl;
     }
-    */
+    
     //======== cubelet ======== 
     return 0;
 }

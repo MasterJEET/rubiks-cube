@@ -53,13 +53,10 @@ extern std::ostream& operator <<(std::ostream& os, FaceSide);
 extern std::ostream& operator <<(std::ostream& os, PositionType);
 
 //Check if given pair of FaceSides are opposite of each other
-bool areOpposite(const FaceSide *first,const FaceSide *second);
+bool areOpposite(const FaceSide first,const FaceSide second);
 
 //Check if any of the given FaceSides form opposite FaceSides
-bool anyOpposite(const FaceSide *first,const FaceSide *second,const FaceSide *third);
-
-bool areOpposite(FaceSide first, FaceSide second);                          //Check if given pair of FaceSides are opposite of each other
-bool anyOpposite(FaceSide first, FaceSide second, FaceSide third);          //Check if any of the given FaceSides form opposite FaceSides
+bool anyOpposite(const FaceSide first,const FaceSide second,const FaceSide third);
 
 extern void createmapColor();
 extern void createmapFaceSide();
