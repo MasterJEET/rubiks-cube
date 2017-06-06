@@ -6,7 +6,7 @@
  * */
 
 #include <iostream>
-//#include "Cubelet.h"
+#include "Cubelet.h"
 #include "Facelet.h"
 #include "Position.h"
 #include "common.h"
@@ -106,48 +106,45 @@ int main(int argc, char **argv)
     try{
 
         //Center i.e. with one face
-        Facelet fac1(&red, &right);
+        Facelet fac1(red, right);
         //const Position r(&right);
-        Cubelet cr(&fac1);
-        const Position * ppos = cr.getPosition();
-        std::cout << *(ppos->getPositionType()) << std::endl;
-        std::cout << (ppos->getSide())->size() << std::endl;
+        Cubelet cr(fac1);
+        const Position pos = cr.getPosition();
+        //std::cout << *ppos << std::endl;
+        //std::cout << ppos->getSide()->size() << std::endl;
         //const std::vector<const FaceSide *> * pvecFac = ppos->getSide();
         //std::cout << pvecFac->size() << std::endl;
        
         //std::cout << *ppos << std::endl;
         //std::cout << cr << std::endl;
-        
+        /*
         //Edge i.e. with two faces
-        Facelet fac2(&white, &front);
-        Facelet fac3(&blue, &up);
-        const Position fu(&front, &up);
-        Cubelet cfu(&fu, &fac2, &fac3);
+        Facelet fac2(white, front);
+        Facelet fac3(blue, up);
+        Cubelet cfu(fac2, fac3);
         std::cout << cfu << std::endl;
 
         //Corner i.e. with three faces
-        Facelet fac4(&green, &back);
-        Facelet fac5(&orange, &left);
-        Facelet fac6(&white, &down);
-        const Position bld(&back, &left, &down);
-        Cubelet cbld(&bld, &fac4, &fac5, &fac6);
+        Facelet fac4(green, back);
+        Facelet fac5(orange, left);
+        Facelet fac6(white, down);
+        Cubelet cbld(fac4, fac5, fac6);
         std::cout << cbld << std::endl;
 
         //Testing getFacelet()
-        std::cout << *(*cfu.getFacelet())[1]  << std::endl;
+        std::cout << *cfu.getFacelet()[1]  << std::endl;
 
         //Testing getFaceletAt()
         std::cout << *cr.getFaceletAt(0) << std::endl;
         
         //Testing getPosition()
         std::cout << *cbld.getPosition() << std::endl;
-
-        //Testing setPosition()
-        const Position frd(&front, &right, &down);
-        cbld.setPosition(&frd);
-        std::cout << *cbld.getPosition() << std::endl;
-
         
+        //Testing setPosition()
+        const Position frd(front, right, down);
+        cbld.setPosition(frd);
+        std::cout << *cbld.getPosition() << std::endl;
+        */
 
     }
     catch(std::runtime_error& err){

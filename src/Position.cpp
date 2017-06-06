@@ -8,6 +8,8 @@
 #include "Position.h"
 #include <iostream>
 
+Position::Position(){};
+
 Position::Position(const FaceSide first): vecSide{first}, ptype(Center){
         //Noting for now
 }
