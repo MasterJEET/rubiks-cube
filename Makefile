@@ -22,6 +22,7 @@ $(OBJ)/%.o : $(SRC)/%.cpp
 	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
 
 clean:
-	rm obj/* bin/*
+	mkdir -p obj bin
+	rm -f obj/* bin/*
 
 .PHONY: all clean

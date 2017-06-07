@@ -102,7 +102,7 @@ int main(int argc, char **argv)
 
     // ============================    
     // ====== cubelet test ========
-    
+    /*
     try{
 
         //Center i.e. with one face
@@ -141,7 +141,7 @@ int main(int argc, char **argv)
     catch(std::runtime_error& err){
         std::cout << err.what() << std::endl;
     }
-    
+    */
     //======== cubelet ======== 
     return 0;
 }
