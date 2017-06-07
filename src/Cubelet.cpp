@@ -21,16 +21,15 @@ Cubelet::Cubelet(const Facelet fac1, const Facelet fac2, const Facelet fac3):vec
 
 const std::vector<Facelet> * Cubelet::getFacelet() const{
     return &vecFac;
-};
+}
 
 const Facelet *Cubelet::getFaceletAt(size_t index) const {
     return &vecFac.at(index);
-};
+}
 
 const Position Cubelet::getPosition() const{
-    std::cout << pos << std::endl;
     return pos;
-};
+}
 
 void Cubelet::setPosition(Position _pos){
     pos = _pos;
@@ -41,7 +40,6 @@ std::ostream& operator<<(std::ostream& os, Cubelet C){
     for(auto it: *C.getFacelet())
         os << it.getColor() << " ";
     os << "} ";
-    os << "Reached Here ";
     os << C.getPosition();
     return os;
-};
+}

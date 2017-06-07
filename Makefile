@@ -9,7 +9,7 @@ OBJ := obj
 BIN := bin
 INCLUDES := -I./inc
 
-OBJECTS := $(OBJ)/main.o $(OBJ)/Position.o $(OBJ)/Facelet.o $(OBJ)/common.o $(OBJ)/Cubelet.o
+OBJECTS := $(OBJ)/common.o $(OBJ)/Position.o $(OBJ)/Facelet.o $(OBJ)/Cubelet.o $(OBJ)/main.o
 
 TARGET := $(BIN)/cube
 
@@ -22,9 +22,6 @@ $(OBJ)/%.o : $(SRC)/%.cpp
 	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
 
 clean:
-	rm -r obj bin
+	rm obj/* bin/*
 
-dir:
-	mkdir bin obj
-
-.PHONY: all clean dir 
+.PHONY: all clean
