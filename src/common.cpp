@@ -79,6 +79,7 @@ void createmapFaceSide(){
 
 
 Color ColorFromStr(std::string col){
+    createmapColor();
     auto it = toColor.find(col);
     if(it == toColor.end())
         throw std::invalid_argument("Invalid Argument: check b in X(a,b) of \"Color.def\" for allowed valid arguments");
@@ -86,6 +87,7 @@ Color ColorFromStr(std::string col){
 };
 
 FaceSide FaceSideFromStr(std::string fac){
+    createmapFaceSide();
     auto it = toFaceSide.find(fac);
     if(it == toFaceSide.end())
         throw std::invalid_argument("Invalid Argument: check b in X(a,b) of \"FaceSide.def\" for allowed arguments");

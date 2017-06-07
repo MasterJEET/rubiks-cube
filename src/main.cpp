@@ -44,7 +44,38 @@ int main(int argc, char **argv)
     const PositionType undefptype = P_UNDEFINED;
     
     //std::cout << center << " " << edge << " " << corner << " " << undefptype << std::endl;
+
+    // ===============================
+    // ========= COMMON TEST =========
+
+    //Printing Color
+    std::cout << blue << std::endl;
+    //Printing FaceSide
+    std::cout << undefside << std::endl;
+    //Printing PositionType
+    std::cout << corner << std::endl;
+
+    //Checking oppsite face
+    std::cout << areOpposite(front, back) << std::endl;
+    std::cout << areOpposite(front, down) << std::endl;
+    std::cout << anyOpposite(front, down, back) << std::endl;
+    std::cout << anyOpposite(front, down, right) << std::endl;
+
+    //Getting Color from string constant
+    std::cout << ColorFromStr("W") << std::endl;
+
+    //Getting FaceSide from string constant
+    std::cout << FaceSideFromStr("L") << std::endl;
     
+    //Printing All Colors
+    printAllColor();
+
+    //Printing All FaceSides
+    printAllFaceSide();
+
+    // =========== COMMON ============
+
+
     // ==============================
     // ======== FACELET TEST ========
     /*
