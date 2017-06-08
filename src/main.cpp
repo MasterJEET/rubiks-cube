@@ -5,10 +5,14 @@
  *
  * */
 
-#include <iostream>
+#include <iostream> //Standard I/O
+#include <fstream>  //File stream I/O
+#include <cstdlib>  //std::getenv()
+
+#include "Cube.h"
 #include "Cubelet.h"
-#include "Facelet.h"
 #include "Position.h"
+#include "Facelet.h"
 #include "common.h"
 
 //Just for few testing
@@ -47,7 +51,7 @@ int main(int argc, char **argv)
 
     // ===============================
     // ========= COMMON TEST =========
-
+    /*
     //Printing Color
     std::cout << blue << std::endl;
     //Printing FaceSide
@@ -74,7 +78,7 @@ int main(int argc, char **argv)
     printAllFaceSide();
 
     // =========== COMMON ============
-
+    */
 
     // ==============================
     // ======== FACELET TEST ========
@@ -174,5 +178,24 @@ int main(int argc, char **argv)
     }
     */
     //======== cubelet ======== 
+
+    
+    // ====================================
+    // ============ CUBE TEST =============
+    
+    //Default condtructor
+    Cube cube;
+    
+    //
+    std::ifstream ifs;
+    std::string strCUBE_HOME = std::getenv("CUBE_HOME");
+    
+    ifs.open(strCUBE_HOME +  "/dat/front.dat");
+    if(!ifs)
+        std::cout << "file NOT open" << std::endl;
+    else
+        Cube cube2(ifs);
+
+    // ============= CUBE =================
     return 0;
 }

@@ -12,5 +12,14 @@ Cube::Cube(){
 };
 
 Cube::Cube(std::istream &is){
-    //To be added soon
+    getFace(is);
+};
+
+void Cube::getFace(std::istream &is){
+    std::string strFaceSide, strColor;
+    //Getting FaceSide and Color for Center Facelet
+    is >> strFaceSide >> strColor;
+    std::cout << "FaceSide: " << strFaceSide << ", Color: " << strColor << std::endl;
+    //Creating Center Facelet
+    //Facelet cFac( ColorFromStr(strColor), FaceSideFromStr(strFaceSide) );
 };
