@@ -21,5 +21,5 @@ void Cube::getFace(std::istream &is){
     is >> strFaceSide >> strColor;
     std::cout << "FaceSide: " << strFaceSide << ", Color: " << strColor << std::endl;
     //Creating Center Facelet
-    //Facelet cFac( ColorFromStr(strColor), FaceSideFromStr(strFaceSide) );
+    Facelet cFac( ColorFromStr(strColor), FaceSideFromStr(strFaceSide) );
 };

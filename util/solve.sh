@@ -1,10 +1,6 @@
 #!/bin/bash
 
+source $CUBE_HOME/util/cube.env
 
-
-
-export CUBE_HOME="$HOME/rubiks-cube"
-export CUBE="$CUBE_HOME/bin/cube"
-
-echo Runnig: $CUBE
-$CUBE
+echo Runnig: `which cube`
+cube
