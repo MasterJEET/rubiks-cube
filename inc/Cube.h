@@ -39,7 +39,7 @@ class Cube {
         void createFace(std::istream &is);
 
         //get Facelet at position specified by FaceSide
-        Facelet &getFacelet(FaceSide fside1, FaceSide fside2, FaceSide fside3) const;
+        Facelet& getFacelet(FaceSide fside1, FaceSide fside2, FaceSide fside3) const;
 };
 
 #endif
