@@ -10,7 +10,12 @@
 
 #include <iostream>
 #include <vector>
+#include <map>
+#include <utility>
 #include "Cubelet.h"
+
+typedef std::pair<FaceSide, FaceSide> pairFaceSide;
+typedef std::map< pairFaceSide, Facelet > mapFacelet;
 
 class Cube {
     private:

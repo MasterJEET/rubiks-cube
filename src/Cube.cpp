@@ -16,6 +16,8 @@ Cube::Cube(std::istream &is){
 };
 
 void Cube::getFace(std::istream &is){
+    mapFacelet mFac;
+
     std::string strFaceSide, strColor;
     //Getting FaceSide and Color for Center Facelet
     is >> strFaceSide >> strColor;
