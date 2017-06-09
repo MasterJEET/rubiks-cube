@@ -83,10 +83,14 @@ int main(int argc, char **argv)
     // ==============================
     // ======== FACELET TEST ========
     /*
-    // Testing constructor
+    // Testing constructor, Color as first argument
     Facelet flet(red, left);
-    std::cout << flet << std::endl;
+    std::cout << "Color first, " << flet << std::endl;
 
+    // Testing constructor, FaceSide as first argument
+    Facelet flr(left, red);
+    std::cout << "FaceSide first, " << flr << std::endl;
+    
     // Testing getColor()
     std::cout << flet.getColor() << std::endl;
 
@@ -182,7 +186,7 @@ int main(int argc, char **argv)
     
     // ====================================
     // ============ CUBE TEST =============
-    
+    /*
     //Default condtructor
     Cube cube;
     
@@ -195,7 +199,7 @@ int main(int argc, char **argv)
         std::cout << "file NOT open" << std::endl;
     else
         Cube cube2(ifs);
-
+    */
     // ============= CUBE =================
     return 0;
 }

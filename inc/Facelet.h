@@ -22,6 +22,9 @@ class Facelet {
         //Initialization from Color and FaceSice
         Facelet(const Color , const FaceSide side);
         
+        //Initialization from Color and FaceSice
+        Facelet(const FaceSide side, const Color);
+
         //Returns pointer to 'col'
         const Color getColor() const;
         
