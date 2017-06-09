@@ -12,16 +12,37 @@ Cube::Cube(){
 };
 
 Cube::Cube(std::istream &is){
-    getFace(is);
+    createFace(is);
 };
 
-void Cube::getFace(std::istream &is){
-    mapFacelet mFac;
+void Cube::createFace(std::istream &is){
 
-    std::string strFaceSide, strColor;
-    //Getting FaceSide and Color for Center Facelet
-    is >> strFaceSide >> strColor;
-    std::cout << "FaceSide: " << strFaceSide << ", Color: " << strColor << std::endl;
-    //Creating Center Facelet
-    Facelet cFac( ColorFromStr(strColor), FaceSideFromStr(strFaceSide) );
+    mapFaceletFace mFaceletFace;
+    std::string strCtrFaceSide, strCtrColor;
+    FaceSide ctrSide;
+    Color ctrCol;
+
+    //Get FaceSide and Color for Center Facelet
+    is >> strCtrFaceSide >> strCtrColor;
+    std::cout << "FaceSide: " << strCtrFaceSide << ", Color: " << strCtrColor << std::endl;
+    ctrSide = FaceSideFromStr(strCtrFaceSide);
+    ctrCol = ColorFromStr(strCtrColor);
+    
+    //Create Center Facelet and add it to map
+    Facelet ctrFac( ctrCol, ctrSide );
+    pairFaceSide pSide(ctrSide, F_UNDEFINED);
+    mFaceletFace.insert( std::pair<pairFaceSide, Facelet>( pSide, ctrFac  ) );
+
+    mFaceletAll.insert( std::pair<FaceSide, mapFaceletFace>(ctrSide, mFaceletFace) );
+
+    //const Facelet& flet = getFacelet(ctrSide, F_UNDEFINED, F_UNDEFINED);
+    
 };
+
+/*
+Facelet& Cube::getFacelet(FaceSide fside1, FaceSide fside2, FaceSide fside3) const{
+    mapFaceletFace mFaceletFace = mFaceletAll.at(fside1);
+    pairFaceSide pSide(fside2, fside3);
+    return mFaceletFace.at(pSide);
+};
+*/

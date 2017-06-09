@@ -186,7 +186,7 @@ int main(int argc, char **argv)
     
     // ====================================
     // ============ CUBE TEST =============
-    /*
+    
     //Default condtructor
     Cube cube;
     
@@ -199,7 +199,7 @@ int main(int argc, char **argv)
         std::cout << "file NOT open" << std::endl;
     else
         Cube cube2(ifs);
-    */
+    
     // ============= CUBE =================
     return 0;
 }
