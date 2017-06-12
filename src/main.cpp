@@ -7,13 +7,8 @@
 
 #include <iostream> //Standard I/O
 #include <fstream>  //File stream I/O
-#include <cstdlib>  //std::getenv()
 
 #include "Cube.h"
-#include "Cubelet.h"
-#include "Position.h"
-#include "Facelet.h"
-#include "common.h"
 
 //Just for few testing
 
@@ -190,7 +185,6 @@ int main(int argc, char **argv)
     //Default condtructor
     Cube cube;
     
-    //
     std::ifstream ifs;
     std::string strCUBE_HOME = std::getenv("CUBE_HOME");
     
@@ -198,8 +192,11 @@ int main(int argc, char **argv)
     if(!ifs)
         std::cout << "file NOT open" << std::endl;
     else
-        Cube cube2(ifs);
+        cube = Cube(ifs);
     
+    const Facelet& flet = cube.getFacelet(Front, F_UNDEFINED, F_UNDEFINED);
+    std::cout << flet << std::endl;
+
     // ============= CUBE =================
     return 0;
 }

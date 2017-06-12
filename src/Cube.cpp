@@ -24,7 +24,6 @@ void Cube::createFace(std::istream &is){
 
     //Get FaceSide and Color for Center Facelet
     is >> strCtrFaceSide >> strCtrColor;
-    std::cout << "FaceSide: " << strCtrFaceSide << ", Color: " << strCtrColor << std::endl;
     ctrSide = FaceSideFromStr(strCtrFaceSide);
     ctrCol = ColorFromStr(strCtrColor);
     
@@ -35,14 +34,24 @@ void Cube::createFace(std::istream &is){
 
     mFaceletAll.insert( std::pair<FaceSide, mapFaceletFace>(ctrSide, mFaceletFace) );
 
-    //const Facelet& flet = getFacelet(ctrSide, F_UNDEFINED, F_UNDEFINED);
-    
 };
 
-/*
+
 Facelet& Cube::getFacelet(FaceSide fside1, FaceSide fside2, FaceSide fside3) const{
+    if( fside1 == F_UNDEFINED ){
+        std::string error_msg = std::string() + "First argument of " + __func__+": Cannot be F_UNDEFINED...\n";
+        error_msg += std::string() + "See \"" + std::getenv("CUBE_HOME") + "/inc/FaceSide.def\" for valid values...\n";
+        throw std::invalid_argument(error_msg);
+    }
     mapFaceletFace mFaceletFace = mFaceletAll.at(fside1);
-    pairFaceSide pSide(fside2, fside3);
+    pairFaceSide pSide;
+    
+    if(fside2 == F_UNDEFINED && fside3 == F_UNDEFINED)
+        pSide = pairFaceSide(fside1, fside2);
+    else
+        pSide = pairFaceSide(fside2, fside3);
+        
+    mFaceletFace.at(pSide);
     return mFaceletFace.at(pSide);
 };
-*/
+
