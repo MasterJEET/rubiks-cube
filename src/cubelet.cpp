@@ -5,7 +5,7 @@
  *
  * */
 
-#include "Cubelet.h"
+#include "cubelet.h"
 
 Cubelet::Cubelet(const Facelet fac1):vecFac{fac1}{
     pos = Position(fac1.getFaceSide());

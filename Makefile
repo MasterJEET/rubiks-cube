@@ -12,27 +12,30 @@
 # project, except GTEST_HEADERS, which you can use in your own targets
 # but shouldn't modify.
 
-BIN := bin
-OBJ := obj
+BIN_DIR := bin
+OBJ_DIR := obj
 
 # Points to the root of Google Test, relative to where this file is.
 # Remember to tweak this if you move this file.
 GTEST_DIR = googletest
 
-# Where to find user code.
-USER_DIR = $(HOME)/googletest/googletest/samples
+# Where to find user source code
+# .cpp files
+USER_DIR = src
+# header files (.h files)
+HEADER_DIR = inc
 
 # Flags passed to the preprocessor.
 # Set Google Test's header directory as a system directory, such that
 # the compiler doesn't generate warnings in Google Test headers.
-CPPFLAGS += -isystem $(GTEST_DIR)/include
+CPPFLAGS += -isystem $(GTEST_DIR)/include -I $(HEADER_DIR)
 
 # Flags passed to the C++ compiler.
 CXXFLAGS += -g -Wall -Wextra -pthread -rdynamic -std=c++11
 
 # All tests produced by this Makefile.  Remember to add new tests you
 # created to the list.
-TESTS = $(BIN)/sample1_unittest
+TESTS = $(BIN_DIR)/facelet_unittest
 
 # All Google Test headers.  Usually you shouldn't change this
 # definition.
@@ -44,9 +47,9 @@ GTEST_HEADERS = $(GTEST_DIR)/include/gtest/*.h \
 all : $(TESTS)
 
 clean :
-	rm -f $(BIN)/* $(OBJ)/*
+	rm -rf $(BIN_DIR) $(OBJ_DIR)
 
-# Builds $(OBJ)/gtest.a and $(OBJ)/gtest_main.a.
+# Builds $(OBJ_DIR)/gtest.a and $(OBJ_DIR)/gtest_main.a.
 
 # Usually you shouldn't tweak such internal variables, indicated by a
 # trailing _.
@@ -56,37 +59,41 @@ GTEST_SRCS_ = $(GTEST_DIR)/src/*.cc $(GTEST_DIR)/src/*.h $(GTEST_HEADERS)
 # implementation details, the dependencies specified below are
 # conservative and not optimized.  This is fine as Google Test
 # compiles fast and for ordinary users its source rarely changes.
-$(OBJ)/gtest-all.o : $(GTEST_SRCS_)
-	@mkdir -p $(OBJ)
+$(OBJ_DIR)/gtest-all.o : $(GTEST_SRCS_)
+	@mkdir -p $(OBJ_DIR)
 	$(CXX) $(CPPFLAGS) -I$(GTEST_DIR) $(CXXFLAGS) -c \
-            $(GTEST_DIR)/src/gtest-all.cc -o $(OBJ)/gtest-all.o
+            $(GTEST_DIR)/src/gtest-all.cc -o $(OBJ_DIR)/gtest-all.o
 
-$(OBJ)/gtest_main.o : $(GTEST_SRCS_)
-	@mkdir -p $(OBJ)
+$(OBJ_DIR)/gtest_main.o : $(GTEST_SRCS_)
+	@mkdir -p $(OBJ_DIR)
 	$(CXX) $(CPPFLAGS) -I$(GTEST_DIR) $(CXXFLAGS) -c \
-            $(GTEST_DIR)/src/gtest_main.cc -o $(OBJ)/gtest_main.o
+            $(GTEST_DIR)/src/gtest_main.cc -o $(OBJ_DIR)/gtest_main.o
 
-$(OBJ)/gtest.a : $(OBJ)/gtest-all.o
-	@mkdir -p $(OBJ)
+$(OBJ_DIR)/gtest.a : $(OBJ_DIR)/gtest-all.o
+	@mkdir -p $(OBJ_DIR)
 	$(AR) $(ARFLAGS) $@ $^
 
-$(OBJ)/gtest_main.a : $(OBJ)/gtest-all.o $(OBJ)/gtest_main.o
-	@mkdir -p $(OBJ)
+$(OBJ_DIR)/gtest_main.a : $(OBJ_DIR)/gtest-all.o $(OBJ_DIR)/gtest_main.o
+	@mkdir -p $(OBJ_DIR)
 	$(AR) $(ARFLAGS) $@ $^
 
-# Builds a sample test.  A test should link with either $(OBJ)/gtest.a or
-# $(OBJ)/gtest_main.a, depending on whether it defines its own main()
+# Builds a sample test.  A test should link with either $(OBJ_DIR)/gtest.a or
+# $(OBJ_DIR)/gtest_main.a, depending on whether it defines its own main()
 # function.
 
-$(OBJ)/sample1.o : $(USER_DIR)/sample1.cc $(USER_DIR)/sample1.h $(GTEST_HEADERS)
-	@mkdir -p $(OBJ)
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/sample1.cc -o $(OBJ)/sample1.o
+$(OBJ_DIR)/%.o : $(USER_DIR)/%.cpp $(HEADER_DIR)/%.h $(GTEST_HEADERS)
+	@mkdir -p $(OBJ_DIR)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
 
-$(OBJ)/sample1_unittest.o : $(USER_DIR)/sample1_unittest.cc \
-                     $(USER_DIR)/sample1.h $(GTEST_HEADERS)
-	@mkdir -p $(OBJ)
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/sample1_unittest.cc -o $(OBJ)/sample1_unittest.o
+$(OBJ_DIR)/rubiks-cube.o : $(USER_DIR)/*.cpp $(HEADER_DIR)/*.h $(GTEST_HEADERS)
+	@mkdir -p $(OBJ_DIR)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/main.cpp -o $(OBJ_DIR)/rubiks-cube.o
 
-$(BIN)/sample1_unittest : $(OBJ)/sample1.o $(OBJ)/sample1_unittest.o $(OBJ)/gtest_main.a
-	@mkdir -p $(BIN) $(OBJ)
+$(OBJ_DIR)/facelet_unittest.o : $(USER_DIR)/facelet_unittest.cpp \
+                     $(HEADER_DIR)/facelet.h $(GTEST_HEADERS)
+	@mkdir -p $(OBJ_DIR)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/facelet_unittest.cpp -o $(OBJ_DIR)/facelet_unittest.o
+
+$(BIN_DIR)/facelet_unittest : $(OBJ_DIR)/common.o $(OBJ_DIR)/facelet.o $(OBJ_DIR)/rubiks-cube.o  $(OBJ_DIR)/facelet_unittest.o $(OBJ_DIR)/gtest.a
+	@mkdir -p $(BIN_DIR) $(OBJ_DIR)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@

@@ -5,7 +5,7 @@
  *
  * */
 
-#include "Cube.h"
+#include "cube.h"
 
 Cube::Cube(){
     //Nothing here for now

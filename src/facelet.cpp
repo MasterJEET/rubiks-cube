@@ -5,7 +5,7 @@
  *
  * */
 
-#include "Facelet.h"
+#include "facelet.h"
 
 Facelet::Facelet(const Color _col, const FaceSide _side): col(_col), side(_side){
     //Nothing for now

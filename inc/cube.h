@@ -12,7 +12,7 @@
 #include <vector>
 #include <map>
 #include <utility>
-#include "Cubelet.h"
+#include "cubelet.h"
 
 typedef std::pair<FaceSide, FaceSide> pairFaceSide;
 typedef std::map< pairFaceSide, Facelet > mapFaceletFace;

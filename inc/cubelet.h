@@ -8,8 +8,8 @@
 #ifndef CUBELET_H
 #define CUBELET_H
 
-#include "Facelet.h"
-#include "Position.h"
+#include "facelet.h"
+#include "position.h"
 #include <vector>
 
 class Cubelet{
