@@ -1,0 +1,28 @@
+# @author: MasterJEET
+# @email : masterjeet9@gmail.com
+
+CXX := g++
+C11 := -std=c++11
+CXXFLAGS := -g -rdynamic $(C11)
+SRC := src
+OBJ_DIR := obj
+BIN := bin
+INCLUDES := -I./inc
+
+OBJECTS := $(OBJ_DIR)/common.o $(OBJ_DIR)/Position.o $(OBJ_DIR)/Facelet.o $(OBJ_DIR)/Cubelet.o $(OBJ_DIR)/Cube.o $(OBJ_DIR)/main.o
+
+TARGET := $(BIN)/cube
+
+all: $(TARGET)
+
+$(TARGET) : $(OBJECTS)
+	$(CXX) $(CXXFLAGS) $^ -o $@
+
+$(OBJ_DIR)/%.o : $(SRC)/%.cpp
+	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+
+clean:
+	mkdir -p obj bin
+	rm -f obj/* bin/*
+
+.PHONY: all clean
