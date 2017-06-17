@@ -15,67 +15,6 @@
 
 int main(int argc, char **argv)
 {
-//    //All facesides
-//    const FaceSide front = Front;
-//    const FaceSide back = Back;
-//    const FaceSide left = Left;
-//    const FaceSide right = Right;
-//    const FaceSide up = Up;
-//    const FaceSide down = Down;
-//    const FaceSide undefside = F_UNDEFINED;
-//    
-//    //std::cout << front << " " << back << " " << left << " " << right << " " << up << " " << down << " " << undefside << std::endl;
-//    
-//    //All colors
-//    const Color white = White;
-//    const Color yellow = Yellow;
-//    const Color orange = Orange;
-//    const Color red = Red;
-//    const Color green = Green;
-//    const Color blue = Blue;
-//    const Color undefcol = C_UNDEFINED;
-//
-//    //std::cout << white << " " << yellow << " " << orange << " " << red << " " << green << " " << blue << " " << undefcol << std::endl;
-//    
-//    //All Position types
-//    const PositionType center = Center;
-//    const PositionType edge = Edge;
-//    const PositionType corner = Corner;
-//    const PositionType undefptype = P_UNDEFINED;
-//    
-//    //std::cout << center << " " << edge << " " << corner << " " << undefptype << std::endl;
-//
-//    // ===============================
-//    // ========= COMMON TEST =========
-//    /*
-//    //Printing Color
-//    std::cout << blue << std::endl;
-//    //Printing FaceSide
-//    std::cout << undefside << std::endl;
-//    //Printing PositionType
-//    std::cout << corner << std::endl;
-//
-//    //Checking oppsite face
-//    std::cout << areOpposite(front, back) << std::endl;
-//    std::cout << areOpposite(front, down) << std::endl;
-//    std::cout << anyOpposite(front, down, back) << std::endl;
-//    std::cout << anyOpposite(front, down, right) << std::endl;
-//
-//    //Getting Color from string constant
-//    std::cout << ColorFromLetter("W") << std::endl;
-//
-//    //Getting FaceSide from string constant
-//    std::cout << FaceSideFromLetter("L") << std::endl;
-//    
-//    //Printing All Colors
-//    printAllColor();
-//
-//    //Printing All FaceSides
-//    printAllFaceSide();
-//
-//    // =========== COMMON ============
-//    */
-//
 //    // ==============================
 //    // ======== FACELET TEST ========
 //    /*

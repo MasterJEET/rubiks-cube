@@ -3,19 +3,19 @@ OBJ_DIR := obj
 LIB_DIR := lib
 INC_DIR := inc
 SRC_DIR := src
-GTEST_DIR := googletest
+TEST_DIR := test
 
 # Flags passed to the preprocessor.
 # Set Google Test's header directory as a system directory, such that
 # the compiler doesn't generate warnings in Google Test headers.
-CPPFLAGS += -isystem $(GTEST_DIR)/include -I $(INC_DIR)
+CPPFLAGS += -isystem $(TEST_DIR) -I $(INC_DIR)
 
 # Flags passed to the C++ compiler.
 CXXFLAGS += -g -Wall -Wextra -pthread -rdynamic -std=c++11
 
 # All tests produced by this Makefile.  Remember to add new tests you
 # created to the list.
-TESTS = $(BIN_DIR)/common_unittest
+TESTS += $(BIN_DIR)/common_unittest
 
 # House-keeping build targets.
 
@@ -33,7 +33,7 @@ $(LIB_DIR)/librubiks-cube.a : $(OBJ_DIR)/common.o $(OBJ_DIR)/position.o $(OBJ_DI
 	@mkdir -p $(OBJ_DIR)
 	$(AR) $(ARFLAGS) $@ $^
 
-$(OBJ_DIR)/%_unittest.o : $(SRC_DIR)/%_unittest.cpp $(INC_DIR)/%.h
+$(OBJ_DIR)/%_unittest.o : $(TEST_DIR)/src/%_unittest.cpp $(INC_DIR)/%.h
 	@mkdir -p $(OBJ_DIR)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
 
