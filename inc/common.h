@@ -1,4 +1,5 @@
 /*
+:wa
  * @author: MasterJEET
  * @email : masterjeet9@gmail.com
  * @date  : 14th Apr 2017
@@ -74,5 +75,31 @@ void printAllColor();
 
 //Print all elemensts of toFaceSide map
 void printAllFaceSide();
+
+// ======== Global Constants Definition ========
+//All facesides
+const FaceSide front = Front;
+const FaceSide back = Back;
+const FaceSide left = Left;
+const FaceSide right = Right;
+const FaceSide up = Up;
+const FaceSide down = Down;
+const FaceSide undefside = F_UNDEFINED;
+
+//All colors
+const Color white = White;
+const Color yellow = Yellow;
+const Color orange = Orange;
+const Color red = Red;
+const Color green = Green;
+const Color blue = Blue;
+const Color undefcol = C_UNDEFINED;
+
+//All Position types
+const PositionType center = Center;
+const PositionType edge = Edge;
+const PositionType corner = Corner;
+const PositionType undeftype = P_UNDEFINED;
+// =============================================
 
 #endif
