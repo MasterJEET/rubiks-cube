@@ -26,10 +26,10 @@ class Facelet {
         Facelet(const FaceSide side, const Color);
 
         //Returns pointer to 'col'
-        const Color getColor() const;
+        Color getColor() const;
         
         //Returns 'side'
-        const FaceSide getFaceSide() const;
+        FaceSide getFaceSide() const;
         
         //Sets 'side'
         void setFaceSide(const FaceSide side);

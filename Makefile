@@ -23,7 +23,7 @@ all : $(TESTS)
 
 clean :
 	rm -rf $(BIN_DIR) $(OBJ_DIR)
-	rm -f $(LIB_DIR)/rubiks*
+	rm -f $(LIB_DIR)/librubiks*
 
 $(OBJ_DIR)/%.o : $(SRC_DIR)/%.cpp $(INC_DIR)/%.h
 	@mkdir -p $(OBJ_DIR)
@@ -33,7 +33,7 @@ $(OBJ_DIR)/main.o : $(SRC_DIR)/*.cpp $(INC_DIR)/*.h
 	@mkdir -p $(OBJ_DIR)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(SRC_DIR)/main.cpp -o $@
 
-$(LIB_DIR)/rubiks-cube.a : $(OBJ_DIR)/common.o $(OBJ_DIR)/position.o $(OBJ_DIR)/facelet.o $(OBJ_DIR)/cubelet.o $(OBJ_DIR)/cube.o $(OBJ_DIR)/main.o
+$(LIB_DIR)/librubiks-cube.a : $(OBJ_DIR)/common.o $(OBJ_DIR)/position.o $(OBJ_DIR)/facelet.o $(OBJ_DIR)/cubelet.o $(OBJ_DIR)/cube.o $(OBJ_DIR)/main.o
 	@mkdir -p $(OBJ_DIR)
 	$(AR) $(ARFLAGS) $@ $^
 
@@ -41,6 +41,6 @@ $(OBJ_DIR)/%_unittest.o : $(SRC_DIR)/%_unittest.cpp $(INC_DIR)/%.h
 	@mkdir -p $(OBJ_DIR)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
 
-$(BIN_DIR)/%_unittest :  $(OBJ_DIR)/%_unittest.o $(LIB_DIR)/rubiks-cube.a  $(LIB_DIR)/gtest.a
+$(BIN_DIR)/%_unittest :  $(OBJ_DIR)/%_unittest.o $(LIB_DIR)/librubiks-cube.a  $(LIB_DIR)/gtest.a
 	@mkdir -p $(BIN_DIR)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
