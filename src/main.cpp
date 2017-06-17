@@ -15,30 +15,6 @@
 
 int main(int argc, char **argv)
 {
-//    // ==============================
-//    // ======== FACELET TEST ========
-//    /*
-//    // Testing constructor, Color as first argument
-//    Facelet flet(red, left);
-//    std::cout << "Color first, " << flet << std::endl;
-//
-//    // Testing constructor, FaceSide as first argument
-//    Facelet flr(left, red);
-//    std::cout << "FaceSide first, " << flr << std::endl;
-//    
-//    // Testing getColor()
-//    std::cout << flet.getColor() << std::endl;
-//
-//    // Testing getFaceSide()
-//    std::cout << flet.getFaceSide() << std::endl;
-//    
-//    // Testing setFaceSide()
-//    flet.setFaceSide(down);
-//    std::cout << flet << std::endl;
-//    */
-//    // =========== FACELET ==========
-//
-//
 //    // ================================
 //    // ========= position test ========
 //

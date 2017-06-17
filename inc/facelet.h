@@ -15,14 +15,16 @@ class Facelet {
     private:
 
         //Holds face color
-        const Color col;
+        Color col;
         FaceSide side;
     public:
-        
+        //Default constructor
+        Facelet();
+
         //Initialization from Color and FaceSice
         Facelet(const Color , const FaceSide side);
         
-        //Initialization from Color and FaceSice
+        //Initialization from FaceSice and Color
         Facelet(const FaceSide side, const Color);
 
         //Returns pointer to 'col'
