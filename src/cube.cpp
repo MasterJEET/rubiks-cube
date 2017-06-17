@@ -24,8 +24,8 @@ void Cube::createFace(std::istream &is){
 
     //Get FaceSide and Color for Center Facelet
     is >> strCtrFaceSide >> strCtrColor;
-    ctrSide = FaceSideFromStr(strCtrFaceSide);
-    ctrCol = ColorFromStr(strCtrColor);
+    ctrSide = FaceSideFromLetter(strCtrFaceSide);
+    ctrCol = ColorFromLetter(strCtrColor);
     
     //Create Center Facelet and add it to map
     Facelet ctrFac( ctrCol, ctrSide );

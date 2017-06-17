@@ -78,7 +78,9 @@ void createmapFaceSide(){
 
 
 
-Color ColorFromStr(std::string col){
+Color ColorFromLetter(char col) { return ColorFromLetter(&col); };
+
+Color ColorFromLetter(std::string col){
     createmapColor();
     auto it = toColor.find(col);
     if(it == toColor.end())
@@ -86,7 +88,9 @@ Color ColorFromStr(std::string col){
     return it->second;
 };
 
-FaceSide FaceSideFromStr(std::string fac){
+FaceSide FaceSideFromLetter(char fac) { return FaceSideFromLetter(&fac); };
+
+FaceSide FaceSideFromLetter(std::string fac){
     createmapFaceSide();
     auto it = toFaceSide.find(fac);
     if(it == toFaceSide.end())

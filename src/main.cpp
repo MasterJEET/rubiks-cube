@@ -62,10 +62,10 @@ int main(int argc, char **argv)
 //    std::cout << anyOpposite(front, down, right) << std::endl;
 //
 //    //Getting Color from string constant
-//    std::cout << ColorFromStr("W") << std::endl;
+//    std::cout << ColorFromLetter("W") << std::endl;
 //
 //    //Getting FaceSide from string constant
-//    std::cout << FaceSideFromStr("L") << std::endl;
+//    std::cout << FaceSideFromLetter("L") << std::endl;
 //    
 //    //Printing All Colors
 //    printAllColor();

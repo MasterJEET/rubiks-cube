@@ -61,8 +61,10 @@ bool anyOpposite(const FaceSide first,const FaceSide second,const FaceSide third
 extern void createmapColor();
 extern void createmapFaceSide();
 
-extern Color ColorFromStr(std::string col);
-extern FaceSide FaceSideFromStr(std::string fs);
+extern Color ColorFromLetter(char col);
+extern Color ColorFromLetter(std::string col);
+extern FaceSide FaceSideFromLetter(char fs);
+extern FaceSide FaceSideFromLetter(std::string fs);
 
 //SIGTERM handler
 void handler(int sig);
