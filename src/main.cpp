@@ -5,13 +5,7 @@
  *
  * */
 
-//#include <iostream> //Standard I/O
 #include "gtest/gtest.h"
-//#include <fstream>  //File stream I/O
-
-//#include "Cube.h"
-
-//Just for few testing
 
 int main(int argc, char **argv)
 {
