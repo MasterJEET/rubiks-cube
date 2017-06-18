@@ -17,7 +17,8 @@ CXXFLAGS += -g -Wall -Wextra -pthread -rdynamic -std=c++11
 # created to the list.
 # TESTS += $(BIN_DIR)/common_unittest
 # TESTS += $(BIN_DIR)/facelet_unittest
-TESTS += $(BIN_DIR)/position_unittest
+# TESTS += $(BIN_DIR)/position_unittest
+TESTS += $(BIN_DIR)/cubelet_unittest
 
 # House-keeping build targets.
 

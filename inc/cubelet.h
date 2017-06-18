@@ -22,6 +22,9 @@ class Cubelet{
         Position pos;
 
     public:
+
+        //Default constructor
+        Cubelet();
         
         //Constructor for Center cubelets
         Cubelet(const Facelet fac1);
@@ -36,10 +39,10 @@ class Cubelet{
         const std::vector<Facelet> *getFacelet() const;
        
         // Returns vecFac[index]
-        const Facelet *getFaceletAt(size_t index) const;
+        Facelet getFaceletAt(size_t index) const;
 
         //Returns Position
-        const Position getPosition() const;
+        Position getPosition() const;
 
         //Sets Position for cubelet
         void setPosition(Position pos);

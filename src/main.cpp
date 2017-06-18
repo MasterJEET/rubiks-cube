@@ -9,41 +9,6 @@
 
 int main(int argc, char **argv)
 {
-//    // ================================
-//    // ========= position test ========
-//
-//    /*
-//    //front center
-//    Position f(front);
-//    std::cout << f << std::endl;
-//    
-//    //back left edge
-//    Position bl(back, left);
-//    std::cout << bl  << std::endl;
-//
-//    //down right front corner
-//    Position drf(down, right, front);
-//    std::cout << drf << std::endl;
-//
-//    //right left, opposite face error
-//    //Position rl(&right, &left);
-//    
-//    //down, front and back, opposite face error
-//    //Position dfb(&down, &front, &back);
-//   
-//    //Testing getSide() 
-//    const std::vector<FaceSide> *pvecSide;
-//    pvecSide = drf.getSide();
-//    std::cout << (*pvecSide)[1] << std::endl;
-//    
-//    //Testing getPositionType()
-//    std::cout << bl.getPositionType() << std::endl;
-//    
-//    //Testing getSideAt()
-//    std::cout << drf.getSideAt(2) << std::endl;
-//    */
-//    // ======== positon ========
-//
 //    // ============================    
 //    // ====== cubelet test ========
 //    /*

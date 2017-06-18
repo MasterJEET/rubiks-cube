@@ -7,6 +7,8 @@
 
 #include "cubelet.h"
 
+Cubelet::Cubelet(){};
+
 Cubelet::Cubelet(const Facelet fac1):vecFac{fac1}{
     pos = Position(fac1.getFaceSide());
 }
@@ -23,11 +25,11 @@ const std::vector<Facelet> * Cubelet::getFacelet() const{
     return &vecFac;
 }
 
-const Facelet *Cubelet::getFaceletAt(size_t index) const {
-    return &vecFac.at(index);
+Facelet Cubelet::getFaceletAt(size_t index) const {
+    return vecFac.at(index);
 }
 
-const Position Cubelet::getPosition() const{
+Position Cubelet::getPosition() const{
     return pos;
 }
 
