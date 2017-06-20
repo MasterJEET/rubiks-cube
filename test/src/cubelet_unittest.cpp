@@ -47,3 +47,8 @@ TEST_F(CubeletTest, constructors) {
     std::getline(ss, clet);
     EXPECT_EQ("Colors: { Green Orange White } Position: ptype = Corner, vecSide = { Back Left Down }", clet);
 }
+
+TEST_F(CubeletTest, functions) {
+    //std::stringstream
+    std::vector<Facelet> *pvecSide = cr.getFacelet();
+}
