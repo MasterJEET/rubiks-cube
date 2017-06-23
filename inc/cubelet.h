@@ -45,7 +45,7 @@ class Cubelet{
         Position getPosition() const;
 
         //Sets Position for cubelet
-        void setPosition(Position pos);
+        void setPosition(const Position pos);
 };
 
 std::ostream& operator<<(std::ostream& os, Cubelet C);

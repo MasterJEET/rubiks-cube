@@ -33,7 +33,7 @@ Position Cubelet::getPosition() const{
     return pos;
 }
 
-void Cubelet::setPosition(Position _pos){
+void Cubelet::setPosition(const Position _pos){
     pos = _pos;
 }
 
