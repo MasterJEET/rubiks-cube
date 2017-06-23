@@ -6,10 +6,11 @@
  * */
 
 #include "common.h"
+#include <unordered_map>
 #include <stdexcept>
 
-std::map<std::string, Color> toColor;                                                   //Maps first letter of Color to Color itself
-std::map<std::string, FaceSide> toFaceSide;                                             //Maps first letter of FaceSide to FaceSide itself
+std::unordered_map<std::string, Color> toColor;                                                   //Maps first letter of Color to Color itself
+std::unordered_map<std::string, FaceSide> toFaceSide;                                             //Maps first letter of FaceSide to FaceSide itself
 
 //============ Define <index,type> pair start ===========
 #   define X(a,b) #a,
