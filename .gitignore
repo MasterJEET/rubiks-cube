@@ -1,6 +1,6 @@
 *.o
 *.out
+*.a
 bin/*
 obj/*
-src/main.cpp
 *.swp

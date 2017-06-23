@@ -5,8 +5,10 @@
  *
  * */
 
-#include "Position.h"
+#include "position.h"
 #include <iostream>
+
+Position::Position(){};
 
 Position::Position(const FaceSide first): vecSide{first}, ptype(Center){
         //Noting for now
@@ -22,7 +24,7 @@ Position::Position(const FaceSide first,const FaceSide second,const FaceSide thi
         throw std::runtime_error(__func__ + std::string(": Contain opposite faces."));
 }
 
-const PositionType Position::getPositionType() const
+PositionType Position::getPositionType() const
 {
     return ptype;
 }
@@ -32,7 +34,7 @@ const std::vector< FaceSide> * Position::getSide() const
     return &(this->vecSide);
 }
 
-const FaceSide Position::getSideAt(size_t index) const{
+FaceSide Position::getSideAt(size_t index) const{
     return vecSide.at(index);
 };
 

@@ -1,30 +1,45 @@
-# @author: MasterJEET
-# @email : masterjeet9@gmail.com
+BIN_DIR := bin
+OBJ_DIR := obj
+LIB_DIR := lib
+INC_DIR := inc
+SRC_DIR := src
+TEST_DIR := test
 
-CXX := g++
-C11 := -std=c++11
-CXXFLAGS := -g -rdynamic $(C11)
-SRC := src
-OBJ := obj
-BIN := bin
-INCLUDES := -I./inc
+# Flags passed to the preprocessor.
+# Set Google Test's header directory as a system directory, such that
+# the compiler doesn't generate warnings in Google Test headers.
+CPPFLAGS += -isystem $(TEST_DIR) -I $(INC_DIR)
 
-OBJECTS := $(OBJ)/main.o $(OBJ)/Position.o $(OBJ)/Facelet.o $(OBJ)/common.o $(OBJ)/Cubelet.o
+# Flags passed to the C++ compiler.
+CXXFLAGS += -g -Wall -Wextra -pthread -rdynamic -std=c++11
 
-TARGET := $(BIN)/cube
+# All tests produced by this Makefile.  Remember to add new tests you
+# created to the list.
+# TESTS += $(BIN_DIR)/common_unittest
+# TESTS += $(BIN_DIR)/facelet_unittest
+# TESTS += $(BIN_DIR)/position_unittest
+TESTS += $(BIN_DIR)/cubelet_unittest
 
-all: $(TARGET)
+# House-keeping build targets.
 
-$(TARGET) : $(OBJECTS)
-	$(CXX) $(CXXFLAGS) $^ -o $@
+all : $(TESTS)
 
-$(OBJ)/%.o : $(SRC)/%.cpp
-	$(CXX) $(INCLUDES) $(CXXFLAGS) -c $< -o $@
+clean :
+	rm -rf $(BIN_DIR) $(OBJ_DIR)
+	rm -f $(LIB_DIR)/librubiks*
 
-clean:
-	rm -r obj bin
+$(OBJ_DIR)/%.o : $(SRC_DIR)/%.cpp $(INC_DIR)/%.h
+	@mkdir -p $(OBJ_DIR)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
 
-dir:
-	mkdir bin obj
+$(LIB_DIR)/librubiks-cube.a : $(OBJ_DIR)/common.o $(OBJ_DIR)/position.o $(OBJ_DIR)/facelet.o $(OBJ_DIR)/cubelet.o $(OBJ_DIR)/cube.o
+	@mkdir -p $(OBJ_DIR)
+	$(AR) $(ARFLAGS) $@ $^
 
-.PHONY: all clean dir 
+$(OBJ_DIR)/%_unittest.o : $(TEST_DIR)/src/%_unittest.cpp $(INC_DIR)/%.h
+	@mkdir -p $(OBJ_DIR)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
+
+$(BIN_DIR)/%_unittest :  $(OBJ_DIR)/%_unittest.o $(LIB_DIR)/librubiks-cube.a  $(LIB_DIR)/gtest_main.a
+	@mkdir -p $(BIN_DIR)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@

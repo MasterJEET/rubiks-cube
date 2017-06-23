@@ -5,17 +5,23 @@
  *
  * */
 
-#include "Facelet.h"
+#include "facelet.h"
+
+Facelet::Facelet(){};
 
 Facelet::Facelet(const Color _col, const FaceSide _side): col(_col), side(_side){
     //Nothing for now
 }
 
-const Color Facelet::getColor() const{
+Facelet::Facelet(const FaceSide _side, const Color _col): Facelet(_col, _side){
+    //Nothing for now
+}
+
+Color Facelet::getColor() const{
     return col;
 }
 
-const FaceSide Facelet::getFaceSide() const{
+FaceSide Facelet::getFaceSide() const{
     return side;
 }
 

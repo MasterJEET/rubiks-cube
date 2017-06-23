@@ -8,41 +8,44 @@
 #ifndef CUBELET_H
 #define CUBELET_H
 
-#include "Facelet.h"
-#include "Position.h"
+#include "facelet.h"
+#include "position.h"
 #include <vector>
 
 class Cubelet{
     private:
 
         //Holds Facelets for a given cubelet
-        const std::vector<Facelet> vecFac;
+        std::vector<Facelet> vecFac;
 
         //Holds Position of a given cubelet
         Position pos;
 
     public:
+
+        //Default constructor
+        Cubelet();
         
         //Constructor for Center cubelets
-        Cubelet(Facelet fac1);
+        Cubelet(const Facelet fac1);
         
         //Constructor for Edge cubelets
-        Cubelet(Facelet fac1, Facelet fac2);
+        Cubelet(const Facelet fac1, const Facelet fac2);
         
         //Constructor for Corner cubelets
-        Cubelet(Facelet fac1, Facelet fac2, Facelet fac3);
+        Cubelet(const Facelet fac1, const Facelet fac2, const Facelet fac3);
        
         //Returns vector of facelets for the cubelet
-        const std::vector<Facelet> * getFacelet() const;
+        const std::vector<Facelet> *getFacelet() const;
        
         // Returns vecFac[index]
-        const Facelet *getFaceletAt(size_t index) const;
+        Facelet getFaceletAt(size_t index) const;
 
-        //Returns pointer to Position
-        const Position * getPosition() const;
+        //Returns Position
+        Position getPosition() const;
 
         //Sets Position for cubelet
-        void setPosition(Position pos);
+        void setPosition(const Position pos);
 };
 
 std::ostream& operator<<(std::ostream& os, Cubelet C);

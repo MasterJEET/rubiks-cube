@@ -1,4 +1,5 @@
 /*
+:wa
  * @author: MasterJEET
  * @email : masterjeet9@gmail.com
  * @date  : 14th Apr 2017
@@ -53,19 +54,18 @@ extern std::ostream& operator <<(std::ostream& os, FaceSide);
 extern std::ostream& operator <<(std::ostream& os, PositionType);
 
 //Check if given pair of FaceSides are opposite of each other
-bool areOpposite(const FaceSide *first,const FaceSide *second);
+bool areOpposite(const FaceSide first,const FaceSide second);
 
 //Check if any of the given FaceSides form opposite FaceSides
-bool anyOpposite(const FaceSide *first,const FaceSide *second,const FaceSide *third);
-
-bool areOpposite(FaceSide first, FaceSide second);                          //Check if given pair of FaceSides are opposite of each other
-bool anyOpposite(FaceSide first, FaceSide second, FaceSide third);          //Check if any of the given FaceSides form opposite FaceSides
+bool anyOpposite(const FaceSide first,const FaceSide second,const FaceSide third);
 
 extern void createmapColor();
 extern void createmapFaceSide();
 
-extern Color ColorFromStr(std::string col);
-extern FaceSide FaceSideFromStr(std::string fs);
+extern Color ColorFromLetter(char col);
+extern Color ColorFromLetter(std::string col);
+extern FaceSide FaceSideFromLetter(char fs);
+extern FaceSide FaceSideFromLetter(std::string fs);
 
 //SIGTERM handler
 void handler(int sig);
@@ -75,5 +75,31 @@ void printAllColor();
 
 //Print all elemensts of toFaceSide map
 void printAllFaceSide();
+
+// ======== Global Constants Definition ========
+//All facesides
+const FaceSide front = Front;
+const FaceSide back = Back;
+const FaceSide left = Left;
+const FaceSide right = Right;
+const FaceSide up = Up;
+const FaceSide down = Down;
+const FaceSide undefside = F_UNDEFINED;
+
+//All colors
+const Color white = White;
+const Color yellow = Yellow;
+const Color orange = Orange;
+const Color red = Red;
+const Color green = Green;
+const Color blue = Blue;
+const Color undefcol = C_UNDEFINED;
+
+//All Position types
+const PositionType center = Center;
+const PositionType edge = Edge;
+const PositionType corner = Corner;
+const PositionType undeftype = P_UNDEFINED;
+// =============================================
 
 #endif

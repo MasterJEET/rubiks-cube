@@ -16,13 +16,15 @@ class Position {
     private:
         
         //Holds FaceSides
-        const std::vector<FaceSide> vecSide;
+        std::vector<FaceSide> vecSide;
         
         //Holds PositionType
-        const PositionType ptype;
+        PositionType ptype;
 
     public:
-        
+        //Default constructor
+        Position();
+
         //For initailizing a FaceSide from parameter, specifies which center
         Position(const FaceSide first);
         
@@ -36,10 +38,10 @@ class Position {
         const std::vector<FaceSide> * getSide() const;
 
         //Returns FaceSide present at 'vecSide[index]'
-        const FaceSide getSideAt(size_t index) const;
+        FaceSide getSideAt(size_t index) const;
         
         //Returns pointer to 'ptype'
-        const PositionType getPositionType() const;
+        PositionType getPositionType() const;
 
 };
 

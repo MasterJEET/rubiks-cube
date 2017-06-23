@@ -6,10 +6,11 @@
  * */
 
 #include "common.h"
+#include <unordered_map>
 #include <stdexcept>
 
-std::map<std::string, Color> toColor;                                                   //Maps first letter of Color to Color itself
-std::map<std::string, FaceSide> toFaceSide;                                             //Maps first letter of FaceSide to FaceSide itself
+std::unordered_map<std::string, Color> toColor;                                                   //Maps first letter of Color to Color itself
+std::unordered_map<std::string, FaceSide> toFaceSide;                                             //Maps first letter of FaceSide to FaceSide itself
 
 //============ Define <index,type> pair start ===========
 #   define X(a,b) #a,
@@ -42,18 +43,18 @@ std::ostream& operator <<(std::ostream& os, PositionType ptype){
     return os << PositionType_str[ptype];
 };
 
-bool areOpposite(const FaceSide *first,const FaceSide *second)
+bool areOpposite(const FaceSide first,const FaceSide second)
 {
-    if((*first == Front && *second == Back) || (*first == Back && *second == Front))
+    if((first == Front && second == Back) || (first == Back && second == Front))
         return true;
-    if((*first == Up && *second == Down) || (*first == Down && *second == Up))
+    if((first == Up && second == Down) || (first == Down && second == Up))
         return true;
-    if((*first == Left && *second == Right) || (*first == Right && *second == Left))
+    if((first == Left && second == Right) || (first == Right && second == Left))
         return true;
     return false;
 }
 
-bool anyOpposite(const FaceSide *first,const FaceSide *second,const FaceSide *third)
+bool anyOpposite(const FaceSide first,const FaceSide second,const FaceSide third)
 {
     return (areOpposite(first, second) || areOpposite(first, third) || areOpposite(second, third));
 }
@@ -78,14 +79,20 @@ void createmapFaceSide(){
 
 
 
-Color ColorFromStr(std::string col){
+Color ColorFromLetter(char col) { return ColorFromLetter(&col); };
+
+Color ColorFromLetter(std::string col){
+    createmapColor();
     auto it = toColor.find(col);
     if(it == toColor.end())
         throw std::invalid_argument("Invalid Argument: check b in X(a,b) of \"Color.def\" for allowed valid arguments");
     return it->second;
 };
 
-FaceSide FaceSideFromStr(std::string fac){
+FaceSide FaceSideFromLetter(char fac) { return FaceSideFromLetter(&fac); };
+
+FaceSide FaceSideFromLetter(std::string fac){
+    createmapFaceSide();
     auto it = toFaceSide.find(fac);
     if(it == toFaceSide.end())
         throw std::invalid_argument("Invalid Argument: check b in X(a,b) of \"FaceSide.def\" for allowed arguments");
