@@ -10,6 +10,7 @@
 
 #include <vector>
 #include <stdexcept>
+#include <functional>
 #include "common.h"
 
 class Position {
@@ -48,7 +49,7 @@ class Position {
 std::ostream& operator<<(std::ostream& os, Position P);
 
 
-
+bool operator==(const Position& lhs, const Position& rhs);
 
 
 /* =============== Hash for Position ================

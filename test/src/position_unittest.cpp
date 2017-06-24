@@ -52,3 +52,19 @@ TEST_F(PositionTest, minions) {
     const std::vector<FaceSide> *pvecSide = pf.getSide();
     EXPECT_EQ(front, pvecSide->at(0));
 }
+
+TEST_F(PositionTest, operatortest) {
+    EXPECT_EQ(true, Position(front) == Position(front));
+    EXPECT_EQ(true, Position(front) == Position(front, F_UNDEFINED));
+    EXPECT_EQ(true, Position(front) == Position(front, F_UNDEFINED, F_UNDEFINED));
+    EXPECT_EQ(false, Position(front) == Position(right));
+    EXPECT_EQ(true, Position(front, left) == Position(front, left));
+    EXPECT_EQ(true, Position(front, left) == Position(front, left, F_UNDEFINED));
+    EXPECT_EQ(true, Position(front, left) == Position(front, F_UNDEFINED, left));
+    EXPECT_EQ(false, Position(front, left) == Position(front, down));
+    EXPECT_EQ(false, Position(front, left) == Position(left, front));
+    EXPECT_EQ(true, Position(front, left, down) == Position(front, left, down));
+    EXPECT_EQ(true, Position(front, left, down) == Position(front, down, left));
+    EXPECT_EQ(false, Position(front, left, down) == Position(front, left, up));
+    EXPECT_EQ(false, Position(front, left, down) == Position(left, front, down));
+}

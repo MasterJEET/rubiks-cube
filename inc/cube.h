@@ -15,35 +15,14 @@
 #include "cubelet.h"
 
 
-typedef std::pair<FaceSide, FaceSide> pairFaceSide;
-typedef std::unordered_map< pairFaceSide, Facelet > mapFaceletFace;
-typedef std::unordered_map<FaceSide, mapFaceletFace> mapFaceletAll;
+typedef std::unordered_map<Position, Facelet> mapFacelet;
 
-//Required for using pairFaceSide and FaceSide in std::unordered_map
-namespace std {
-    template <>
-        struct hash<pairFaceSide>{
-            size_t operator()(const pairFaceSide& x) const{
-                return std::hash<pairFaceSide>()(static_cast<pairFaceSide>(x));
-            }
-        };
-
-    template <>
-        struct hash<FaceSide>{
-            size_t operator()(const FaceSide& x) const{
-                return std::hash<FaceSide>()(static_cast<FaceSide>(x));
-            }
-        };
-}
 
 class Cube {
     private:
 
-        //Stores vector of Cubelets for a given cube
-        std::vector<Cubelet> vecCubelet;
-
-        //Map for storing Facelet for all position of cubes
-        mapFaceletAll mFaceletAll;
+        //Map for storing Facelet with Position as key
+        mapFacelet mFacelet;
 
     public:
 
@@ -57,7 +36,7 @@ class Cube {
         void createFace(std::istream &is);
 
         //get Facelet at position specified by FaceSide
-        Facelet& getFacelet(FaceSide fside1, FaceSide fside2, FaceSide fside3) const;
+        Facelet getFacelet(FaceSide fside1, FaceSide fside2, FaceSide fside3) const;
 };
 
 #endif

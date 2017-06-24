@@ -15,21 +15,20 @@ class CubeTest: public ::testing::Test {
         std::ifstream ifs;
 
         CubeTest() {
-            std::string strCUBE_HOME = std::getenv("CUBE_HOME");
-            ifs.open( strCUBE_HOME + "/dat/front.dat" );
+            std::string filepath = std::string() + std::getenv("CUBE_HOME") + "/test/dat/front.dat";
+            ifs.open( filepath  );
             if(!ifs)
-                throw std::runtime_error("Couldn't open file: \"" + strCUBE_HOME + "\"");
+                throw std::runtime_error("Couldn't open file: \"" + filepath + "\"");
             else
                 cube = Cube(ifs);
         }
 };
 
 TEST_F(CubeTest, constructor) {
-    pairFaceSide pFS1(front, back);
-    pairFaceSide pFS2(back, front);
-    EXPECT_EQ(pFS1, pFS2);
-    typedef std::pair<int, int> Pair;
-    Pair p1(1,2);
-    Pair p2(2,1);
-    EXPECT_EQ(p1, p2);
+    std::stringstream ss;
+    Facelet f1 = cube.getFacelet(front, undefside, undefside);
+
+    ss << f1;
+    EXPECT_EQ("Facelet: col = White, side = Front", ss.str());
 }
+
