@@ -26,13 +26,15 @@ void Cube::createFace(std::istream &is){
     is >> strCtrFaceSide >> strCtrColor;
     ctrSide = FaceSideFromLetter(strCtrFaceSide);
     ctrCol = ColorFromLetter(strCtrColor);
-    
+
     //Create Center Facelet and add it to map
     Facelet ctrFac( ctrCol, ctrSide );
     pairFaceSide pSide(ctrSide, F_UNDEFINED);
-    mFaceletFace.insert( std::pair<pairFaceSide, Facelet>( pSide, ctrFac  ) );
+    
+    //mFaceletFace[pSide] = ctrFac ;
 
-    mFaceletAll.insert( std::pair<FaceSide, mapFaceletFace>(ctrSide, mFaceletFace) );
+    //std::cout << __func__ << ": Hello cube" << std::endl;    
+    //mFaceletAll.insert( std::pair<FaceSide, mapFaceletFace>(ctrSide, mFaceletFace) );
 
 };
 

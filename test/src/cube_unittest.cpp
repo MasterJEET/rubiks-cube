@@ -17,13 +17,19 @@ class CubeTest: public ::testing::Test {
         CubeTest() {
             std::string strCUBE_HOME = std::getenv("CUBE_HOME");
             ifs.open( strCUBE_HOME + "/dat/front.dat" );
-            //if(!ifs)
-            //    throw std::runtime_error("Couldn't open file: \"" + strCUBE_HOME + "\"");
-            //else
-            //    cube = Cube(ifs);
+            if(!ifs)
+                throw std::runtime_error("Couldn't open file: \"" + strCUBE_HOME + "\"");
+            else
+                cube = Cube(ifs);
         }
 };
 
 TEST_F(CubeTest, constructor) {
-    EXPECT_EQ(1, 1);
+    pairFaceSide pFS1(front, back);
+    pairFaceSide pFS2(back, front);
+    EXPECT_EQ(pFS1, pFS2);
+    typedef std::pair<int, int> Pair;
+    Pair p1(1,2);
+    Pair p2(2,1);
+    EXPECT_EQ(p1, p2);
 }
