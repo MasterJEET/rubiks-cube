@@ -35,7 +35,9 @@ const std::vector< FaceSide> * Position::getSide() const
 }
 
 FaceSide Position::getSideAt(size_t index) const{
-    return vecSide.at(index);
+    if(index < vecSide.size())
+        return vecSide.at(index);
+    return F_UNDEFINED;
 };
 
 std::ostream& operator<<(std::ostream& os, Position P){
