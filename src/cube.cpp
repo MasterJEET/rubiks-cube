@@ -17,27 +17,40 @@ Cube::Cube(std::istream &is){
 
 void Cube::createFace(std::istream &is){
 
-    std::string strCtrFaceSide, strCtrColor;
-    FaceSide ctrSide;
-    Color ctrCol;
+    std::string strFaceSide, strFaceSide2, strColor;
+    FaceSide ctrSide, edgeSide, corSide;
+    Color col;
 
     //Get FaceSide and Color for Center Facelet
-    is >> strCtrFaceSide >> strCtrColor;
-    ctrSide = FaceSideFromLetter(strCtrFaceSide);
-    ctrCol = ColorFromLetter(strCtrColor);
+    is >> strFaceSide >> strColor;
+    ctrSide = FaceSideFromLetter(strFaceSide);
+    col = ColorFromLetter(strColor);
 
     //Create Center Facelet and add it to map
-    Facelet ctrFac( ctrCol, ctrSide );
-    Position ctrP( ctrSide );
+    mFacelet[ Position(ctrSide) ] = Facelet(col, ctrSide);
 
-    mFacelet[ ctrP ] = ctrFac;
+    //Get FaceSide and Color for Edge Facelets and add them to map
+    for(size_t i=0; i<4; i++){
+        is >> strFaceSide >> strColor;
+        edgeSide = FaceSideFromLetter(strFaceSide);
+        col = ColorFromLetter(strColor);
+        mFacelet[ Position(ctrSide, edgeSide) ] = Facelet(col, ctrSide);
+    }
+
+    //Get FaceSide and Color for Corner Facelets and add them to map
+    for(size_t i=0; i<4; i++){
+        is >> strFaceSide >> strFaceSide2 >> strColor;
+        edgeSide = FaceSideFromLetter(strFaceSide);
+        corSide = FaceSideFromLetter(strFaceSide2);
+        col = ColorFromLetter(strColor);
+        mFacelet[ Position(ctrSide, edgeSide, corSide) ] = Facelet(col, ctrSide);
+    }
 
 
 };
 
 
 Facelet Cube::getFacelet(FaceSide fside1, FaceSide fside2, FaceSide fside3) const{
-    Position pos(fside1);
-    return mFacelet.at( pos );
+    return mFacelet.at( Position (fside1, fside2, fside3));
 };
 
