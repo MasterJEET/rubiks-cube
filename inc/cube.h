@@ -11,11 +11,30 @@
 #include <iostream>
 #include <vector>
 #include <utility>
+#include <unordered_map>
 #include "cubelet.h"
 
+
 typedef std::pair<FaceSide, FaceSide> pairFaceSide;
-typedef std::map< pairFaceSide, Facelet > mapFaceletFace;
-typedef std::map<FaceSide, mapFaceletFace> mapFaceletAll;
+typedef std::unordered_map< pairFaceSide, Facelet > mapFaceletFace;
+typedef std::unordered_map<FaceSide, mapFaceletFace> mapFaceletAll;
+
+//Required for using pairFaceSide and FaceSide in std::unordered_map
+namespace std {
+    template <>
+        struct hash<pairFaceSide>{
+            size_t operator()(const pairFaceSide& x) const{
+                return std::hash<pairFaceSide>()(static_cast<pairFaceSide>(x));
+            }
+        };
+
+    template <>
+        struct hash<FaceSide>{
+            size_t operator()(const FaceSide& x) const{
+                return std::hash<FaceSide>()(static_cast<FaceSide>(x));
+            }
+        };
+}
 
 class Cube {
     private:
