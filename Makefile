@@ -15,9 +15,9 @@ CXXFLAGS += -g -Wall -Wextra -pthread -rdynamic -std=c++11
 
 # All tests produced by this Makefile.  Remember to add new tests you
 # created to the list.
-TESTS += $(BIN_DIR)/common_unittest
+# TESTS += $(BIN_DIR)/common_unittest
 # TESTS += $(BIN_DIR)/facelet_unittest
-# TESTS += $(BIN_DIR)/position_unittest
+TESTS += $(BIN_DIR)/position_unittest
 # TESTS += $(BIN_DIR)/cubelet_unittest
 # TESTS += $(BIN_DIR)/cube_unittest
 

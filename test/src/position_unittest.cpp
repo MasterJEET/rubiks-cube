@@ -44,8 +44,10 @@ TEST_F(PositionTest, constructors) {
 TEST_F(PositionTest, minions) {
     //getPositionType()
     EXPECT_EQ(corner, pdrf.getPositionType());
-    //getSideAt()
+    //getSideAt(), index within range
     EXPECT_EQ(left, pbl.getSideAt(1));
+    //getSideAt(), index out of range
+    EXPECT_EQ(undefside, pbl.getSideAt(2));
     //getVecSide()
     const std::vector<FaceSide> *pvecSide = pf.getSide();
     EXPECT_EQ(front, pvecSide->at(0));
