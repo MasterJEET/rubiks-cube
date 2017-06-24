@@ -19,48 +19,33 @@ TEST(cubecell, faceside) {
 
     // string stream for writing FaceSide into it using "<<"
     std::stringstream ss;
-    // string to be retrieved from string stream
-    std::string side;
     
     ss << front;
-    ss >> side;
-    EXPECT_EQ("Front", side);
+    EXPECT_EQ("Front", ss.str());
     ss.str("");
-    ss.clear();
     
     ss << back;
-    ss >> side >> side;
-    EXPECT_EQ("Back", side);
+    EXPECT_EQ("Back", ss.str());
     ss.str("");
-    ss.clear();
     
     ss << left;
-    ss >> side;
-    EXPECT_EQ("Left", side);
+    EXPECT_EQ("Left", ss.str());
     ss.str("");
-    ss.clear();
     
     ss << right;
-    ss >> side;
-    EXPECT_EQ("Right", side);
+    EXPECT_EQ("Right", ss.str());
     ss.str("");
-    ss.clear();
     
     ss << up;
-    ss >> side;
-    EXPECT_EQ("Up", side);
+    EXPECT_EQ("Up", ss.str());
     ss.str("");
-    ss.clear();
     
     ss << down;
-    ss >> side;
-    EXPECT_EQ("Down", side);
+    EXPECT_EQ("Down", ss.str());
     ss.str("");
-    ss.clear();
 
     ss << undefside;
-    ss >> side;
-    EXPECT_EQ("F_UNDEFINED",side);
+    EXPECT_EQ("F_UNDEFINED",ss.str());
 }
 
 TEST(cubecell, color) {
@@ -76,44 +61,31 @@ TEST(cubecell, color) {
     std::string col;
 
     ss << red;
-    ss >> col;
-    EXPECT_EQ("Red",col);
+    EXPECT_EQ("Red",ss.str());
     ss.str("");
-    ss.clear();
 
     ss << white;
-    ss >> col;
-    EXPECT_EQ("White",col);
+    EXPECT_EQ("White",ss.str());
     ss.str("");
-    ss.clear();
 
     ss << yellow;
-    ss >> col;
-    EXPECT_EQ("Yellow",col);
+    EXPECT_EQ("Yellow",ss.str());
     ss.str("");
-    ss.clear();
 
     ss << green;
-    ss >> col;
-    EXPECT_EQ("Green",col);
+    EXPECT_EQ("Green",ss.str());
     ss.str("");
-    ss.clear();
 
     ss << blue;
-    ss >> col;
-    EXPECT_EQ("Blue",col);
+    EXPECT_EQ("Blue",ss.str());
     ss.str("");
-    ss.clear();
 
     ss << orange;
-    ss >> col;
-    EXPECT_EQ("Orange",col);
+    EXPECT_EQ("Orange",ss.str());
     ss.str("");
-    ss.clear();
 
     ss << undefcol;
-    ss >> col;
-    EXPECT_EQ("C_UNDEFINED",col);
+    EXPECT_EQ("C_UNDEFINED",ss.str());
 }
 
 
@@ -130,26 +102,19 @@ TEST(cubecell, positiontype) {
     std::string type;
 
     ss << center;
-    ss >> type;
-    EXPECT_EQ("Center",type);
+    EXPECT_EQ("Center",ss.str());
     ss.str("");
-    ss.clear();
 
     ss << edge;
-    ss >> type;
-    EXPECT_EQ("Edge",type);
+    EXPECT_EQ("Edge",ss.str());
     ss.str("");
-    ss.clear();
 
     ss << corner;
-    ss >> type;
-    EXPECT_EQ("Corner",type);
+    EXPECT_EQ("Corner",ss.str());
     ss.str("");
-    ss.clear();
 
     ss << undeftype;
-    ss >> type;
-    EXPECT_EQ("P_UNDEFINED",type);
+    EXPECT_EQ("P_UNDEFINED",ss.str());
 }
 
 TEST(cubemetabolism, opposite) {
