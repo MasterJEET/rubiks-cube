@@ -35,8 +35,17 @@ class Cube {
         //get all Facelets of a face from std::stream
         void createFace(std::istream &is);
 
-        //get Facelet at position specified by FaceSide
-        Facelet getFacelet(FaceSide fside1, FaceSide fside2, FaceSide fside3) const;
+        //get Facelet at position specified by FaceSide from unordered_map mFacelet, three FaceSides specified
+        Facelet getFacelet(const FaceSide fside1, const FaceSide fside2, const FaceSide fside3) const;
+
+        //get Facelet at position specified by FaceSide from unordered_map mFacelet, two FaceSides specified
+        Facelet getFacelet(const FaceSide fside1, const FaceSide fside2) const;
+
+        //get Facelet at position specified by FaceSide from unordered_map mFacelet, two FaceSides specified
+        Facelet getFacelet(const FaceSide fside1) const;
+
+        //get Facelet from unordered_map mFacelet, where position is specified by Position object
+        Facelet getFacelet(const Position pos ) const;
 };
 
 #endif

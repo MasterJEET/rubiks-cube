@@ -7,6 +7,7 @@
 
 #include "gtest/gtest.h"
 #include "cubelet.h"
+#include "testcommon.h"
 
 
 class CubeletTest : public ::testing::Test {
@@ -31,65 +32,38 @@ class CubeletTest : public ::testing::Test {
 };
 
 TEST_F(CubeletTest, constructors) {
-    std::stringstream ss;
 
-    ss << cr;
-    EXPECT_EQ("Colors: { Red } Position: ptype = Center, vecSide = { Right }", ss.str());
-    ss.str("");
+    EXPECT_PRED_FORMAT2(checkPrint, "Colors: { Red } Position: ptype = Center, vecSide = { Right }", cr);
+    EXPECT_PRED_FORMAT2(checkPrint, "Colors: { White Blue } Position: ptype = Edge, vecSide = { Front Up }", cfu);
+    EXPECT_PRED_FORMAT2(checkPrint, "Colors: { Green Orange White } Position: ptype = Corner, vecSide = { Back Left Down }", cbld);
     
-    ss << cfu;
-    EXPECT_EQ("Colors: { White Blue } Position: ptype = Edge, vecSide = { Front Up }", ss.str());
-    ss.str("");
-    
-    ss << cbld;
-    EXPECT_EQ("Colors: { Green Orange White } Position: ptype = Corner, vecSide = { Back Left Down }", ss.str());
 }
 
 TEST_F(CubeletTest, vecside) {
-    std::stringstream ss;
     const std::vector<Facelet> *pvecSide = cbld.getFacelet();
 
-    ss << pvecSide->at(0).getFaceSide();
-    EXPECT_EQ("Back", ss.str());
-    ss.str("");
-    ss << pvecSide->at(0).getColor();
-    EXPECT_EQ("Green", ss.str());
-    ss.str("");
+    EXPECT_PRED_FORMAT2(checkPrint, "Back", pvecSide->at(0).getFaceSide());
+    EXPECT_PRED_FORMAT2(checkPrint, "Green", pvecSide->at(0).getColor());
     
-    ss << pvecSide->at(1).getFaceSide();
-    EXPECT_EQ("Left", ss.str());
-    ss.str("");
-    ss << pvecSide->at(1).getColor();
-    EXPECT_EQ("Orange", ss.str());
-    ss.str("");
+    EXPECT_PRED_FORMAT2(checkPrint, "Left", pvecSide->at(1).getFaceSide());
+    EXPECT_PRED_FORMAT2(checkPrint, "Orange", pvecSide->at(1).getColor());
 
-    ss << pvecSide->at(2).getFaceSide();
-    EXPECT_EQ("Down", ss.str());
-    ss.str("");
-    ss << pvecSide->at(2).getColor();
-    EXPECT_EQ("White", ss.str());
+    EXPECT_PRED_FORMAT2(checkPrint, "Down", pvecSide->at(2).getFaceSide());
+    EXPECT_PRED_FORMAT2(checkPrint, "White", pvecSide->at(2).getColor());
 
 }
 
 TEST_F(CubeletTest, get) {
-    std::stringstream ss;
 
-    ss << cfu.getFaceletAt(0);
-    EXPECT_EQ("Facelet: col = White, side = Front", ss.str());
-    ss.str("");
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = White, side = Front", cfu.getFaceletAt(0));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Blue, side = Up", cfu.getFaceletAt(1));
+    EXPECT_PRED_FORMAT2(checkPrint, "Position: ptype = Center, vecSide = { Right }", cr.getPosition());
     
-    ss << cfu.getFaceletAt(1);
-    EXPECT_EQ("Facelet: col = Blue, side = Up", ss.str());
-    ss.str("");
-
-    ss << cr.getPosition();
-    EXPECT_EQ("Position: ptype = Center, vecSide = { Right }", ss.str());
 }
 
 TEST_F(CubeletTest, set) {
-    std::stringstream ss;
 
     cbld.setPosition(pfrd);
-    ss << cbld.getPosition();
-    EXPECT_EQ("Position: ptype = Corner, vecSide = { Front Right Down }", ss.str());
+    EXPECT_PRED_FORMAT2(checkPrint, "Position: ptype = Corner, vecSide = { Front Right Down }", cbld.getPosition());
+
 }

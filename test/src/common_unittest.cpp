@@ -8,6 +8,7 @@
 //First google test ever
 #include "gtest/gtest.h"
 #include "common.h"
+#include "testcommon.h"
 
 
 TEST(cubecell, faceside) {
@@ -17,35 +18,13 @@ TEST(cubecell, faceside) {
      * === ===
      */
 
-    // string stream for writing FaceSide into it using "<<"
-    std::stringstream ss;
-    
-    ss << front;
-    EXPECT_EQ("Front", ss.str());
-    ss.str("");
-    
-    ss << back;
-    EXPECT_EQ("Back", ss.str());
-    ss.str("");
-    
-    ss << left;
-    EXPECT_EQ("Left", ss.str());
-    ss.str("");
-    
-    ss << right;
-    EXPECT_EQ("Right", ss.str());
-    ss.str("");
-    
-    ss << up;
-    EXPECT_EQ("Up", ss.str());
-    ss.str("");
-    
-    ss << down;
-    EXPECT_EQ("Down", ss.str());
-    ss.str("");
-
-    ss << undefside;
-    EXPECT_EQ("F_UNDEFINED",ss.str());
+    EXPECT_PRED_FORMAT2(checkPrint, "Front", front);
+    EXPECT_PRED_FORMAT2(checkPrint, "Back", back);
+    EXPECT_PRED_FORMAT2(checkPrint, "Left", left);
+    EXPECT_PRED_FORMAT2(checkPrint, "Right", right);
+    EXPECT_PRED_FORMAT2(checkPrint, "Up", up);
+    EXPECT_PRED_FORMAT2(checkPrint, "Down", down);
+    EXPECT_PRED_FORMAT2(checkPrint, "F_UNDEFINED", undefside);
 }
 
 TEST(cubecell, color) {
@@ -55,37 +34,15 @@ TEST(cubecell, color) {
      * === ===
      */
 
-    // string stream for writing Color into it using "<<"
-    std::stringstream ss;
-    // string to be retrieved from string stream
-    std::string col;
 
-    ss << red;
-    EXPECT_EQ("Red",ss.str());
-    ss.str("");
+    EXPECT_PRED_FORMAT2(checkPrint, "Red", red);
+    EXPECT_PRED_FORMAT2(checkPrint, "White", white);
+    EXPECT_PRED_FORMAT2(checkPrint, "Yellow", yellow);
+    EXPECT_PRED_FORMAT2(checkPrint, "Green", green);
+    EXPECT_PRED_FORMAT2(checkPrint, "Blue", blue);
+    EXPECT_PRED_FORMAT2(checkPrint, "Orange", orange);
+    EXPECT_PRED_FORMAT2(checkPrint, "C_UNDEFINED", undefcol);
 
-    ss << white;
-    EXPECT_EQ("White",ss.str());
-    ss.str("");
-
-    ss << yellow;
-    EXPECT_EQ("Yellow",ss.str());
-    ss.str("");
-
-    ss << green;
-    EXPECT_EQ("Green",ss.str());
-    ss.str("");
-
-    ss << blue;
-    EXPECT_EQ("Blue",ss.str());
-    ss.str("");
-
-    ss << orange;
-    EXPECT_EQ("Orange",ss.str());
-    ss.str("");
-
-    ss << undefcol;
-    EXPECT_EQ("C_UNDEFINED",ss.str());
 }
 
 
@@ -96,25 +53,11 @@ TEST(cubecell, positiontype) {
      * === ===
      */
 
-    // string stream for writing PositionType into it using "<<"
-    std::stringstream ss;
-    // string to be retrieved from string stream
-    std::string type;
+    EXPECT_PRED_FORMAT2(checkPrint, "Center", center);
+    EXPECT_PRED_FORMAT2(checkPrint, "Edge", edge);
+    EXPECT_PRED_FORMAT2(checkPrint, "Corner", corner);
+    EXPECT_PRED_FORMAT2(checkPrint, "P_UNDEFINED", undeftype);
 
-    ss << center;
-    EXPECT_EQ("Center",ss.str());
-    ss.str("");
-
-    ss << edge;
-    EXPECT_EQ("Edge",ss.str());
-    ss.str("");
-
-    ss << corner;
-    EXPECT_EQ("Corner",ss.str());
-    ss.str("");
-
-    ss << undeftype;
-    EXPECT_EQ("P_UNDEFINED",ss.str());
 }
 
 TEST(cubemetabolism, opposite) {
@@ -140,7 +83,7 @@ TEST(cubemetabolism, mapping) {
      * 5. ColorFromLetter()
      * 6. FaceSideFromLetter()
      * Call to function 6. and 7. makes use of 1-4 hence
-     * don't need to tested explicitly
+     * don't need to be tested explicitly
      * ==================================================
      */
 

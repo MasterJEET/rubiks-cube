@@ -12,7 +12,9 @@ Cube::Cube(){
 };
 
 Cube::Cube(std::istream &is){
-    createFace(is);
+    //Get all Faces
+    for(int i=0; i<6; i++)
+        createFace(is);
 };
 
 void Cube::createFace(std::istream &is){
@@ -50,7 +52,18 @@ void Cube::createFace(std::istream &is){
 };
 
 
-Facelet Cube::getFacelet(FaceSide fside1, FaceSide fside2, FaceSide fside3) const{
+Facelet Cube::getFacelet(const FaceSide fside1, const FaceSide fside2, const FaceSide fside3) const{
     return mFacelet.at( Position (fside1, fside2, fside3));
 };
 
+Facelet Cube::getFacelet(const FaceSide fside1, const FaceSide fside2) const{
+    return mFacelet.at( Position (fside1, fside2));
+};
+
+Facelet Cube::getFacelet(const FaceSide fside1) const{
+    return mFacelet.at( Position (fside1));
+};
+
+Facelet Cube::getFacelet(const Position pos) const{
+    return mFacelet.at( pos );
+};

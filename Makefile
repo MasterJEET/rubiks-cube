@@ -15,15 +15,15 @@ CXXFLAGS += -g -Wall -Wextra -pthread -rdynamic -std=c++11
 
 # All tests produced by this Makefile.  Remember to add new tests you
 # created to the list.
-# TESTS += $(BIN_DIR)/common_unittest
-# TESTS += $(BIN_DIR)/facelet_unittest
-# TESTS += $(BIN_DIR)/position_unittest
-# TESTS += $(BIN_DIR)/cubelet_unittest
-TESTS += $(BIN_DIR)/cube_unittest
+TEST_OBJ += $(OBJ_DIR)/common_unittest.o
+TEST_OBJ += $(OBJ_DIR)/facelet_unittest.o
+TEST_OBJ += $(OBJ_DIR)/position_unittest.o
+TEST_OBJ += $(OBJ_DIR)/cubelet_unittest.o
+TEST_OBJ += $(OBJ_DIR)/cube_unittest.o
 
 # House-keeping build targets.
 
-all : $(TESTS)
+all : $(BIN_DIR)/cubetest
 
 clean :
 	rm -rf $(BIN_DIR) $(OBJ_DIR)
@@ -41,6 +41,10 @@ $(OBJ_DIR)/%_unittest.o : $(TEST_DIR)/src/%_unittest.cpp $(INC_DIR)/%.h
 	@mkdir -p $(OBJ_DIR)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
 
-$(BIN_DIR)/%_unittest :  $(OBJ_DIR)/%_unittest.o $(LIB_DIR)/librubiks-cube.a  $(LIB_DIR)/gtest_main.a
+$(BIN_DIR)/% :  $(OBJ_DIR)/%_unittest.o $(LIB_DIR)/librubiks-cube.a  $(LIB_DIR)/gtest_main.a
+	@mkdir -p $(BIN_DIR)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
+
+$(BIN_DIR)/cubetest :  $(TEST_OBJ) $(LIB_DIR)/librubiks-cube.a  $(LIB_DIR)/gtest_main.a
 	@mkdir -p $(BIN_DIR)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
