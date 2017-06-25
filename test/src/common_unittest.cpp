@@ -103,6 +103,14 @@ TEST(cubemetabolism, mapping) {
 
 }
 
+TEST(cubemetabolism, overloading) {
+    /* === Testing overloaded 'operator*' ===
+     * Call to operator* makes call to 'operator*='
+     * So need to test it explicitly
+     */
+    EXPECT_EQ(up, front*right);
+}
+
 /* =============== Untested Functions ===============
  * Following functions declared in "common.h" are not
  * tested as they are for debug purpose and does not

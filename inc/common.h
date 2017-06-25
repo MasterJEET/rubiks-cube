@@ -53,6 +53,13 @@ extern std::ostream& operator <<(std::ostream& os, FaceSide);
 
 extern std::ostream& operator <<(std::ostream& os, PositionType);
 
+//Overloding to implement cross multiplication similar to those for
+//Cartesian coordinates (Right hand system), compund assignment
+FaceSide& operator*=(FaceSide& lhs, const FaceSide& rhs);
+
+//Overloading multiplication
+FaceSide operator*(FaceSide lhs, const FaceSide& rhs);
+
 //Check if given pair of FaceSides are opposite of each other
 bool areOpposite(const FaceSide first,const FaceSide second);
 
