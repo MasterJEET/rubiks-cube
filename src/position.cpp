@@ -8,8 +8,6 @@
 #include "position.h"
 #include <iostream>
 
-Position::Position(){};
-
 Position::Position(const FaceSide first): vecSide{first}, ptype(Center){
         //Noting for now
 }
@@ -41,10 +39,9 @@ FaceSide Position::getSideAt(size_t index) const{
 };
 
 std::ostream& operator<<(std::ostream& os, Position P){
-    os << "Position: ptype = " << P.getPositionType();
-    auto pvecSide = P.getSide();
+    os << "Position: ptype = " << P.ptype;
     os << ", vecSide = { ";
-    for(const auto& face : *pvecSide){
+    for(const auto& face : P.vecSide){
         os << face << " ";
     }
     os << "}";

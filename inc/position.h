@@ -24,7 +24,7 @@ class Position {
 
     public:
         //Default constructor
-        Position();
+        Position(){};
 
         //For initailizing a FaceSide from parameter, specifies which center
         Position(const FaceSide first);
@@ -44,12 +44,13 @@ class Position {
         //Returns pointer to 'ptype'
         PositionType getPositionType() const;
 
+        //operator<< overloading to write Position to ostream
+        friend std::ostream& operator<<(std::ostream& os, Position P);
+
+        //Equality
+        friend bool operator==(const Position& lhs, const Position& rhs);
 };
 
-std::ostream& operator<<(std::ostream& os, Position P);
-
-
-bool operator==(const Position& lhs, const Position& rhs);
 
 
 /* =============== Hash for Position ================
