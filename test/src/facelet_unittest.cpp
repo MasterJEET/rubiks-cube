@@ -14,7 +14,9 @@ class FaceletTest : public ::testing::Test {
         Facelet flr;
         Facelet ffw;
         
-        FaceletTest(): frl(red, left), flr(left, red), ffw(front, white) {}
+        FaceletTest(): frl(red, left), flr(left, red), ffw(front, white) {
+            ffw*=up;
+        }
 };
 
 TEST_F(FaceletTest, Initialization) {
@@ -42,5 +44,16 @@ TEST_F(FaceletTest, setFaceSide) {
 }
 
 TEST_F(FaceletTest, overloading) {
+    //Order is important in these tests
+
+    //Simple multiplication
     EXPECT_EQ( Facelet(red, back), frl*up );
+    //Multiplying Facelet with FaceSide which Facelet.side == FaceSide
+    EXPECT_THROW( flr*left, std::runtime_error );
+    //Compund assignment through multiplication, done is constructor
+    EXPECT_EQ( Facelet(left, white) , ffw );
+    //Chaining operator*
+    EXPECT_EQ( Facelet(right, red), frl*front*front );
+    //Chaining operator*=
+    EXPECT_EQ( Facelet(down, red), (frl *= up) *= right );
 }

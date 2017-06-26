@@ -19,7 +19,7 @@ class Facelet {
         FaceSide side;
     public:
         //Default constructor
-        Facelet();
+        Facelet(){};
 
         //Initialization from Color and FaceSice
         Facelet(const Color , const FaceSide side);
@@ -28,13 +28,13 @@ class Facelet {
         Facelet(const FaceSide side, const Color);
 
         //Returns pointer to 'col'
-        Color getColor() const;
+        Color getColor() const { return col; }
         
         //Returns 'side'
-        FaceSide getFaceSide() const;
-        
+        FaceSide getFaceSide() const { return side; }
+
         //Sets 'side'
-        void setFaceSide(const FaceSide side);
+        void setFaceSide(const FaceSide _side) { side = _side; }
 
         //Overloading operator*= to define multiplication of type
         //Facelet*=FaceSide
@@ -46,9 +46,11 @@ class Facelet {
 
         //Equality 
         friend bool operator==(const Facelet& lhs, const Facelet& rhs) { return  lhs.col == rhs.col && lhs.side == rhs.side; }
-};
 
-std::ostream& operator<<(std::ostream& os, Facelet F);
+        //Write to output stream
+        friend std::ostream& operator<<(std::ostream& os, const Facelet& F){ return os << "Facelet: col = " << F.col << ", side = " << F.side; }
+
+};
 
 
 #endif
