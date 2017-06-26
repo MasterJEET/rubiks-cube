@@ -17,16 +17,21 @@ Facelet::Facelet(const FaceSide _side, const Color _col): Facelet(_col, _side){
     //Nothing for now
 }
 
-Color Facelet::getColor() const{
+inline Color Facelet::getColor() const{
     return col;
 }
 
-FaceSide Facelet::getFaceSide() const{
+inline FaceSide Facelet::getFaceSide() const{
     return side;
 }
 
 void Facelet::setFaceSide(const FaceSide _side){
     side = _side;
+}
+
+Facelet& Facelet::operator*=(const FaceSide& rhs){
+    side *= rhs;
+    return *this;
 }
 
 std::ostream& operator<<(std::ostream& os, Facelet F){

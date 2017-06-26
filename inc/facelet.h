@@ -35,8 +35,20 @@ class Facelet {
         
         //Sets 'side'
         void setFaceSide(const FaceSide side);
+
+        //Overloading operator*= to define multiplication of type
+        //Facelet*=FaceSide
+        Facelet& operator*=(const FaceSide& rhs); 
+
+        //Overloading operator* to define multiplication of type
+        //Facelet*FaceSide
+        friend Facelet operator*(Facelet lhs, const FaceSide& rhs){ lhs *= rhs; return lhs; }
+
+        //Equality 
+        friend bool operator==(const Facelet& lhs, const Facelet& rhs) { return  lhs.col == rhs.col && lhs.side == rhs.side; }
 };
 
 std::ostream& operator<<(std::ostream& os, Facelet F);
+
 
 #endif

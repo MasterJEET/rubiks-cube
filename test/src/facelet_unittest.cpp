@@ -12,8 +12,9 @@ class FaceletTest : public ::testing::Test {
     protected:
         Facelet frl;
         Facelet flr;
+        Facelet ffw;
         
-        FaceletTest(): frl(red, left), flr(left, red) {}
+        FaceletTest(): frl(red, left), flr(left, red), ffw(front, white) {}
 };
 
 TEST_F(FaceletTest, Initialization) {
@@ -38,4 +39,8 @@ TEST_F(FaceletTest, setFaceSide) {
     // === Facelet(FaceSide, Color) ===
     flr.setFaceSide(down);
     EXPECT_EQ(down, flr.getFaceSide());
+}
+
+TEST_F(FaceletTest, overloading) {
+    EXPECT_EQ( Facelet(red, back), frl*up );
 }
