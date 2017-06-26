@@ -1,5 +1,4 @@
 /*
-:wa
  * @author: MasterJEET
  * @email : masterjeet9@gmail.com
  * @date  : 14th Apr 2017

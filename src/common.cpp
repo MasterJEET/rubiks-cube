@@ -51,58 +51,43 @@ FaceSide& operator*=(FaceSide& lhs, const FaceSide& rhs){
     if( areOpposite(lhs, rhs))
         throw std::runtime_error("Cannot multiply opposite FaceSide...");
 
+    if( lhs == F_UNDEFINED || rhs == F_UNDEFINED )
+        throw std::runtime_error("Opearnd cannot have F_UNDEFINED values...");
+
     //Front lhs
     if(lhs == front && rhs == right){ lhs = up; return lhs; }
-    
     if(lhs == front && rhs == left){ lhs = down; return lhs; }
-
     if(lhs == front && rhs == up){ lhs = left; return lhs; }
-
     if(lhs == front && rhs == down){ lhs = right; return lhs; }
 
     //Back lhs
     if(lhs == back && rhs == right){ lhs = down; return lhs; }
-
     if(lhs == back && rhs == left){ lhs = up; return lhs; }
-
     if(lhs == back && rhs == up){ lhs = right; return lhs; }
-
     if(lhs == back && rhs == down){ lhs = left; return lhs; }
 
     //Right lhs
     if(lhs == right && rhs == front){ lhs = down; return lhs; }
-
     if(lhs == right && rhs == back){ lhs = up; return lhs; }
-
     if(lhs == right && rhs == up){ lhs = front; return lhs; }
-
     if(lhs == right && rhs == down){ lhs = back; return lhs; }
 
     //Left lhs
     if(lhs == left && rhs == front){ lhs = up; return lhs; }
-
     if(lhs == left && rhs == back){ lhs = down; return lhs; }
-
     if(lhs == left && rhs == up){ lhs = back; return lhs; }
-
     if(lhs == left && rhs == down){ lhs = front; return lhs; }
 
     //Up lhs
     if(lhs == up && rhs == front){ lhs = right; return lhs; }
-
     if(lhs == up && rhs == back){ lhs = left; return lhs; }
-
     if(lhs == up && rhs == right){ lhs = back; return lhs; }
-
     if(lhs == up && rhs == left){ lhs = front; return lhs; }
 
     //Down lhs
     if(lhs == down && rhs == front){ lhs = left; return lhs; }
-
     if(lhs == down && rhs == back){ lhs = right; return lhs; }
-
     if(lhs == down && rhs == right){ lhs = front; return lhs; }
-
     if(lhs == down && rhs == left){ lhs = back; return lhs; }
 
     //Kept to suppress compiler warnings, else following return statement

@@ -10,6 +10,24 @@
 #include "common.h"
 #include "testcommon.h"
 
+class OverloadingTest : public ::testing::Test{
+    protected:
+        FaceSide f_front;
+        FaceSide f_back;
+        FaceSide f_up;
+        FaceSide f_down;
+        FaceSide f_right;
+        FaceSide f_left;
+
+        OverloadingTest(): f_front(front), f_back(back), f_up(up),
+                           f_down(down), f_right(right), f_left(left)
+        {
+            f_front*=up;
+            f_up*=right;
+            f_right*=front;
+        }
+
+};
 
 TEST(cubecell, faceside) {
     /* === For checking overloaded operator "<<" for FaceSide ===
@@ -103,12 +121,63 @@ TEST(cubemetabolism, mapping) {
 
 }
 
-TEST(cubemetabolism, overloading) {
+TEST_F(OverloadingTest, basics) {
     /* === Testing overloaded 'operator*' ===
      * Call to operator* makes call to 'operator*='
      * So need to test it explicitly
      */
+    //Front first
     EXPECT_EQ(up, front*right);
+    EXPECT_EQ(down, front*left);
+    EXPECT_EQ(left, front*up);
+    EXPECT_EQ(right, front*down);
+
+    //Back first
+    EXPECT_EQ(down, back*right);
+    EXPECT_EQ(up, back*left);
+    EXPECT_EQ(right, back*up);
+    EXPECT_EQ(left, back*down);
+
+    //Right first
+    EXPECT_EQ(down, right*front);
+    EXPECT_EQ(up, right*back);
+    EXPECT_EQ(front, right*up);
+    EXPECT_EQ(back, right*down);
+
+    //Left first
+    EXPECT_EQ(up, left*front);
+    EXPECT_EQ(down, left*back);
+    EXPECT_EQ(back, left*up);
+    EXPECT_EQ(front, left*down);
+
+    //Up first
+    EXPECT_EQ(right, up*front);
+    EXPECT_EQ(left, up*back);
+    EXPECT_EQ(front, up*left);
+    EXPECT_EQ(back, up*right);
+
+    //Down first
+    EXPECT_EQ(left, down*front);
+    EXPECT_EQ(right, down*back);
+    EXPECT_EQ(back, down*left);
+    EXPECT_EQ(front, down*right);
+
+}
+
+TEST_F(OverloadingTest, compoundassignment){
+    EXPECT_EQ(left, f_front);
+    EXPECT_EQ(back, f_up);
+    EXPECT_EQ(down, f_right);
+}
+
+TEST_F(OverloadingTest, check) {
+    //Same FaceSide
+    EXPECT_THROW(front*front, std::runtime_error);
+    //Opposite FaceSide
+    EXPECT_THROW(up*down, std::runtime_error);
+    //F_UNDEFINED FaceSide
+    EXPECT_THROW(right*undefside, std::runtime_error);
+
 }
 
 /* =============== Untested Functions ===============
