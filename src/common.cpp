@@ -136,7 +136,11 @@ void createmapFaceSide(){
 
 
 
-Color ColorFromLetter(char col) { return ColorFromLetter(&col); };
+Color ColorFromLetter(char col) {
+    std::string s_col = &col;
+    return ColorFromLetter(s_col);
+};
+
 
 Color ColorFromLetter(std::string col){
     createmapColor();
@@ -146,7 +150,10 @@ Color ColorFromLetter(std::string col){
     return it->second;
 };
 
-FaceSide FaceSideFromLetter(char fac) { return FaceSideFromLetter(&fac); };
+FaceSide FaceSideFromLetter(char fac) {
+    std::string s_fac = &fac;
+    return FaceSideFromLetter(s_fac);
+};
 
 FaceSide FaceSideFromLetter(std::string fac){
     createmapFaceSide();

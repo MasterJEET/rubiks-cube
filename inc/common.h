@@ -9,6 +9,7 @@
 #define COMMON_H
 #include <iostream>
 #include <map>
+#include <sstream>
 #include <execinfo.h>
 #include <signal.h>
 #include <unistd.h>
