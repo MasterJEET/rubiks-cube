@@ -24,7 +24,7 @@ class Cubelet{
     public:
 
         //Default constructor
-        Cubelet();
+        Cubelet(){};
         
         //Constructor for Center cubelets
         Cubelet(const Facelet fac1);
@@ -36,18 +36,20 @@ class Cubelet{
         Cubelet(const Facelet fac1, const Facelet fac2, const Facelet fac3);
        
         //Returns vector of facelets for the cubelet
-        const std::vector<Facelet> *getFacelet() const;
+        const std::vector<Facelet> *getFacelet() const {return &vecFac;}
        
         // Returns vecFac[index]
-        Facelet getFaceletAt(size_t index) const;
+        Facelet getFaceletAt(size_t index) const{ return vecFac.at(index);}
 
         //Returns Position
-        Position getPosition() const;
+        Position getPosition() const{ return pos;}
 
         //Sets Position for cubelet
-        void setPosition(const Position pos);
+        void setPosition(const Position _pos){ pos = _pos; }
+
+        //operator<< overloading for writing Cubelet to ostream
+        friend std::ostream& operator<<(std::ostream& os, Cubelet C);
 };
 
-std::ostream& operator<<(std::ostream& os, Cubelet C);
 
 #endif
