@@ -27,7 +27,7 @@ class Position {
         Position(){};
 
         //For initailizing a FaceSide from parameter, specifies which center
-        Position(const FaceSide first);
+        Position(const FaceSide first): vecSide{first}, ptype(Center){};
         
         //For initializing two FaceSides from parameter list, specifies which edge
         Position(const FaceSide first,const FaceSide second);
@@ -35,14 +35,17 @@ class Position {
         //For initializing all three FaceSides from parameter list, specifies which corner
         Position(const FaceSide first,const FaceSide second,const FaceSide third);
         
+        //Initialization from vector for FaceSides
+        Position(const std::vector<FaceSide> _vecSide);
+
         //Returns pointer to 'vecSide'
-        const std::vector<FaceSide> * getSide() const;
+        const std::vector<FaceSide> * getSide() const{ return &(this->vecSide); }
 
         //Returns FaceSide present at 'vecSide[index]'
         FaceSide getSideAt(size_t index) const;
         
         //Returns pointer to 'ptype'
-        PositionType getPositionType() const;
+        PositionType getPositionType() const {return ptype; }
 
         //operator<< overloading to write Position to ostream
         friend std::ostream& operator<<(std::ostream& os, Position P);

@@ -1,7 +1,7 @@
 /*
  * @author: MasterJEET
  * @email : masterjeet9@gmail.com
- * @date  : 10th Apr 2017
+ * @date  : 1Xth June 2017
  *
  * */
 
@@ -11,11 +11,15 @@
 
 class PositionTest : public ::testing::Test {
     protected:
+        std::vector<FaceSide> vFS;
         Position pf;
         Position pbl;
         Position pdrf;
+        Position plub_v;
 
-        PositionTest(): pf(front), pbl(back, left), pdrf(down, right, front){}
+        PositionTest(): vFS{left, up, back}, pf(front), pbl(back, left), pdrf(down, right, front), plub_v(vFS){
+
+        }
 
 
 };
@@ -30,6 +34,9 @@ TEST_F(PositionTest, constructors) {
 
     //Initialization with triple FaceSide
     EXPECT_PRED_FORMAT2(checkPrint, "Position: ptype = Corner, vecSide = { Down Right Front }", pdrf); 
+
+    //Initialization with std::vector<FaceSide>
+    EXPECT_PRED_FORMAT2(checkPrint, "Position: ptype = Corner, vecSide = { Left Up Back }", plub_v); 
 }
 
 TEST_F(PositionTest, minions) {

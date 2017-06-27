@@ -8,10 +8,6 @@
 #include "position.h"
 #include <iostream>
 
-Position::Position(const FaceSide first): vecSide{first}, ptype(Center){
-        //Noting for now
-}
-
 Position::Position(const FaceSide first,const FaceSide second): vecSide{first, second}, ptype(Edge){
     if(areOpposite(first, second))
         throw std::runtime_error(__func__ + std::string(": Contain opposite faces."));
@@ -22,14 +18,26 @@ Position::Position(const FaceSide first,const FaceSide second,const FaceSide thi
         throw std::runtime_error(__func__ + std::string(": Contain opposite faces."));
 }
 
-PositionType Position::getPositionType() const
-{
-    return ptype;
-}
 
-const std::vector< FaceSide> * Position::getSide() const
-{
-    return &(this->vecSide);
+Position::Position(const std::vector<FaceSide> _vecSide):vecSide(_vecSide){
+        
+    switch (_vecSide.size()) {
+        case 1:
+            ptype = center;
+            break;
+        case 2:
+            if(areOpposite(_vecSide[0], _vecSide[1]))
+                throw std::runtime_error(__func__ + std::string(": Contain opposite faces."));
+            ptype = edge;
+            break;
+        case 3:
+            if(anyOpposite(_vecSide[0], _vecSide[1], _vecSide[2]))
+                throw std::runtime_error(__func__ + std::string(": Contain opposite faces."));
+            ptype = corner;
+            break;
+        default:
+            throw std::runtime_error(__func__ + std::string(": std::vector<FaceSide> must satisfy, 0 < size <= 3"));
+    }
 }
 
 FaceSide Position::getSideAt(size_t index) const{
