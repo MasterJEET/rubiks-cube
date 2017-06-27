@@ -50,33 +50,15 @@ void Cube::createFace(std::istream &is){
 
 };
 
-
-Facelet Cube::getFacelet(const FaceSide fside1, const FaceSide fside2, const FaceSide fside3) const{
-    return mFacelet.at( Position (fside1, fside2, fside3));
-};
-
-Facelet Cube::getFacelet(const FaceSide fside1, const FaceSide fside2) const{
-    return mFacelet.at( Position (fside1, fside2));
-};
-
-Facelet Cube::getFacelet(const FaceSide fside1) const{
-    return mFacelet.at( Position (fside1));
-};
-
-Facelet Cube::getFacelet(const Position pos) const{
-    return mFacelet.at( pos );
-};
-
 void Cube::createCubelet(){
    
     //Vector of all valid FaceSides
     std::vector<FaceSide> vSingleFS = {front, back, up, down, right, left};
 
     //Create center Facelets and add to map
-    for( const auto& fs: vSingleFS ){
-        //Facelet* pFL = &mFacelet[ fs ];
+    for( const auto& fs: vSingleFS )
         mCubelet[ fs ] = &mFacelet[ fs ];
-    }
+
 
     //Vector of vector of pair FaceSides
     std::vector< std::vector<FaceSide> > vDoubleFS = { 
@@ -85,10 +67,19 @@ void Cube::createCubelet(){
                                         { back, up }, { back, right }, { back, down }, { back, left }
                                       };
 
+    for( const auto& fs_d: vDoubleFS ){
+        Position pos(fs_d);
+        mCubelet[ pos ] = &mFacelet[ pos ];
+    }
 
     //Vector of vector of triple FaceSides
     std::vector< std::vector<FaceSide> > vTripleFS = { { front, right, up}, { back, right, up }, { back, left, up}, { front, left, up },
                                                        { front, right, down}, { back, right, down }, { back, left, down}, { front, left, down } };
+
+    for( const auto& fs_t: vTripleFS ){
+        Position pos(fs_t);
+        mCubelet[ pos ] = &mFacelet[ pos ];
+    }
 }
 
 Cubelet Cube::getCubelet(const Position pos) const{

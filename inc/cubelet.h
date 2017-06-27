@@ -54,7 +54,7 @@ class Cubelet{
         friend bool operator==(const Cubelet& lhs, const Cubelet& rhs);
 
         //Inequality
-        friend bool operator!=(const Cubelet& lhs, const Cubelet& rhs);
+        friend bool operator!=(const Cubelet& lhs, const Cubelet& rhs){ return !(lhs == rhs); }
 };
 
 

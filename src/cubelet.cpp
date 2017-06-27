@@ -29,7 +29,7 @@ std::ostream& operator<<(std::ostream& os, Cubelet C){
 }
 
 bool operator==(const Cubelet& lhs, const Cubelet& rhs){
-    if( !(lhs.pos == rhs.pos) )
+    if( lhs.pos != rhs.pos)
         return false;
 
     if(lhs.vecFac.size() != rhs.vecFac.size())
@@ -40,8 +40,4 @@ bool operator==(const Cubelet& lhs, const Cubelet& rhs){
             return false;
 
     return true;
-}
-
-bool operator!=(const Cubelet& lhs, const Cubelet&rhs){
-    return !(lhs == rhs);
 }

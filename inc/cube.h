@@ -39,16 +39,13 @@ class Cube {
         void createFace(std::istream &is);
 
         //get Facelet at position specified by FaceSide from unordered_map mFacelet, three FaceSides specified
-        Facelet getFacelet(const FaceSide fside1, const FaceSide fside2, const FaceSide fside3) const;
+        Facelet getFacelet(const FaceSide fside1, const FaceSide fside2, const FaceSide fside3) const { return mFacelet.at( Position (fside1, fside2, fside3));}
 
         //get Facelet at position specified by FaceSide from unordered_map mFacelet, two FaceSides specified
-        Facelet getFacelet(const FaceSide fside1, const FaceSide fside2) const;
-
-        //get Facelet at position specified by FaceSide from unordered_map mFacelet, two FaceSides specified
-        Facelet getFacelet(const FaceSide fside1) const;
+        Facelet getFacelet(const FaceSide fside1, const FaceSide fside2) const{ return mFacelet.at( Position (fside1, fside2)); }
 
         //get Facelet from unordered_map mFacelet, where position is specified by Position object
-        Facelet getFacelet(const Position pos ) const;
+        Facelet getFacelet(const Position pos ) const{ return mFacelet.at( pos ); }
 
         //create Cubelets and store in map with help of mapFacelet
         void createCubelet();
