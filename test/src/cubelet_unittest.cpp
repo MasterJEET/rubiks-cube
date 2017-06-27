@@ -27,7 +27,7 @@ class CubeletTest : public ::testing::Test {
 
         CubeletTest(): frr(red, right), fwf(white, front), fbu(blue, up), fgb(green, back), fol(orange, left), fwd(white, down),
                        pfrd(front, right, down),
-                       cr(frr), cfu(fwf, fbu), cbld(fgb, fol, fwd)
+                       cr(&frr), cfu(&fwf, &fbu), cbld(&fgb, &fol, &fwd)
                        {}
 };
 
@@ -40,16 +40,16 @@ TEST_F(CubeletTest, constructors) {
 }
 
 TEST_F(CubeletTest, vecside) {
-    const std::vector<Facelet> *pvecSide = cbld.getFacelet();
+    const std::vector<Facelet*> *pvecSide = cbld.getFacelet();
 
-    EXPECT_PRED_FORMAT2(checkPrint, "Back", pvecSide->at(0).getFaceSide());
-    EXPECT_PRED_FORMAT2(checkPrint, "Green", pvecSide->at(0).getColor());
+    EXPECT_PRED_FORMAT2(checkPrint, "Back", pvecSide->at(0)->getFaceSide());
+    EXPECT_PRED_FORMAT2(checkPrint, "Green", pvecSide->at(0)->getColor());
     
-    EXPECT_PRED_FORMAT2(checkPrint, "Left", pvecSide->at(1).getFaceSide());
-    EXPECT_PRED_FORMAT2(checkPrint, "Orange", pvecSide->at(1).getColor());
+    EXPECT_PRED_FORMAT2(checkPrint, "Left", pvecSide->at(1)->getFaceSide());
+    EXPECT_PRED_FORMAT2(checkPrint, "Orange", pvecSide->at(1)->getColor());
 
-    EXPECT_PRED_FORMAT2(checkPrint, "Down", pvecSide->at(2).getFaceSide());
-    EXPECT_PRED_FORMAT2(checkPrint, "White", pvecSide->at(2).getColor());
+    EXPECT_PRED_FORMAT2(checkPrint, "Down", pvecSide->at(2)->getFaceSide());
+    EXPECT_PRED_FORMAT2(checkPrint, "White", pvecSide->at(2)->getColor());
 
 }
 
@@ -66,4 +66,10 @@ TEST_F(CubeletTest, set) {
     cbld.setPosition(pfrd);
     EXPECT_PRED_FORMAT2(checkPrint, "Position: ptype = Corner, vecSide = { Front Right Down }", cbld.getPosition());
 
+}
+
+
+TEST_F(CubeletTest, overloading) {
+    EXPECT_TRUE(Cubelet(&frr) == Cubelet(&frr));
+    EXPECT_TRUE(Cubelet(&frr) != Cubelet(&fwf));
 }

@@ -67,7 +67,7 @@ TEST_F(CubeTest, face) {
  * expected. 
  * =================================================
  */
-TEST_F(CubeTest, constructor) {
+TEST_F(CubeTest, facelet) {
 
     EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = White, side = Front", cube.getFacelet(front));
 
@@ -151,4 +151,9 @@ TEST_F(CubeTest, constructor) {
     EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = White, side = Down", cube.getFacelet(down, back, left));
     EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Red, side = Down", cube.getFacelet(down, back, right));
 
+}
+
+
+TEST_F(CubeTest, cubelet){
+    //std::cout << cube.getCubelet(front) << std::endl;
 }

@@ -16,7 +16,7 @@ class Cubelet{
     private:
 
         //Holds Facelets for a given cubelet
-        std::vector<Facelet> vecFac;
+        std::vector<Facelet*> vecFac;
 
         //Holds Position of a given cubelet
         Position pos;
@@ -27,19 +27,19 @@ class Cubelet{
         Cubelet(){};
         
         //Constructor for Center cubelets
-        Cubelet(const Facelet fac1);
+        Cubelet(Facelet* p_fac1);
         
         //Constructor for Edge cubelets
-        Cubelet(const Facelet fac1, const Facelet fac2);
+        Cubelet(Facelet* p_fac1, Facelet* p_fac2);
         
         //Constructor for Corner cubelets
-        Cubelet(const Facelet fac1, const Facelet fac2, const Facelet fac3);
+        Cubelet(Facelet* p_fac1, Facelet* p_fac2, Facelet* p_fac3);
        
         //Returns vector of facelets for the cubelet
-        const std::vector<Facelet> *getFacelet() const {return &vecFac;}
+        const std::vector<Facelet*> *getFacelet() const {return &vecFac;}
        
         // Returns vecFac[index]
-        Facelet getFaceletAt(size_t index) const{ return vecFac.at(index);}
+        Facelet getFaceletAt(size_t index) const{ return *vecFac.at(index);}
 
         //Returns Position
         Position getPosition() const{ return pos;}
@@ -49,6 +49,12 @@ class Cubelet{
 
         //operator<< overloading for writing Cubelet to ostream
         friend std::ostream& operator<<(std::ostream& os, Cubelet C);
+
+        //Equality
+        friend bool operator==(const Cubelet& lhs, const Cubelet& rhs);
+
+        //Inequality
+        friend bool operator!=(const Cubelet& lhs, const Cubelet& rhs);
 };
 
 

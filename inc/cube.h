@@ -16,18 +16,21 @@
 
 
 typedef std::unordered_map<Position, Facelet> mapFacelet;
+typedef std::unordered_map<Position, Cubelet> mapCubelet;
 
 
 class Cube {
     private:
 
-        //Map for storing Facelet with Position as key
+        //Map for storing Facelets with Position as key
         mapFacelet mFacelet;
+        //Map for storing Cubelets with Position as key
+        mapCubelet mCubelet;
 
     public:
 
         //Default constructor
-        Cube();
+        Cube(){};
 
         //Constructor that takes std::istream and create cubelets
         Cube(std::istream &is);
@@ -46,6 +49,12 @@ class Cube {
 
         //get Facelet from unordered_map mFacelet, where position is specified by Position object
         Facelet getFacelet(const Position pos ) const;
+
+        //create Cubelets and store in map with help of mapFacelet
+        void createCubelet();
+
+        //get Cubelet from Position
+        Cubelet getCubelet(const Position pos) const;
 };
 
 #endif
