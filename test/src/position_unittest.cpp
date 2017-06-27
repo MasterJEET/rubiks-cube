@@ -44,7 +44,7 @@ TEST_F(PositionTest, minions) {
     EXPECT_EQ(front, pvecSide->at(0));
 }
 
-TEST_F(PositionTest, operatortest) {
+TEST_F(PositionTest, equality) {
     EXPECT_TRUE(Position(front) == Position(front));
     EXPECT_TRUE(Position(front) == Position(front, F_UNDEFINED));
     EXPECT_TRUE(Position(front) == Position(front, F_UNDEFINED, F_UNDEFINED));
@@ -58,4 +58,9 @@ TEST_F(PositionTest, operatortest) {
     EXPECT_TRUE(Position(front, left, down) == Position(front, down, left));
     EXPECT_FALSE(Position(front, left, down) == Position(front, left, up));
     EXPECT_FALSE(Position(front, left, down) == Position(left, front, down));
+}
+
+TEST_F(PositionTest, inequality) {
+    EXPECT_TRUE( Position(back, right, down) != Position(front, right, down) );
+    EXPECT_FALSE( Position(back, right, down) != Position(back, down, right) );
 }
