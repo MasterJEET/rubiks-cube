@@ -49,6 +49,9 @@ class Position {
 
         //Equality
         friend bool operator==(const Position& lhs, const Position& rhs);
+
+        //Inequality
+        friend bool operator!=(const Position& lhs, const Position& rhs){ return !(lhs == rhs); }
 };
 
 
