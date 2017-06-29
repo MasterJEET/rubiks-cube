@@ -16,7 +16,7 @@
 
 
 typedef std::unordered_map<Position, Facelet> mapFacelet;
-typedef std::unordered_map<Position, Cubelet*> mappCubelet;
+typedef std::unordered_map<Position, Cubelet> mappCubelet;
 
 
 class Cube {
@@ -53,7 +53,9 @@ class Cube {
         void createCubelet();
 
         //get Cubelet from Position
-        Cubelet getCubelet(const Position pos) const{ return *mpCubelet.at( pos ); }
+        //Cubelet getCubelet(const Position pos) const{ return *mpCubelet.at( pos ); }
+        Cubelet getCubelet(const Position pos) const{ return mpCubelet.at( pos ); }
+        //Cubelet getCubelet(const Position pos) const{ return vCubelet[0]; }
 };
 
 #endif

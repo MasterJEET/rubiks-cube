@@ -60,7 +60,7 @@ void Cube::createCubelet(){
         Position pos(fs);
         Facelet* pfl = &mFacelet[ Position( pos ) ];
         vCubelet.push_back( Cubelet(pfl) );
-        mpCubelet[ pos ] = &vCubelet.back();
+        mpCubelet[ pos ] = vCubelet.back();
     }
 
 

@@ -160,13 +160,12 @@ TEST_F(CubeTest, facelet) {
 
 
 TEST_F(CubeTest, cubelet){
-    cube.getCubelet(Position(front));
-    //EXPECT_PRED_FORMAT2(checkPrint, "Colors: { White } Position: ptype = Center, vecSide = { Front }", cube.getCubelet(front));
-    //EXPECT_PRED_FORMAT2(checkPrint, "Colors: { Yellow } Position: ptype = Center, vecSide = { Back }", cube.getCubelet(back));
-    //EXPECT_PRED_FORMAT2(checkPrint, "Colors: { Blue } Position: ptype = Center, vecSide = { Up }", cube.getCubelet(up));
-    //EXPECT_PRED_FORMAT2(checkPrint, "Colors: { Red } Position: ptype = Center, vecSide = { Right }", cube.getCubelet(right));
-    //EXPECT_PRED_FORMAT2(checkPrint, "Colors: { Orange } Position: ptype = Center, vecSide = { Left }", cube.getCubelet(left));
-    //EXPECT_PRED_FORMAT2(checkPrint, "Colors: { Green } Position: ptype = Center, vecSide = { Down }", cube.getCubelet(down));
+    EXPECT_PRED_FORMAT2(checkPrint, "Colors: { White } Position: ptype = Center, vecSide = { Front }", cube.getCubelet(front));
+    EXPECT_PRED_FORMAT2(checkPrint, "Colors: { Yellow } Position: ptype = Center, vecSide = { Back }", cube.getCubelet(back));
+    EXPECT_PRED_FORMAT2(checkPrint, "Colors: { Blue } Position: ptype = Center, vecSide = { Up }", cube.getCubelet(up));
+    EXPECT_PRED_FORMAT2(checkPrint, "Colors: { Red } Position: ptype = Center, vecSide = { Right }", cube.getCubelet(right));
+    EXPECT_PRED_FORMAT2(checkPrint, "Colors: { Orange } Position: ptype = Center, vecSide = { Left }", cube.getCubelet(left));
+    EXPECT_PRED_FORMAT2(checkPrint, "Colors: { Green } Position: ptype = Center, vecSide = { Down }", cube.getCubelet(down));
     //Facelet f1 = cube.getFacelet(front, down);
     //Facelet f2 = cube.getFacelet(down, front);
     //std::cout << f1 << std::endl;
