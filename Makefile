@@ -1,14 +1,15 @@
-BIN_DIR := bin
-OBJ_DIR := obj
-LIB_DIR := lib
-INC_DIR := inc
-SRC_DIR := src
-TEST_DIR := test
+INC_DIR := ./inc
+SRC_DIR := ./src
+TEST_DIR := ./test
+
+# Googletest directories
+GTEST_DIR := ./googletest/googletest/
+GTEST_MAKE := $(GTEST_DIR)/make
 
 # Flags passed to the preprocessor.
 # Set Google Test's header directory as a system directory, such that
 # the compiler doesn't generate warnings in Google Test headers.
-CPPFLAGS += -isystem $(TEST_DIR) -I $(INC_DIR)
+CPPFLAGS += -isystem $(GTEST_DIR)/include -I$(INC_DIR) -I$(TEST_DIR)
 
 # Flags passed to the C++ compiler.
 CXXFLAGS += -g -Wall -Wextra -pthread -rdynamic -std=c++11
@@ -51,11 +52,11 @@ RUBIK_MAIN += librubiks-cube_main.a  gtest.a
 all : rubiktest
 
 clean :
-	rm -f librubiks*
-	rm -f *.o *.out common* facelet* position* cube* rubik*
+	rm -f *.o *.a *.out common* facelet* position* cube* rubik*
 
-cleanall : clean
-	rm -f *.o *.out common* facelet* position* cube* rubik* *.a
+cleanall :
+	make clean
+	cd $(GTEST_MAKE); make clean
 
 common.o : $(COMMON_SRC)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(SRC_DIR)/common.cpp 
@@ -76,21 +77,25 @@ main.o : $(CUBE_SRC) main.cpp
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c main.cpp 
 
 
-
+# Libraries, this project
 librubiks-cube.a : $(ALL_OBJ)
 	$(AR) $(ARFLAGS) $@ $^
 
 librubiks-cube_main.a : $(ALL_OBJ) main.o
 	$(AR) $(ARFLAGS) $@ $^
 
+# Libraris, googletest
+$(GTEST_MAKE)/gtest.a :
+	cd $(GTEST_MAKE); make gtest.a
 
-
+$(GTEST_MAKE)/gtest_main.a :
+	cd $(GTEST_MAKE); make gtest_main.a
 
 %_unittest.o : $(TEST_DIR)/src/%_unittest.cpp $(INC_DIR)/%.h
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< 
 
-% :  %_unittest.o librubiks-cube_main.a  gtest.a
+% :  %_unittest.o librubiks-cube_main.a  $(GTEST_MAKE)/gtest.a
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
 
-rubiktest :  $(TEST_OBJ) librubiks-cube_main.a  gtest.a
+rubiktest :  $(TEST_OBJ) librubiks-cube_main.a  $(GTEST_MAKE)/gtest.a
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
