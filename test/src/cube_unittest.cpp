@@ -26,19 +26,24 @@ class CubeTest: public ::testing::Test {
         CubeTest(): pf(front), pfd(front, down), pfur(front, up, right),
                     pd(down), pdl(down, left), pdfr(down, front, right)
          {
+            std::cout << "Inside consttructor 1" << std::endl;
             std::string filepath = std::string() + std::getenv("CUBE_HOME") + "/test/dat/cube.dat";
+            std::cout << "Inside consttructor 1.1" << std::endl;
             is_cube.open( filepath  );
+            std::cout << "Inside consttructor 1.2" << std::endl;
             if(!is_cube)
                 throw std::runtime_error("Couldn't open file: \"" + filepath + "\"");
             else
                 cube = Cube(is_cube);
 
+            std::cout << "Inside consttructor 2" << std::endl;
             filepath = std::string() + std::getenv("CUBE_HOME") + "/test/dat/front.dat";
             is_front.open( filepath  );
             if(!is_front)
                 throw std::runtime_error("Couldn't open file: \"" + filepath + "\"");
             else
                 cube_f.createFace(is_front);
+            std::cout << "Inside consttructor 3" << std::endl;
         }
 };
 
@@ -57,13 +62,17 @@ class CubeTest: public ::testing::Test {
  * 5. Cubelet::getFacelet(Position);
  * ===============================================
  */
+
 TEST_F(CubeTest, face) {
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = White, side = Front", cube_f.getFacelet(front));
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Blue, side = Front", cube_f.getFacelet(front, down));
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Red, side = Front", cube_f.getFacelet(front, up, right));
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = White, side = Front", cube_f.getFacelet(pf));
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Blue, side = Front", cube_f.getFacelet(pfd));
-    ASSERT_PRED_FORMAT2(checkPrint, "Facelet: col = Red, side = Front", cube_f.getFacelet(pfur));
+    std::cout << "I'm here" << std::endl;
+    //Position pos(front);
+    //cube_f.getFacelet(front);
+    //EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = White, side = Front", cube_f.getFacelet(front));
+    //EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Blue, side = Front", cube_f.getFacelet(front, down));
+    //EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Red, side = Front", cube_f.getFacelet(front, up, right));
+    //EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = White, side = Front", cube_f.getFacelet(pf));
+    //EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Blue, side = Front", cube_f.getFacelet(pfd));
+    //ASSERT_PRED_FORMAT2(checkPrint, "Facelet: col = Red, side = Front", cube_f.getFacelet(pfur));
 }
 
 
@@ -72,6 +81,7 @@ TEST_F(CubeTest, face) {
  * expected. 
  * =================================================
  */
+/*
 TEST_F(CubeTest, facelet) {
 
     EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = White, side = Front", cube.getFacelet(front));
@@ -157,7 +167,8 @@ TEST_F(CubeTest, facelet) {
     EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Red, side = Down", cube.getFacelet(down, back, right));
 
 }
-
+*/
+/*
 
 TEST_F(CubeTest, cubelet){
     EXPECT_PRED_FORMAT2(checkPrint, "Colors: { White } Position: ptype = Center, vecSide = { Front }", cube.getCubelet(front));
@@ -177,3 +188,4 @@ TEST_F(CubeTest, cubelet){
     //std::cout << cube.getCubelet(pos) << std::endl;
     //std::cout << cube.getCubelet(pos2) << std::endl;
 }
+*/

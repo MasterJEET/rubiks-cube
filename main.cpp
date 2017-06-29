@@ -6,6 +6,7 @@
  * */
 
 #include "gtest/gtest.h"
+#include "cube.h"
 
 int main(int argc, char **argv)
 {

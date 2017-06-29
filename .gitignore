@@ -4,3 +4,8 @@
 bin/*
 obj/*
 *.swp
+common*
+facelet*
+position*
+cube*
+rubik*
