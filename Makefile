@@ -3,7 +3,7 @@ SRC_DIR := ./src
 TEST_DIR := ./test
 
 # Googletest directories
-GTEST_DIR := ./googletest/googletest/
+GTEST_DIR := ./googletest/googletest
 GTEST_MAKE := $(GTEST_DIR)/make
 
 # Flags passed to the preprocessor.
@@ -42,9 +42,9 @@ CUBE_SRC += $(CUBELET_SRC) $(SRC_DIR)/cube.cpp $(INC_DIR)/cube.h
 
 ## Combination of libraries ensuring only one main program in project
 # including googletest main
-GTEST_MAIN += librubiks-cube.a  gtest_main.a
+GTEST_MAIN += librubiks-cube.a  $(GTEST_MAKE)/gtest_main.a
 # including main from rubiks-cube
-RUBIK_MAIN += librubiks-cube_main.a  gtest.a
+RUBIK_MAIN += librubiks-cube_main.a  $(GTEST_MAKE)/gtest.a
 
 
 # House-keeping build targets.
@@ -94,7 +94,7 @@ $(GTEST_MAKE)/gtest_main.a :
 %_unittest.o : $(TEST_DIR)/src/%_unittest.cpp $(INC_DIR)/%.h
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< 
 
-% :  %_unittest.o librubiks-cube_main.a  $(GTEST_MAKE)/gtest.a
+%_ut :  %_unittest.o librubiks-cube_main.a  $(GTEST_MAKE)/gtest.a
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
 
 rubiktest :  $(TEST_OBJ) librubiks-cube_main.a  $(GTEST_MAKE)/gtest.a
