@@ -83,6 +83,10 @@ void printAllColor();
 //Print all elemensts of toFaceSide map
 void printAllFaceSide();
 
+// Basic checks and setting before program starts
+std::string getHome();
+
+
 // ======== Global Constants Definition ========
 //All facesides
 const FaceSide front = Front;
@@ -107,6 +111,10 @@ const PositionType center = Center;
 const PositionType edge = Edge;
 const PositionType corner = Corner;
 const PositionType undeftype = P_UNDEFINED;
+
+//Path where all of rubkis-cube's civilization is present
+extern const std::string CUBE_HOME;
+
 // =============================================
 
 #endif

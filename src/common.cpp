@@ -192,3 +192,11 @@ void printAllFaceSide(){
         std::cout << it.first << " --> " << it.second << std::endl;
     std::cout << "======= FaceSide | end =======" << std::endl;
 };
+
+std::string getHome(){
+    char* cube_home = std::getenv("CUBE_HOME");
+    if(cube_home)
+        return std::string( cube_home );
+    else
+        return std::string( std::getenv("HOME") + std::string("/rubiks-cube"));
+};
