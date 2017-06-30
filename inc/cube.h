@@ -26,8 +26,6 @@ class Cube {
         mapFacelet mFacelet;
         //Map for storing pointers to Cubelets with Position as key
         mappCubelet mpCubelet;
-        //Vector for stroing Cebelets
-        std::vector<Cubelet> vCubelet;
 
     public:
 

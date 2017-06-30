@@ -12,6 +12,9 @@ Cube::Cube(std::istream &is){
     for(int i=0; i<6; i++)
         createFace(is);
 
+    //Vector for stroing Cubelets temporarily
+    //std::vector<Cubelet> vCubelet;
+
     //Create Cubelets from mapFacelet and store it in map
     createCubelet();
 };
