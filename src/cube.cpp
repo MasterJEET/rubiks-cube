@@ -56,15 +56,15 @@ void Cube::createFace(std::istream &is){
 void Cube::createCubelet(){
    
     //Vector of all valid FaceSides
-    std::vector<FaceSide> vSingleFS = {front, back, up, down, right, left};
+    //std::vector<FaceSide> vSingleFS = {front, back, up, down, right, left};
 
     //Create center Facelets and add to map
-    for( const auto& fs: vSingleFS ){
-        Position pos(fs);
-        Facelet* pfl = &mFacelet[ Position( pos ) ];
-        vCubelet.push_back( Cubelet(pfl) );
-        mpCubelet[ pos ] = vCubelet.back();
-    }
+    //for( const auto& fs: vSingleFS ){
+    //    Position pos(fs);
+    //    Facelet* pfl = &mFacelet[ Position( pos ) ];
+    //    vCubelet.push_back( Cubelet(pfl) );
+    //    mpCubelet[ pos ] = vCubelet.back();
+    //}
 
 
     ////Vector of vector of pair FaceSides

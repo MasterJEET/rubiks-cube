@@ -23,16 +23,16 @@ TEST_OBJ += cubelet_unittest.o
 TEST_OBJ += cube_unittest.o
 
 
+## Object dependencies of certain object
+#common_OBJ = common.o
+#position_OBJ = $(COMMON_OBJ) facelet.o
+#facelet_OBJ = $(POSITION_OBJ) position.o
+#cubelet_OBJ = $(FACELET_OBJ) cubelet.o
+#cube_OBJ = $(CUBELET_OBJ) cube.o
+
 # All objects for original program ( excluding those of test cases and 'main')
 ALL_OBJ += common.o facelet.o position.o cubelet.o cube.o
 
-
-## Dependencies and Source files
-# common
-# facelet
-# position
-# cubelet
-# cube
 
 
 ## Combination of libraries ensuring only one main program in project
@@ -94,7 +94,7 @@ $(GTEST_MAKE)/gtest_main.a :
 %_unittest.o : $(TEST_DIR)/src/%_unittest.cpp $(INC_DIR)/%.h
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< 
 
-%_ut :  %_unittest.o %.o  $(GTEST_MAKE)/gtest.a
+%_ut : %_unittest.o librubiks-cube_main.a $(GTEST_MAKE)/gtest.a
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
 
 rubiktest :  $(TEST_OBJ) librubiks-cube_main.a  $(GTEST_MAKE)/gtest.a
