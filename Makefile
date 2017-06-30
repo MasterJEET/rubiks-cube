@@ -29,15 +29,10 @@ ALL_OBJ += common.o facelet.o position.o cubelet.o cube.o
 
 ## Dependencies and Source files
 # common
-COMMON_SRC += $(SRC_DIR)/common.cpp $(INC_DIR)/common.h  $(INC_DIR)/Color.def $(INC_DIR)/FaceSide.def $(INC_DIR)/PositionType.def
 # facelet
-FACELET_SRC += $(COMMON_SRC) $(SRC_DIR)/facelet.cpp $(INC_DIR)/facelet.h
 # position
-POSITION_SRC += $(FACELET_SRC) $(SRC_DIR)/position.cpp $(INC_DIR)/position.h
 # cubelet
-CUBELET_SRC += $(POSITION_SRC) $(SRC_DIR)/cubelet.cpp $(INC_DIR)/cubelet.h
 # cube
-CUBE_SRC += $(CUBELET_SRC) $(SRC_DIR)/cube.cpp $(INC_DIR)/cube.h
 
 
 ## Combination of libraries ensuring only one main program in project
@@ -58,18 +53,23 @@ cleanall :
 	make clean
 	cd $(GTEST_MAKE); make clean
 
+COMMON_SRC += $(SRC_DIR)/common.cpp $(INC_DIR)/common.h  $(INC_DIR)/Color.def $(INC_DIR)/FaceSide.def $(INC_DIR)/PositionType.def
 common.o : $(COMMON_SRC)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(SRC_DIR)/common.cpp 
 
+FACELET_SRC += $(COMMON_SRC) $(SRC_DIR)/facelet.cpp $(INC_DIR)/facelet.h
 facelet.o : $(FACELET_SRC)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(SRC_DIR)/facelet.cpp 
 
+POSITION_SRC += $(FACELET_SRC) $(SRC_DIR)/position.cpp $(INC_DIR)/position.h
 position.o : $(POSITION_SRC)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(SRC_DIR)/position.cpp 
 
+CUBELET_SRC += $(POSITION_SRC) $(SRC_DIR)/cubelet.cpp $(INC_DIR)/cubelet.h
 cubelet.o : $(CUBELET_SRC)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(SRC_DIR)/cubelet.cpp 
 
+CUBE_SRC += $(CUBELET_SRC) $(SRC_DIR)/cube.cpp $(INC_DIR)/cube.h
 cube.o : $(CUBE_SRC)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(SRC_DIR)/cube.cpp 
 
@@ -94,7 +94,7 @@ $(GTEST_MAKE)/gtest_main.a :
 %_unittest.o : $(TEST_DIR)/src/%_unittest.cpp $(INC_DIR)/%.h
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< 
 
-%_ut :  %_unittest.o librubiks-cube_main.a  $(GTEST_MAKE)/gtest.a
+%_ut :  %_unittest.o %.o  $(GTEST_MAKE)/gtest.a
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
 
 rubiktest :  $(TEST_OBJ) librubiks-cube_main.a  $(GTEST_MAKE)/gtest.a
