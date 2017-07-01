@@ -58,4 +58,53 @@ class Cubelet{
 };
 
 
+
+class CubeletPosition : public Position {
+    public:
+        //Constructors same as those of Position
+        CubeletPosition(const FaceSide first): Position(first){};
+        CubeletPosition(const FaceSide first, const FaceSide second): Position(first, second){};
+        CubeletPosition(const FaceSide first, const FaceSide second, const FaceSide third): Position(first, second, third){};
+        CubeletPosition(const std::vector<FaceSide> _vecSide): Position(_vecSide){};
+
+        //Equality
+        friend bool operator==(const CubeletPosition& lhs, const CubeletPosition& rhs);
+
+        //Inequality
+        friend bool operator!=(const CubeletPosition& lhs, const CubeletPosition& rhs){ return !(lhs == rhs); }
+};
+
+namespace std {
+    template <>
+        struct hash<CubeletPosition> {
+            typedef CubeletPosition argument_type;
+            typedef std::size_t result_type;
+            
+            result_type operator()(const argument_type& p) const{
+                FaceSide f1 = p.getSideAt(0);
+                FaceSide f2 = p.getSideAt(1);
+                FaceSide f3 = p.getSideAt(2);
+
+                // Arrange in decreasing order
+                // This is required to make this implementaion
+                // insensitive to order of FaceSides in Position object i.e.
+                // (front, up, left) == (up, left, front) == (left, up, front)
+
+                if(f1 > f2)
+                    swap(f1, f2);
+                if(f2 > f3)
+                    swap(f2, f3);
+                if(f1 > f2)
+                    swap(f1, f2);
+
+                result_type i1 = std::hash<int>()(static_cast<result_type>(f1));
+                result_type i2 = std::hash<int>()(static_cast<result_type>(f2));
+                result_type i3 = std::hash<int>()(static_cast<result_type>(f3));
+
+                return ( i1*100 + i2*10 + i3 );
+            }
+        };
+}
+
+
 #endif

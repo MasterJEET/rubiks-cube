@@ -15,7 +15,6 @@ const std::string CUBE_HOME = getHome();
 int main(int argc, char **argv)
 {
 
-    std::cout << CUBE_HOME << std::endl;
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }

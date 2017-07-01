@@ -120,9 +120,7 @@ namespace std {
                 // This is required to make this implementaion
                 // insensitive to order of 2nd and 3rd FaceSide
                 if(f2 < f3){
-                    FaceSide ftmp = f2;
-                    f2 = f3;
-                    f3 = ftmp;
+                    swap(f2, f3);
                 }
 
                 result_type i1 = std::hash<int>()(static_cast<result_type>(f1));

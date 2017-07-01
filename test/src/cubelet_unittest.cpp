@@ -73,3 +73,17 @@ TEST_F(CubeletTest, overloading) {
     EXPECT_TRUE(Cubelet(&frr) == Cubelet(&frr));
     EXPECT_TRUE(Cubelet(&frr) != Cubelet(&fwf));
 }
+
+
+TEST_F(CubeletTest, CubeletPosition){
+    //Create CubeletPositons
+    CubeletPosition cp_f(front);
+    CubeletPosition cp_fl(front, left);
+    CubeletPosition cp_fld(front, left, down);
+    CubeletPosition cp_fdl(front, down, left);
+    CubeletPosition cp_dfl( down,front, left);
+
+    EXPECT_FALSE( cp_f == cp_fl );
+    EXPECT_FALSE( cp_fld != cp_fdl );
+    EXPECT_FALSE( cp_dfl != cp_fdl );
+}

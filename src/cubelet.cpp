@@ -41,3 +41,36 @@ bool operator==(const Cubelet& lhs, const Cubelet& rhs){
 
     return true;
 }
+
+
+//Equality
+bool operator==(const CubeletPosition& lhs, const CubeletPosition& rhs){
+   //sorting FaceSides of lhs
+   FaceSide lfs0 = lhs.getSideAt(0);
+   FaceSide lfs1 = lhs.getSideAt(1);
+   FaceSide lfs2 = lhs.getSideAt(2);
+
+   if( lfs0 > lfs1 )
+       std::swap(lfs0, lfs1);
+   if( lfs1 > lfs2 )
+       std::swap(lfs1, lfs2);
+   if( lfs0 > lfs1 )
+       std::swap(lfs0, lfs1);
+   //sorting FaceSides of rhs
+   FaceSide rfs0 = rhs.getSideAt(0);
+   FaceSide rfs1 = rhs.getSideAt(1);
+   FaceSide rfs2 = rhs.getSideAt(2);
+
+   if( rfs0 > rfs1 )
+       std::swap(rfs0, rfs1);
+   if( rfs1 > rfs2 )
+       std::swap(rfs1, rfs2);
+   if( rfs0 > rfs1 )
+       std::swap(rfs0, rfs1);
+
+   if( lfs0 != rfs0 || lfs1 != rfs1 || lfs2 != rfs2 )
+       return false;
+
+   return true;
+
+};
