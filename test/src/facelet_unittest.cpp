@@ -6,6 +6,7 @@
  * */
 
 #include "gtest/gtest.h"
+#include "testcommon.h"
 #include "facelet.h"
 
 class FaceletTest : public ::testing::Test {
@@ -56,4 +57,19 @@ TEST_F(FaceletTest, overloading) {
     EXPECT_EQ( Facelet(right, red), frl*front*front );
     //Chaining operator*=
     EXPECT_EQ( Facelet(down, red), (frl *= up) *= right );
+}
+
+
+TEST_F(FaceletTest, FaceletPosition){
+    //Create few FaceletPositions
+    FaceletPosition fp_fu( front, up );
+    FaceletPosition fp_uf( up, front );
+    FaceletPosition fp_bdl( back, down, left );
+    FaceletPosition fp_bld( back, left, down );
+    FaceletPosition fp_lbd( std::vector<FaceSide>{left, back, down} );
+
+    EXPECT_FALSE( fp_fu == fp_uf );
+    EXPECT_FALSE( fp_bdl != fp_bld );
+    EXPECT_TRUE( fp_lbd != fp_bld );
+
 }

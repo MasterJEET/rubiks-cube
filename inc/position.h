@@ -14,7 +14,7 @@
 #include "common.h"
 
 class Position {
-    private:
+    protected:
         
         //Holds FaceSides
         std::vector<FaceSide> vecSide;
