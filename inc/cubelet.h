@@ -34,7 +34,6 @@ class CubeletPosition : public Position {
 
 
 class Cubelet{
-    friend class Cube;
     private:
 
         //Holds Facelets for a given cubelet
@@ -66,6 +65,8 @@ class Cubelet{
         
         //Constructor for Corner cubelets
         Cubelet(FaceletPosition cp1, FaceletPosition cp2, FaceletPosition cp3);
+
+        Cubelet(std::vector<FaceletPosition> _vecFP);
 
         //Returns vector of facelets for the cubelet
         const std::vector<Facelet*> *getFacelet() const {return &vecFac;}
