@@ -57,6 +57,7 @@ class Facelet {
 class FaceletPosition: public Position  {
     public:
         //All constructor similar to those in base class Position
+        FaceletPosition(){};
         FaceletPosition(const FaceSide first): Position(first){};
         FaceletPosition(const FaceSide first, const FaceSide second): Position(first, second){};
         FaceletPosition(const FaceSide first, const FaceSide second, const FaceSide third): Position(first, second, third){};

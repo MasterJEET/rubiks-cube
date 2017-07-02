@@ -19,7 +19,7 @@ class CubeletTest : public ::testing::Test {
         Facelet fol;
         Facelet fwd;
         
-        Position pfrd;
+        CubeletPosition pfrd;
         
         Cubelet cr;
         Cubelet cfu;
@@ -82,8 +82,17 @@ TEST_F(CubeletTest, CubeletPosition){
     CubeletPosition cp_fld(front, left, down);
     CubeletPosition cp_fdl(front, down, left);
     CubeletPosition cp_dfl( down,front, left);
+    FaceletPosition fp_ldf( left, down, front );
+    FaceletPosition fp_rdf( right, down, front );
+    FaceletPosition fp_u( up );
+    
+    CubeletPosition cp_fp_ldf( fp_ldf );
 
     EXPECT_FALSE( cp_f == cp_fl );
     EXPECT_FALSE( cp_fld != cp_fdl );
     EXPECT_FALSE( cp_dfl != cp_fdl );
+    EXPECT_TRUE( cp_fp_ldf == cp_dfl );
+    EXPECT_THROW( Cubelet( fp_rdf, fp_ldf ), std::runtime_error );
+    EXPECT_THROW( Cubelet( fp_rdf, fp_u ), std::runtime_error );
+
 }

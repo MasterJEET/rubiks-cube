@@ -12,7 +12,29 @@
 #include "position.h"
 #include <vector>
 
+class CubeletPosition : public Position {
+    public:
+        //Constructors same as those of Position
+        CubeletPosition(){};
+        CubeletPosition(const FaceSide first): Position(first){};
+        CubeletPosition(const FaceSide first, const FaceSide second): Position(first, second){};
+        CubeletPosition(const FaceSide first, const FaceSide second, const FaceSide third): Position(first, second, third){};
+        CubeletPosition(const std::vector<FaceSide> _vecSide): Position(_vecSide){};
+        
+        //New construtor, initialize from  FaceletPosition
+        CubeletPosition(const FaceletPosition fp): Position( *fp.getSide() ){};
+
+
+        //Equality
+        friend bool operator==(const CubeletPosition& lhs, const CubeletPosition& rhs);
+
+        //Inequality
+        friend bool operator!=(const CubeletPosition& lhs, const CubeletPosition& rhs){ return !(lhs == rhs); }
+};
+
+
 class Cubelet{
+    friend class Cube;
     private:
 
         //Holds Facelets for a given cubelet
@@ -20,7 +42,7 @@ class Cubelet{
         //Holds FaceletPositions which refers to Facelets
         std::vector<FaceletPosition> vecFP;
         //Holds Position of a given cubelet
-        Position pos;
+        CubeletPosition pos;
 
     public:
 
@@ -55,7 +77,7 @@ class Cubelet{
         Position getPosition() const{ return pos;}
 
         //Sets Position for cubelet
-        void setPosition(const Position _pos){ pos = _pos; }
+        void setPosition(const CubeletPosition _pos){ pos = _pos; }
 
         //operator<< overloading for writing Cubelet to ostream
         friend std::ostream& operator<<(std::ostream& os, Cubelet C);
@@ -68,21 +90,6 @@ class Cubelet{
 };
 
 
-
-class CubeletPosition : public Position {
-    public:
-        //Constructors same as those of Position
-        CubeletPosition(const FaceSide first): Position(first){};
-        CubeletPosition(const FaceSide first, const FaceSide second): Position(first, second){};
-        CubeletPosition(const FaceSide first, const FaceSide second, const FaceSide third): Position(first, second, third){};
-        CubeletPosition(const std::vector<FaceSide> _vecSide): Position(_vecSide){};
-
-        //Equality
-        friend bool operator==(const CubeletPosition& lhs, const CubeletPosition& rhs);
-
-        //Inequality
-        friend bool operator!=(const CubeletPosition& lhs, const CubeletPosition& rhs){ return !(lhs == rhs); }
-};
 
 namespace std {
     template <>
