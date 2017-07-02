@@ -31,14 +31,14 @@ void Cube::createFace(std::istream &is){
     col = ColorFromLetter(strColor);
 
     //Create Center Facelet and add it to map
-    mFacelet[ Position(ctrSide) ] = Facelet(col, ctrSide);
+    mFacelet[ FaceletPosition(ctrSide) ] = Facelet(col, ctrSide);
 
     //Get FaceSide and Color for Edge Facelets and add them to map
     for(size_t i=0; i<4; i++){
         is >> strFaceSide >> strColor;
         edgeSide = FaceSideFromLetter(strFaceSide);
         col = ColorFromLetter(strColor);
-        mFacelet[ Position(ctrSide, edgeSide) ] = Facelet(col, ctrSide);
+        mFacelet[ FaceletPosition(ctrSide, edgeSide) ] = Facelet(col, ctrSide);
     }
 
     //Get FaceSide and Color for Corner Facelets and add them to map
@@ -47,7 +47,7 @@ void Cube::createFace(std::istream &is){
         edgeSide = FaceSideFromLetter(strFaceSide);
         corSide = FaceSideFromLetter(strFaceSide2);
         col = ColorFromLetter(strColor);
-        mFacelet[ Position(ctrSide, edgeSide, corSide) ] = Facelet(col, ctrSide);
+        mFacelet[ FaceletPosition(ctrSide, edgeSide, corSide) ] = Facelet(col, ctrSide);
     }
 
 
@@ -56,14 +56,14 @@ void Cube::createFace(std::istream &is){
 void Cube::createCubelet(){
    
     //Vector of all valid FaceSides
-    //std::vector<FaceSide> vSingleFS = {front, back, up, down, right, left};
+    std::vector<FaceSide> vSingleFS = {front, back, up, down, right, left};
 
-    //Create center Facelets and add to map
+    //Create center Cubelets and add to map
     //for( const auto& fs: vSingleFS ){
     //    Position pos(fs);
     //    Facelet* pfl = &mFacelet[ Position( pos ) ];
     //    vCubelet.push_back( Cubelet(pfl) );
-    //    mpCubelet[ pos ] = vCubelet.back();
+    //    mCubelet[ pos ] = vCubelet.back();
     //}
 
 

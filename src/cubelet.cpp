@@ -19,6 +19,10 @@ Cubelet::Cubelet(Facelet* p_fac1, Facelet* p_fac2, Facelet* p_fac3):vecFac{p_fac
     pos = Position(p_fac1->getFaceSide(), p_fac2->getFaceSide(), p_fac3->getFaceSide());
 }
 
+Cubelet::Cubelet(FaceletPosition cp1): vecFP{cp1} {
+    
+};
+
 std::ostream& operator<<(std::ostream& os, Cubelet C){
     os << "Colors: { ";
     for(auto it: C.vecFac)

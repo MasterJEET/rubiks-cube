@@ -17,7 +17,8 @@ class Cubelet{
 
         //Holds Facelets for a given cubelet
         std::vector<Facelet*> vecFac;
-
+        //Holds FaceletPositions which refers to Facelets
+        std::vector<FaceletPosition> vecFP;
         //Holds Position of a given cubelet
         Position pos;
 
@@ -35,6 +36,15 @@ class Cubelet{
         //Constructor for Corner cubelets
         Cubelet(Facelet* p_fac1, Facelet* p_fac2, Facelet* p_fac3);
        
+        //Constructor for Center cubelets
+        Cubelet(FaceletPosition cp1);
+        
+        //Constructor for Edge cubelets
+        Cubelet(FaceletPosition cp1, FaceletPosition cp2);
+        
+        //Constructor for Corner cubelets
+        Cubelet(FaceletPosition cp1, FaceletPosition cp2, FaceletPosition cp3);
+
         //Returns vector of facelets for the cubelet
         const std::vector<Facelet*> *getFacelet() const {return &vecFac;}
        

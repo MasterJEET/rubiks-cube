@@ -16,9 +16,9 @@ class CubeTest: public ::testing::Test {
         Cube cube_f;
         std::ifstream is_cube;
         std::ifstream is_front;
-        Position pf;
-        Position pfd;
-        Position pfur; 
+        FaceletPosition pf;
+        FaceletPosition pfd;
+        FaceletPosition pfur; 
         Position pd;
         Position pdl;
         Position pdfr;
@@ -65,6 +65,7 @@ TEST_F(CubeTest, face) {
     EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = White, side = Front", cube_f.getFacelet(pf));
     EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Blue, side = Front", cube_f.getFacelet(pfd));
     ASSERT_PRED_FORMAT2(checkPrint, "Facelet: col = Red, side = Front", cube_f.getFacelet(pfur));
+
 }
 
 
