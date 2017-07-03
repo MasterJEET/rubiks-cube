@@ -50,6 +50,11 @@ class Facelet {
         //Write to output stream
         friend std::ostream& operator<<(std::ostream& os, const Facelet& F){ return os << "Facelet: col = " << F.col << ", side = " << F.side; }
 
+        //Check if given two faclets are opposite of each other
+        friend bool areOpposite(const Facelet& first, const Facelet& second){ return areOpposite(first.side, second.side); }
+
+        //Check if any of given three Facelets contain opposite faces
+        friend bool anyOpposite(const Facelet& first, const Facelet& second, const Facelet& third){ return anyOpposite(first.side, second.side, third.side); }
 };
 
 

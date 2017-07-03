@@ -73,3 +73,16 @@ TEST_F(FaceletTest, FaceletPosition){
     EXPECT_TRUE( fp_lbd != fp_bld );
 
 }
+
+
+TEST(Nonmember, opposition){
+    Facelet f_fr(front, red);
+    Facelet f_bg(back, green);
+    Facelet f_ub(up, blue);
+    Facelet f_rw(right, white);
+
+    EXPECT_TRUE( areOpposite(f_fr, f_bg));
+    EXPECT_FALSE( areOpposite(f_fr, f_ub));
+    EXPECT_TRUE( anyOpposite(f_fr, f_ub, f_bg));
+    EXPECT_FALSE( anyOpposite( f_ub, f_fr, f_rw ));
+}
