@@ -7,51 +7,39 @@
 
 #include "cubelet.h"
 
-Cubelet::Cubelet(Facelet* p_fac1):vecFac{p_fac1}{
-    pos = CubeletPosition(p_fac1->getFaceSide());
+Cubelet::Cubelet(Facelet fac1):vecFac{fac1}{
+    pos = CubeletPosition(fac1.getFaceSide());
 }
 
-Cubelet::Cubelet(Facelet* p_fac1, Facelet* p_fac2):vecFac{p_fac1, p_fac2}{
-    pos = CubeletPosition(p_fac1->getFaceSide(), p_fac2->getFaceSide());
+Cubelet::Cubelet(Facelet fac1, Facelet fac2):vecFac{fac1, fac2}{
+    pos = CubeletPosition(fac1.getFaceSide(), fac2.getFaceSide());
 }
 
-Cubelet::Cubelet(Facelet* p_fac1, Facelet* p_fac2, Facelet* p_fac3):vecFac{p_fac1, p_fac2, p_fac3}{
-    pos = CubeletPosition(p_fac1->getFaceSide(), p_fac2->getFaceSide(), p_fac3->getFaceSide());
+Cubelet::Cubelet(Facelet fac1, Facelet fac2, Facelet fac3):vecFac{fac1, fac2, fac3}{
+    pos = CubeletPosition(fac1.getFaceSide(), fac2.getFaceSide(), fac3.getFaceSide());
 }
 
-Cubelet::Cubelet(FaceletPosition fp1):
-    vecFP{fp1},
-    pos ( fp1 )
-{}
-
-Cubelet::Cubelet(FaceletPosition fp1, FaceletPosition fp2):
-    vecFP{fp1, fp2},
-    pos( fp1 )
-{
-    CubeletPosition cp1( fp2 );
-    if( pos != cp1 )
-        throw(std::runtime_error(std::string() + __func__ + ": FaceletPosition fp1 and fp2 donot refer to Facelets on same Cubelet"));
+Cubelet::Cubelet(std::vector<Facelet> _vecFac): vecFac(_vecFac) {
+    switch( _vecFac.size() ){
+        case 1:
+            pos = CubeletPosition(_vecFac[0].getFaceSide() );
+            break;
+        case 2:
+            pos = CubeletPosition( std::vector<FaceSide>{  _vecFac[0].getFaceSide(), _vecFac[1].getFaceSide()   }  );
+            break;
+        case 3:
+            pos = CubeletPosition( std::vector<FaceSide>{  _vecFac[0].getFaceSide(),  _vecFac[1].getFaceSide(),  _vecFac[2].getFaceSide()   }  );
+            break;
+        default:
+            throw std::runtime_error(std::string() + __func__ + ": _vecFac can only have size such that 0 < size <= 3...");
+            
+    }
 }
-
-
-Cubelet::Cubelet(FaceletPosition fp1, FaceletPosition fp2, FaceletPosition fp3):
-    vecFP{fp1, fp2, fp3},
-    pos ( fp1 )
-{
-    CubeletPosition cp1( fp2 );
-    if( pos != cp1 )
-        throw(std::runtime_error(std::string() + __func__ + ": FaceletPosition fp1 and fp2 donot refer to Facelets on same Cubelet"));
-    CubeletPosition cp2( fp3 );
-    if( pos != cp2 )
-        throw(std::runtime_error(std::string() + __func__ + ": FaceletPosition fp1 and fp3 donot refer to Facelets on same Cubelet"));
-
-}
-
 
 std::ostream& operator<<(std::ostream& os, Cubelet C){
     os << "Colors: { ";
     for(auto it: C.vecFac)
-        os << it->getColor() << " ";
+        os << it.getColor() << " ";
     os << "} ";
     os << C.pos;
     return os;
@@ -65,7 +53,7 @@ bool operator==(const Cubelet& lhs, const Cubelet& rhs){
         return false;
 
     for(size_t i=0; i < lhs.vecFac.size() ; i++)
-        if( !(*lhs.vecFac[i] == *rhs.vecFac[i]) )
+        if( !(lhs.vecFac[i] == rhs.vecFac[i]) )
             return false;
 
     return true;

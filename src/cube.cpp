@@ -8,17 +8,19 @@
 #include "cube.h"
 
 Cube::Cube(std::istream &is){
+
+    mapFacelet mFacelet;
     //Get all Faces
     for(int i=0; i<6; i++)
-        createFace(is);
+        createFace(is, mFacelet);
 
     //Vector for stroing Cubelets temporarily
 
     //Create Cubelets from mapFacelet and store it in map
-    createCubelet();
+    createCubelet(mFacelet);
 };
 
-void Cube::createFace(std::istream &is){
+void Cube::createFace(std::istream &is, mapFacelet& mFacelet){
 
     std::string strFaceSide, strFaceSide2, strColor;
     FaceSide ctrSide, edgeSide, corSide;
@@ -52,16 +54,18 @@ void Cube::createFace(std::istream &is){
 
 };
 
-void Cube::createCubelet(){
+void Cube::createCubelet(mapFacelet& mFacelet){
    
     //Vector of all valid FaceSides
-    std::vector<FaceSide> vSingleFS = {front, back, up, down, right, left};
+    std::vector<FaceSide> vSingleFS = {
+        {front} , {back} , {up} , {down} , {right} , {left}
+    };
 
     //Create center Cubelets and add to map
-    for( const auto& fs: vSingleFS ){
-        FaceletPosition fp(fs);
-        CubeletPosition cp(fs);
-        mCubelet[ cp ] = Cubelet(fp);
+    for( const auto& vfs: vSingleFS ){
+        FaceletPosition fp(vfs);
+        CubeletPosition cp(vfs);
+        mCubelet[ cp ] = Cubelet( mFacelet[fp] );
     }
 
 

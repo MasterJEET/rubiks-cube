@@ -10,7 +10,11 @@
 
 #include "facelet.h"
 #include "position.h"
+#include <unordered_map>
 #include <vector>
+
+typedef std::unordered_map<FaceletPosition, Facelet> mapFacelet;
+
 
 class CubeletPosition : public Position {
     public:
@@ -36,11 +40,11 @@ class CubeletPosition : public Position {
 class Cubelet{
     private:
 
+        //to hold Facelets with FaceletPosition as thek key
+        mapFacelet mFacelet;
         //Holds Facelets for a given cubelet
-        std::vector<Facelet*> vecFac;
+        std::vector<Facelet> vecFac;
         //Holds FaceletPositions which refers to Facelets
-        std::vector<FaceletPosition> vecFP;
-        //Holds Position of a given cubelet
         CubeletPosition pos;
 
     public:
@@ -49,30 +53,22 @@ class Cubelet{
         Cubelet(){};
         
         //Constructor for Center cubelets
-        Cubelet(Facelet* p_fac1);
+        Cubelet(Facelet fac1);
         
         //Constructor for Edge cubelets
-        Cubelet(Facelet* p_fac1, Facelet* p_fac2);
+        Cubelet(Facelet fac1, Facelet fac2);
         
         //Constructor for Corner cubelets
-        Cubelet(Facelet* p_fac1, Facelet* p_fac2, Facelet* p_fac3);
+        Cubelet(Facelet fac1, Facelet fac2, Facelet fac3);
+
+        //Initializaton from vector of Facelets
+        Cubelet( std::vector<Facelet> _vecFac );
        
-        //Constructor for Center cubelets
-        Cubelet(FaceletPosition cp1);
-        
-        //Constructor for Edge cubelets
-        Cubelet(FaceletPosition cp1, FaceletPosition cp2);
-        
-        //Constructor for Corner cubelets
-        Cubelet(FaceletPosition cp1, FaceletPosition cp2, FaceletPosition cp3);
-
-        Cubelet(std::vector<FaceletPosition> _vecFP);
-
         //Returns vector of facelets for the cubelet
-        const std::vector<Facelet*> *getFacelet() const {return &vecFac;}
+        const std::vector<Facelet> *getFacelet() const {return &vecFac;}
        
         // Returns vecFac[index]
-        Facelet getFaceletAt(size_t index) const{ return *vecFac.at(index);}
+        Facelet getFaceletAt(size_t index) const{ return vecFac.at(index);}
 
         //Returns Position
         Position getPosition() const{ return pos;}

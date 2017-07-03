@@ -15,7 +15,6 @@
 #include "cubelet.h"
 
 
-typedef std::unordered_map<FaceletPosition, Facelet> mapFacelet;
 typedef std::unordered_map<CubeletPosition, Cubelet> mappCubelet;
 
 
@@ -23,7 +22,7 @@ class Cube {
     private:
 
         //Map for storing Facelets with FaceletPosition as key
-        mapFacelet mFacelet;
+        //mapFacelet mFacelet;
         //Map for storing pointers to Cubelets with Position as key
         mappCubelet mCubelet;
 
@@ -36,19 +35,19 @@ class Cube {
         Cube(std::istream &is);
         
         //get all Facelets of a face from std::stream
-        void createFace(std::istream &is);
+        void createFace(std::istream &is, mapFacelet& mFacelet);
 
         //get Facelet at position specified by FaceSide from unordered_map mFacelet, three FaceSides specified
-        Facelet getFacelet(const FaceSide fside1, const FaceSide fside2, const FaceSide fside3) const { return mFacelet.at( FaceletPosition (fside1, fside2, fside3));}
+        //Facelet getFacelet(const FaceSide fside1, const FaceSide fside2, const FaceSide fside3) const { return mFacelet.at( FaceletPosition (fside1, fside2, fside3));}
 
         //get Facelet at position specified by FaceSide from unordered_map mFacelet, two FaceSides specified
-        Facelet getFacelet(const FaceSide fside1, const FaceSide fside2) const{ return mFacelet.at( FaceletPosition (fside1, fside2)); }
+        //Facelet getFacelet(const FaceSide fside1, const FaceSide fside2) const{ return mFacelet.at( FaceletPosition (fside1, fside2)); }
 
         //get Facelet from unordered_map mFacelet, where position is specified by FaceletPosition object
-        Facelet getFacelet(const FaceletPosition pos ) const{ return mFacelet.at( pos ); }
+        Facelet getFacelet(const FaceletPosition pos ) const{ return mCubelet.at( pos ).getFaceletAt(0)   ; }
 
         //create Cubelets and store in map with help of mapFacelet
-        void createCubelet();
+        void createCubelet(mapFacelet& mFacelet);
 
         //get Cubelet from Position
         //Cubelet getCubelet(const Position pos) const{ return *mCubelet.at( pos ); }
