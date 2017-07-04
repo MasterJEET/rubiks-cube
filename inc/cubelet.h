@@ -42,9 +42,7 @@ class Cubelet{
 
         //to hold Facelets with FaceletPosition as thek key
         mapFacelet mFacelet;
-        //Holds Facelets for a given cubelet
-        std::vector<Facelet> vecFac;
-        //Holds FaceletPositions which refers to Facelets
+        //Holds Position of Cubelet in the Cube
         CubeletPosition pos;
 
     public:
@@ -65,13 +63,13 @@ class Cubelet{
         Cubelet( std::vector<Facelet> _vecFac );
        
         //Returns vector of facelets for the cubelet
-        const std::vector<Facelet> *getFacelet() const {return &vecFac;}
+        const mapFacelet getMapFacelet() const {return mFacelet;}
        
         // Returns vecFac[index]
-        Facelet getFaceletAt(size_t index) const{ return vecFac.at(index);}
+        Facelet getFacelet(const FaceletPosition& fp) const{ return mFacelet[fp];}
 
         //Returns Position
-        Position getPosition() const{ return pos;}
+        CubeletPosition getPosition() const{ return pos;}
 
         //Sets Position for cubelet
         void setPosition(const CubeletPosition _pos){ pos = _pos; }
