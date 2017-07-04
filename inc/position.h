@@ -59,6 +59,8 @@ class Position {
 
         //Multiplication
         Position& operator*=(const FaceSide& rhs);
+        friend Position operator*(Position lhs, const FaceSide& rhs){ lhs *= rhs; return lhs; }
+
 };
 
 

@@ -130,4 +130,6 @@ TEST_F(PositionTest, multiplication) {
     EXPECT_THROW(p1*=undefside, std::runtime_error);
     EXPECT_THROW(p2*=front, std::runtime_error);
 
+    Position p3 = pdrf*right;
+    ASSERT_EQ( p3, Position(back, left, up) );
 }
