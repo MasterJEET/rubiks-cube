@@ -25,23 +25,23 @@ TEST_F(FaceletTest, Initialization) {
     // check Color
     EXPECT_EQ(red, frl.getColor());
     // check FaceSide
-    EXPECT_EQ(left, frl.getFaceSide());
+    EXPECT_EQ(left, frl.side());
 
     // === Facelet(FaceSide, Color) ===
     // check Color
     EXPECT_EQ(red, flr.getColor());
     // check FaceSide
-    EXPECT_EQ(left, flr.getFaceSide());
+    EXPECT_EQ(left, flr.side());
 }
 
-TEST_F(FaceletTest, setFaceSide) {
+TEST_F(FaceletTest, setPosition) {
     // === Facelet(Color, FaceSide) ===
-    frl.setFaceSide(right);
-    EXPECT_EQ(right, frl.getFaceSide());
+    frl.setPosition(right);
+    EXPECT_EQ(right, frl.side());
     
     // === Facelet(FaceSide, Color) ===
-    flr.setFaceSide(down);
-    EXPECT_EQ(down, flr.getFaceSide());
+    flr.setPosition(down);
+    EXPECT_EQ(down, flr.side());
 }
 
 TEST_F(FaceletTest, overloading) {
@@ -50,7 +50,7 @@ TEST_F(FaceletTest, overloading) {
     //Simple multiplication
     EXPECT_EQ( Facelet(red, back), frl*up );
     //Multiplying Facelet with FaceSide which Facelet.side == FaceSide
-    EXPECT_THROW( flr*left, std::runtime_error );
+    EXPECT_EQ( flr*left, Facelet(left, red) );
     //Compund assignment through multiplication, done is constructor
     EXPECT_EQ( Facelet(left, white) , ffw );
     //Chaining operator*

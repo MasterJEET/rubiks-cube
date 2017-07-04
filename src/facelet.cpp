@@ -9,7 +9,7 @@
 
 
 Facelet& Facelet::operator*=(const FaceSide& rhs){
-    side *= rhs;
+    pos *= rhs;
     return *this;
 }
 
