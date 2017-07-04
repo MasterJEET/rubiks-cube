@@ -8,27 +8,27 @@
 #include "cubelet.h"
 
 Cubelet::Cubelet(Facelet fac1):vecFac{fac1}{
-    pos = CubeletPosition(fac1.getFaceSide());
+    pos = CubeletPosition(fac1.side());
 }
 
 Cubelet::Cubelet(Facelet fac1, Facelet fac2):vecFac{fac1, fac2}{
-    pos = CubeletPosition(fac1.getFaceSide(), fac2.getFaceSide());
+    pos = CubeletPosition(fac1.side(), fac2.side());
 }
 
 Cubelet::Cubelet(Facelet fac1, Facelet fac2, Facelet fac3):vecFac{fac1, fac2, fac3}{
-    pos = CubeletPosition(fac1.getFaceSide(), fac2.getFaceSide(), fac3.getFaceSide());
+    pos = CubeletPosition(fac1.side(), fac2.side(), fac3.side());
 }
 
 Cubelet::Cubelet(std::vector<Facelet> _vecFac): vecFac(_vecFac) {
     switch( _vecFac.size() ){
         case 1:
-            pos = CubeletPosition(_vecFac[0].getFaceSide() );
+            pos = CubeletPosition(_vecFac[0].side() );
             break;
         case 2:
-            pos = CubeletPosition( std::vector<FaceSide>{  _vecFac[0].getFaceSide(), _vecFac[1].getFaceSide()   }  );
+            pos = CubeletPosition( std::vector<FaceSide>{  _vecFac[0].side(), _vecFac[1].side()   }  );
             break;
         case 3:
-            pos = CubeletPosition( std::vector<FaceSide>{  _vecFac[0].getFaceSide(),  _vecFac[1].getFaceSide(),  _vecFac[2].getFaceSide()   }  );
+            pos = CubeletPosition( std::vector<FaceSide>{  _vecFac[0].side(),  _vecFac[1].side(),  _vecFac[2].side()   }  );
             break;
         default:
             throw std::runtime_error(std::string() + __func__ + ": _vecFac can only have size such that 0 < size <= 3...");

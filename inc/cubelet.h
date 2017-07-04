@@ -66,7 +66,7 @@ class Cubelet{
         const mapFacelet getMapFacelet() const {return mFacelet;}
        
         // Returns vecFac[index]
-        Facelet getFacelet(const FaceletPosition& fp) const{ return mFacelet[fp];}
+        Facelet getFacelet(const FaceletPosition& fp) const{ return mFacelet.at(fp);}
 
         //Returns Position
         CubeletPosition getPosition() const{ return pos;}
