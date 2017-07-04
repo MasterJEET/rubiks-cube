@@ -71,6 +71,9 @@ std::ostream& operator<<(std::ostream& os, Position P){
 
 
 /* ================= operator== overloading ================
+ * == This doesn't apply here anymore.
+ * == This condition has been implemented for FaceletPosition
+ * =========================================================
  * Required for Implemention of std::unordered_map with 
  * Position as key
  *
@@ -102,20 +105,21 @@ std::ostream& operator<<(std::ostream& os, Position P){
  *
  * =========================================================
  */
+
 bool operator==(const Position& lhs, const Position& rhs){
     
-    //First FaceSides must be equal, point 2.a descrived above
-    if( lhs.getSideAt(0) != rhs.getSideAt(0) )
-        return false;
-
-    //2nd and 3rd FaceSide equal in same order, 2.b.i describe above
-    if ( lhs.getSideAt(1) == rhs.getSideAt(1) && lhs.getSideAt(2) == rhs.getSideAt(2) )
+    if( lhs.getSideAt(0) == rhs.getSideAt(0) && lhs.getSideAt(1) == rhs.getSideAt(1) && lhs.getSideAt(2) == rhs.getSideAt(2) )
         return true;
 
-    //2nd and 3rd FaceSide equal in rever order, 2.b.ii described above
-    if ( lhs.getSideAt(1) == rhs.getSideAt(2) && lhs.getSideAt(2) == rhs.getSideAt(1) )
-        return true;
-
-    //If above conditions doesn't satisfy return false
     return false;
+}
+
+Position& Position::operator*=(const FaceSide& rhs){
+    //If position face (first entry in vector Position.vecSide) matches with with rhs
+    //then don't multiply with it
+    for(auto& el:vecSide){
+        if( el != rhs && !areOpposite( el, rhs ) )
+            el *= rhs;
+    }    
+    return *this;
 }

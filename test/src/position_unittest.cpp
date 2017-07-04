@@ -52,27 +52,82 @@ TEST_F(PositionTest, minions) {
 }
 
 TEST_F(PositionTest, equality) {
-    EXPECT_TRUE(Position(front) == Position(front));
-    EXPECT_TRUE(Position(front) == Position(front, F_UNDEFINED));
-    EXPECT_TRUE(Position(front) == Position(front, F_UNDEFINED, F_UNDEFINED));
-    EXPECT_FALSE(Position(front) == Position(right));
-    EXPECT_TRUE(Position(front, left) == Position(front, left));
-    EXPECT_TRUE(Position(front, left) == Position(front, left, F_UNDEFINED));
-    EXPECT_TRUE(Position(front, left) == Position(front, F_UNDEFINED, left));
-    EXPECT_FALSE(Position(front, left) == Position(front, down));
-    EXPECT_FALSE(Position(front, left) == Position(left, front));
-    EXPECT_TRUE(Position(front, left, down) == Position(front, left, down));
-    EXPECT_TRUE(Position(front, left, down) == Position(front, down, left));
-    EXPECT_FALSE(Position(front, left, down) == Position(front, left, up));
-    EXPECT_FALSE(Position(front, left, down) == Position(left, front, down));
+    EXPECT_EQ(Position(front), Position(front));
+    EXPECT_EQ(Position(front), Position(front, F_UNDEFINED));
+    EXPECT_EQ(Position(front), Position(front, F_UNDEFINED, F_UNDEFINED));
+    EXPECT_NE(Position(front), Position(right));
+    EXPECT_EQ(Position(front, left), Position(front, left));
+    EXPECT_EQ(Position(front, left), Position(front, left, F_UNDEFINED));
+    EXPECT_NE(Position(front, left), Position(front, F_UNDEFINED, left));
+    EXPECT_NE(Position(front, left), Position(front, down));
+    EXPECT_NE(Position(front, left), Position(left, front));
+    EXPECT_EQ(Position(front, left, down), Position(front, left, down));
+    EXPECT_NE(Position(front, left, down), Position(front, down, left));
+    EXPECT_NE(Position(front, left, down), Position(front, left, up));
+    EXPECT_NE(Position(front, left, down), Position(left, front, down));
 }
 
 TEST_F(PositionTest, inequality) {
-    EXPECT_TRUE( Position(back, right, down) != Position(front, right, down) );
-    EXPECT_FALSE( Position(back, right, down) != Position(back, down, right) );
+    EXPECT_NE( Position(back, right, down), Position(front, right, down) );
+    EXPECT_NE( Position(back, right, down), Position(back, down, right) );
 }
 
 
-//TEST_F(PositionTest, multiplication) {
-//    pf *= left;
-//}
+TEST_F(PositionTest, multiplication) {
+    ////single////
+    //different side
+    pf *= left;
+    ASSERT_EQ( pf, Position(down) );
+    //same side
+    pf *= down;
+    ASSERT_EQ( pf, Position(down) );
+    //opposite side
+    pf *= up;
+    ASSERT_EQ( pf, Position(down) );
+    
+    ////double////
+    //same side on first
+    pbl *= back;
+    ASSERT_EQ(pbl, Position(back, down));
+    //same side on second
+    pbl *= down;
+    ASSERT_EQ(pbl, Position(left, down));
+    //opposite on first
+    pbl *= right;
+    ASSERT_EQ(pbl, Position(left, front));
+    //opposite on second
+    pbl *= back;
+    ASSERT_EQ(pbl, Position(down, front));
+    //different
+    pbl *= right;
+    ASSERT_EQ(pbl, Position(front, up));
+
+    ////triple////
+    //same side on first
+    pdrf *= down;
+    ASSERT_EQ(pdrf, Position(down, back, right) );
+    //same side on second
+    pdrf *= back;
+    ASSERT_EQ(pdrf, Position(right, back, up) );
+    //same side on third
+    pdrf *= up;
+    ASSERT_EQ(pdrf, Position(front, right, up) );
+    //opposite on first
+    pdrf *= back;
+    ASSERT_EQ(pdrf, Position(front, up, left) );
+    //opposite on second
+    pdrf *= down;
+    ASSERT_EQ(pdrf, Position(right, up, front) );
+    //opposite on third
+    pdrf *= back;
+    ASSERT_EQ(pdrf, Position(up, left, front) );
+    //different
+    //not possible
+    
+    //few corner cases
+    Position p1(front);
+    Position p2(undefside);
+    EXPECT_THROW(p1*=undefside, std::runtime_error);
+    EXPECT_THROW(p2*=front, std::runtime_error);
+
+}
