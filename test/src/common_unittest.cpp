@@ -176,7 +176,7 @@ TEST_F(OverloadingTest, check) {
     //Opposite FaceSide
     EXPECT_THROW(up*down, std::runtime_error);
     //F_UNDEFINED FaceSide
-    EXPECT_THROW(right*undefside, std::runtime_error);
+    EXPECT_NO_THROW(right*undefside);
 
 }
 

@@ -51,8 +51,8 @@ FaceSide& operator*=(FaceSide& lhs, const FaceSide& rhs){
     if( areOpposite(lhs, rhs))
         throw std::runtime_error("Cannot multiply opposite FaceSide...");
 
-    if( lhs == F_UNDEFINED || rhs == F_UNDEFINED )
-        throw std::runtime_error("Opearnd cannot have F_UNDEFINED values...");
+    //Handling undefside
+    if( lhs == F_UNDEFINED || rhs == F_UNDEFINED ){ lhs = undefside; return lhs;}
 
     //Front lhs
     if(lhs == front && rhs == right){ lhs = up; return lhs; }
