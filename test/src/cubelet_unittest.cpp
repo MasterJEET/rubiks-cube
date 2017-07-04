@@ -31,14 +31,14 @@ class CubeletTest : public ::testing::Test {
                        {}
 };
 
-//TEST_F(CubeletTest, constructors) {
-//
-//    EXPECT_PRED_FORMAT2(checkPrint, "Colors: { Red } Position: ptype = Center, vecSide = { Right }", cr);
-//    EXPECT_PRED_FORMAT2(checkPrint, "Colors: { White Blue } Position: ptype = Edge, vecSide = { Front Up }", cfu);
-//    EXPECT_PRED_FORMAT2(checkPrint, "Colors: { Green Orange White } Position: ptype = Corner, vecSide = { Back Left Down }", cbld);
-//    
-//}
-//
+TEST_F(CubeletTest, constructors) {
+
+    EXPECT_PRED_FORMAT2(checkPrint, "Colors: { Red } Position: ptype = Center, vecSide = { Right }", cr);
+    EXPECT_PRED_FORMAT2(checkPrint, "Colors: { White Blue } Position: ptype = Edge, vecSide = { Front Up }", cfu);
+    EXPECT_PRED_FORMAT2(checkPrint, "Colors: { Green Orange White } Position: ptype = Corner, vecSide = { Back Left Down }", cbld);
+    
+}
+
 //TEST_F(CubeletTest, vecside) {
 //    const std::vector<Facelet> *pvecSide = cbld.getFacelet();
 //

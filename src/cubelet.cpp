@@ -7,29 +7,75 @@
 
 #include "cubelet.h"
 
-Cubelet::Cubelet(Facelet fac1):vecFac{fac1}{
-    pos = CubeletPosition(fac1.side());
+Cubelet::Cubelet(Facelet fac1): pos( fac1.side() ) {
+    FaceletPosition fp1 = fac1.getPosition();
+    mFacelet[ fp1 ] = fac1;
 }
 
-Cubelet::Cubelet(Facelet fac1, Facelet fac2):vecFac{fac1, fac2}{
-    pos = CubeletPosition(fac1.side(), fac2.side());
+Cubelet::Cubelet(Facelet fac1, Facelet fac2): pos( fac1.side(), fac2.side() ) {
+    
+    FaceletPosition fp1 = fac1.getPosition();
+    FaceletPosition fp2 = fac2.getPosition();
+    CubeletPosition cp1(fp1);
+    CubeletPosition cp2(fp2);
+    if(cp1 != cp2)
+        throw std::runtime_error(std::string() + __func__ + ": Two Facelets provided doesnot belong to same Cubelet");
+    mFacelet[ fp1 ] = fac1;
+    mFacelet[ fp2 ] = fac2;
 }
 
-Cubelet::Cubelet(Facelet fac1, Facelet fac2, Facelet fac3):vecFac{fac1, fac2, fac3}{
-    pos = CubeletPosition(fac1.side(), fac2.side(), fac3.side());
+Cubelet::Cubelet(Facelet fac1, Facelet fac2, Facelet fac3): pos( fac1.side(), fac2.side(), fac3.side() ) {
+    
+    FaceletPosition fp1 = fac1.getPosition();
+    FaceletPosition fp2 = fac2.getPosition();
+    FaceletPosition fp3 = fac3.getPosition();
+    CubeletPosition cp1(fp1);
+    CubeletPosition cp2(fp2);
+    CubeletPosition cp3(fp3);
+    if(cp1 != cp2 || cp1 != cp3 || cp2 != cp3)
+        throw std::runtime_error(std::string() + __func__ + ": Three Facelets provided doesnot belong to same Cubelet");
+    mFacelet[ fp1 ] = fac1;
+    mFacelet[ fp2 ] = fac2;
+    mFacelet[ fp3 ] = fac3;
 }
 
-Cubelet::Cubelet(std::vector<Facelet> _vecFac): vecFac(_vecFac) {
+Cubelet::Cubelet(std::vector<Facelet> _vecFac) {
     switch( _vecFac.size() ){
         case 1:
-            pos = CubeletPosition(_vecFac[0].side() );
+            {
+            FaceletPosition fp1 = _vecFac[0].getPosition();
+            pos = CubeletPosition( fp1 );
+            mFacelet[ fp1 ] = _vecFac[0];
             break;
+            }
         case 2:
-            pos = CubeletPosition( std::vector<FaceSide>{  _vecFac[0].side(), _vecFac[1].side()   }  );
+            {
+            FaceletPosition fp1 = _vecFac[0].getPosition();
+            FaceletPosition fp2 = _vecFac[1].getPosition();
+            CubeletPosition cp1(fp1);
+            CubeletPosition cp2(fp2);
+            if(cp1 != cp2)
+                throw std::runtime_error(std::string() + __func__ + ": Two Facelets provided doesnot belong to same Cubelet");
+            pos = cp1 ;
+            mFacelet[ fp1 ] = _vecFac[0];
+            mFacelet[ fp2 ] = _vecFac[1];
             break;
+            }
         case 3:
-            pos = CubeletPosition( std::vector<FaceSide>{  _vecFac[0].side(),  _vecFac[1].side(),  _vecFac[2].side()   }  );
+            {
+            FaceletPosition fp1 = _vecFac[0].getPosition();
+            FaceletPosition fp2 = _vecFac[1].getPosition();
+            FaceletPosition fp3 = _vecFac[2].getPosition();
+            CubeletPosition cp1(fp1);
+            CubeletPosition cp2(fp2);
+            CubeletPosition cp3(fp3);
+            if(cp1 != cp2 || cp1 != cp3 || cp2 != cp3)
+                throw std::runtime_error(std::string() + __func__ + ": Three Facelets provided doesnot belong to same Cubelet");
+            mFacelet[ fp1 ] = _vecFac[0];
+            mFacelet[ fp2 ] = _vecFac[0];
+            mFacelet[ fp3 ] = _vecFac[0];
             break;
+            }
         default:
             throw std::runtime_error(std::string() + __func__ + ": _vecFac can only have size such that 0 < size <= 3...");
             
@@ -38,8 +84,8 @@ Cubelet::Cubelet(std::vector<Facelet> _vecFac): vecFac(_vecFac) {
 
 std::ostream& operator<<(std::ostream& os, Cubelet C){
     os << "Colors: { ";
-    for(auto it: C.vecFac)
-        os << it.getColor() << " ";
+    for(const auto& it: C.mFacelet)
+        os << it.second.getColor() << " ";
     os << "} ";
     os << C.pos;
     return os;
@@ -49,11 +95,11 @@ bool operator==(const Cubelet& lhs, const Cubelet& rhs){
     if( lhs.pos != rhs.pos)
         return false;
 
-    if(lhs.vecFac.size() != rhs.vecFac.size())
+    if(lhs.mFacelet.size() != rhs.mFacelet.size())
         return false;
 
-    for(size_t i=0; i < lhs.vecFac.size() ; i++)
-        if( !(lhs.vecFac[i] == rhs.vecFac[i]) )
+    for( const auto& it: lhs.mFacelet )
+        if( it.second != rhs.mFacelet.at( it.first ) )
             return false;
 
     return true;

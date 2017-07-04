@@ -67,6 +67,9 @@ class Facelet {
         //Equality 
         friend bool operator==(const Facelet& lhs, const Facelet& rhs) { return  lhs.col == rhs.col && lhs.side() == rhs.side(); }
 
+        //Inequality
+        friend bool operator!=(const Facelet& lhs, const Facelet& rhs) { return !( lhs == rhs ); }
+
         //Write to output stream
         friend std::ostream& operator<<(std::ostream& os, const Facelet& F){ return os << "Facelet: col = " << F.col << ", side = " << F.side(); }
 
