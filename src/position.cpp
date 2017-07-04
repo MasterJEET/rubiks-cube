@@ -46,6 +46,18 @@ FaceSide Position::getSideAt(size_t index) const{
     return F_UNDEFINED;
 };
 
+//template<typename T> T& Position::operator*=(const FaceSide& rhs){
+//    switch( vecSide.size() ) {
+//        case 1:
+//            return *this;
+//        case 2:
+//            vecSide[1] *= rhs;
+//            return *this;
+//    }
+//}
+
+//template Position& Position::operator*=(const FaceSide& rhs);
+
 std::ostream& operator<<(std::ostream& os, Position P){
     os << "Position: ptype = " << P.ptype;
     os << ", vecSide = { ";

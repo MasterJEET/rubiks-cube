@@ -71,3 +71,8 @@ TEST_F(PositionTest, inequality) {
     EXPECT_TRUE( Position(back, right, down) != Position(front, right, down) );
     EXPECT_FALSE( Position(back, right, down) != Position(back, down, right) );
 }
+
+
+//TEST_F(PositionTest, multiplication) {
+//    pf *= left;
+//}

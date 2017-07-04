@@ -17,21 +17,15 @@ CXXFLAGS += -g -Wall -Wextra -pthread -rdynamic -std=c++11
 # All tests produced by this Makefile.  Remember to add new tests you
 # created to the list.
 TEST_OBJ += common_unittest.o
-TEST_OBJ += facelet_unittest.o
 TEST_OBJ += position_unittest.o
-TEST_OBJ += cubelet_unittest.o
-TEST_OBJ += cube_unittest.o
+# TEST_OBJ += facelet_unittest.o
+# TEST_OBJ += cubelet_unittest.o
+# TEST_OBJ += cube_unittest.o
 
-
-## Object dependencies of certain object
-#common_OBJ = common.o
-#position_OBJ = $(COMMON_OBJ) facelet.o
-#facelet_OBJ = $(POSITION_OBJ) position.o
-#cubelet_OBJ = $(FACELET_OBJ) cubelet.o
-#cube_OBJ = $(CUBELET_OBJ) cube.o
 
 # All objects for original program ( excluding those of test cases and 'main')
-ALL_OBJ += common.o facelet.o position.o cubelet.o cube.o
+# ALL_OBJ += common.o position.o facelet.o cubelet.o cube.o
+ALL_OBJ += common.o position.o
 
 
 
@@ -57,13 +51,13 @@ COMMON_SRC += $(SRC_DIR)/common.cpp $(INC_DIR)/common.h  $(INC_DIR)/Color.def $(
 common.o : $(COMMON_SRC)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(SRC_DIR)/common.cpp 
 
-FACELET_SRC += $(COMMON_SRC) $(SRC_DIR)/facelet.cpp $(INC_DIR)/facelet.h
-facelet.o : $(FACELET_SRC)
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(SRC_DIR)/facelet.cpp 
-
 POSITION_SRC += $(FACELET_SRC) $(SRC_DIR)/position.cpp $(INC_DIR)/position.h
 position.o : $(POSITION_SRC)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(SRC_DIR)/position.cpp 
+
+FACELET_SRC += $(COMMON_SRC) $(SRC_DIR)/facelet.cpp $(INC_DIR)/facelet.h
+facelet.o : $(FACELET_SRC)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(SRC_DIR)/facelet.cpp 
 
 CUBELET_SRC += $(POSITION_SRC) $(SRC_DIR)/cubelet.cpp $(INC_DIR)/cubelet.h
 cubelet.o : $(CUBELET_SRC)

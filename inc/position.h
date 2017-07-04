@@ -13,6 +13,7 @@
 #include <functional>
 #include "common.h"
 
+
 class Position {
     protected:
         
@@ -55,6 +56,9 @@ class Position {
 
         //Inequality
         friend bool operator!=(const Position& lhs, const Position& rhs){ return !(lhs == rhs); }
+
+        //Multiplication with FaceSide
+        //template<typename T> T& operator*=(const FaceSide& rhs);
 };
 
 

@@ -6,7 +6,7 @@
  * */
 
 #include "gtest/gtest.h"
-#include "cube.h"
+#include "position.h"
 
 
 const std::string CUBE_HOME = getHome();
