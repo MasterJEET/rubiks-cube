@@ -44,7 +44,7 @@ class Cube {
         //Facelet getFacelet(const FaceSide fside1, const FaceSide fside2) const{ return mFacelet.at( FaceletPosition (fside1, fside2)); }
 
         //get Facelet from unordered_map mFacelet, where position is specified by FaceletPosition object
-        Facelet getFacelet(const FaceletPosition pos ) const{ return mCubelet.at( pos ).getFaceletAt(0)   ; }
+        Facelet getFacelet(const FaceletPosition pos ) const{ return mCubelet.at( pos ).getFacelet( pos )   ; }
 
         //create Cubelets and store in map with help of mapFacelet
         void createCubelet(mapFacelet& mFacelet);

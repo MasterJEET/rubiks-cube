@@ -19,13 +19,12 @@ CXXFLAGS += -g -Wall -Wextra -pthread -rdynamic -std=c++11
 # TEST_OBJ += common_unittest.o
 # TEST_OBJ += position_unittest.o
 # TEST_OBJ += facelet_unittest.o
-TEST_OBJ += cubelet_unittest.o
-# TEST_OBJ += cube_unittest.o
+# TEST_OBJ += cubelet_unittest.o
+TEST_OBJ += cube_unittest.o
 
 
 # All objects for original program ( excluding those of test cases and 'main')
-# ALL_OBJ += common.o position.o facelet.o cubelet.o cube.o
-ALL_OBJ += common.o position.o facelet.o cubelet.o
+ALL_OBJ += common.o position.o facelet.o cubelet.o cube.o
 
 
 
