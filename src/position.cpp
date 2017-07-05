@@ -115,7 +115,8 @@ bool operator==(const Position& lhs, const Position& rhs){
 }
 
 Position& Position::operator*=(const FaceSide& rhs){
-    //If position face (first entry in vector Position.vecSide) matches with with rhs
+    //If position face (first entry in vector Position.vecSide) matches with with rhs and
+    //position face and rhs form oppsite
     //then don't multiply with it
     for(auto& el:vecSide){
         if( el != rhs && !areOpposite( el, rhs ) )

@@ -73,6 +73,15 @@ TEST_F(PositionTest, inequality) {
 }
 
 
+TEST_F(PositionTest, size) {
+    EXPECT_EQ(1, pf.size());
+    EXPECT_EQ(2, pbl.size());
+    EXPECT_EQ(3, pdrf.size());
+    EXPECT_EQ(3, plub_v.size());
+
+}
+
+
 TEST_F(PositionTest, multiplication) {
     ////single////
     //different side
@@ -127,8 +136,8 @@ TEST_F(PositionTest, multiplication) {
     //few corner cases
     Position p1(front);
     Position p2(undefside);
-    EXPECT_THROW(p1*=undefside, std::runtime_error);
-    EXPECT_THROW(p2*=front, std::runtime_error);
+    EXPECT_NO_THROW(p1*=undefside);
+    EXPECT_NO_THROW(p2*=front);
 
     Position p3 = pdrf*right;
     ASSERT_EQ( p3, Position(back, left, up) );

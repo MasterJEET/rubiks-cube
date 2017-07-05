@@ -72,8 +72,8 @@ Cubelet::Cubelet(std::vector<Facelet> _vecFac) {
             if(cp1 != cp2 || cp1 != cp3 || cp2 != cp3)
                 throw std::runtime_error(std::string() + __func__ + ": Three Facelets provided doesnot belong to same Cubelet");
             mFacelet[ fp1 ] = _vecFac[0];
-            mFacelet[ fp2 ] = _vecFac[0];
-            mFacelet[ fp3 ] = _vecFac[0];
+            mFacelet[ fp2 ] = _vecFac[1];
+            mFacelet[ fp3 ] = _vecFac[2];
             break;
             }
         default:
@@ -83,11 +83,10 @@ Cubelet::Cubelet(std::vector<Facelet> _vecFac) {
 }
 
 std::ostream& operator<<(std::ostream& os, Cubelet C){
-    os << "Colors: { ";
+    os << "Facelet(s): {";
     for(const auto& it: C.mFacelet)
-        os << it.second.getColor() << " ";
-    os << "} ";
-    os << C.pos;
+        os << " (" << it.second.side() << ", " << it.second.getColor() << ") ";
+    os << "}";
     return os;
 }
 

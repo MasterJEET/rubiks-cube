@@ -48,6 +48,9 @@ class Position {
         //Returns pointer to 'ptype'
         PositionType getPositionType() const {return ptype; }
 
+        //size for vector that stores FaceSides for given position
+        size_t size() const{ return vecSide.size();}
+
         //operator<< overloading to write Position to ostream
         friend std::ostream& operator<<(std::ostream& os, Position P);
 

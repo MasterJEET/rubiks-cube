@@ -33,3 +33,41 @@ bool operator==(const FaceletPosition& lhs, const FaceletPosition& rhs){
     return false;
     
 }
+
+
+//bool operator<(const FaceletPosition& lhs, const FaceletPosition& rhs){
+//    size_t size1 = lhs.size();
+//    size_t size2 = rhs.size();
+//
+//    //when both are empty
+//    if( size1 == 0 && size2 == 0)
+//        return false;
+//
+//    //when only lhs is empty, return true as an "empty is less than something"
+//    if( size1 == 0 )
+//        return true;
+//
+//    //when only rhs is empty, return false as "something is greater than empty"
+//    if( size2 == 0 )
+//        return false;
+//
+//    //when both have non-empty size
+//    if( lhs.getSideAt(0) < rhs.getSideAt(0) )
+//        return true;
+//    if( lhs.getSideAt(0) > rhs.getSideAt(0) )
+//        return false;
+//
+//    //when first FaceSides in lhs and rhs are equal and lhs.size == 1 and rhs.size == 1
+//    //Then both are equal and return false
+//    if( size1 == 1 && size2 == 1 )
+//        return false;
+//    //when first FaceSides in lhs and rhs are equal and lhs.size > 1 and rhs.size = 1
+//    //then return false
+//    if( size1 > 1 && size2 == 1)
+//        return false;
+//    //when first FaceSides in lhs and rhs are equal and lhs.size == 1 and rhs.size > 1
+//    //then return true
+//    if( size1 == 1 && size2 > 1)
+//        return true;
+//
+//}

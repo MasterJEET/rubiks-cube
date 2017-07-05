@@ -26,6 +26,9 @@ class FaceletPosition: public Position  {
         //Inequality
         friend bool operator!=(const FaceletPosition& lhs, const FaceletPosition& rhs){ return !(lhs == rhs); }
 
+//        //Less than
+//        friend bool operator<(const FaceletPosition& lhs, const FaceletPosition& rhs);
+
 };
 
 class Facelet {
