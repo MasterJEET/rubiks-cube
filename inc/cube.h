@@ -15,16 +15,14 @@
 #include "cubelet.h"
 
 
-typedef std::unordered_map<CubeletPosition, Cubelet> mappCubelet;
+typedef std::unordered_map<CubeletPosition, Cubelet> mapCubelet;
 
 
 class Cube {
     private:
 
-        //Map for storing Facelets with FaceletPosition as key
-        //mapFacelet mFacelet;
         //Map for storing pointers to Cubelets with Position as key
-        mappCubelet mCubelet;
+        mapCubelet mCubelet;
 
     public:
 
@@ -50,9 +48,7 @@ class Cube {
         void createCubelet(mapFacelet& mFacelet);
 
         //get Cubelet from Position
-        //Cubelet getCubelet(const Position pos) const{ return *mCubelet.at( pos ); }
         Cubelet getCubelet(const CubeletPosition pos) const{ return mCubelet.at( pos ); }
-        //Cubelet getCubelet(const Position pos) const{ return vCubelet[0]; }
 };
 
 #endif
