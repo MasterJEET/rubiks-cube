@@ -45,11 +45,11 @@ std::ostream& operator <<(std::ostream& os, PositionType ptype){
 
 FaceSide& operator*=(FaceSide& lhs, const FaceSide& rhs){
 
-    if(lhs == rhs)
-        throw std::runtime_error("Cannot multiply same FaceSide...");
-    
-    if( areOpposite(lhs, rhs))
-        throw std::runtime_error("Cannot multiply opposite FaceSide...");
+    //if(lhs == rhs)
+    //    throw std::runtime_error("Cannot multiply same FaceSide...");
+    //
+    //if( areOpposite(lhs, rhs))
+    //    throw std::runtime_error("Cannot multiply opposite FaceSide...");
 
     //Handling undefside
     if( lhs == F_UNDEFINED || rhs == F_UNDEFINED ){ lhs = undefside; return lhs;}
@@ -90,8 +90,8 @@ FaceSide& operator*=(FaceSide& lhs, const FaceSide& rhs){
     if(lhs == down && rhs == right){ lhs = front; return lhs; }
     if(lhs == down && rhs == left){ lhs = back; return lhs; }
 
-    //Kept to suppress compiler warnings, else following return statement
-    //is not required, function execution should not reach here
+    //Executin reached here it means either lhs == rhs or lhs is opposite of rhs
+    //In both case return lhs
     return lhs;
 };
 

@@ -9,7 +9,7 @@
 
 Cubelet::Cubelet(Facelet fac1): pos( fac1.side() ) {
     FaceletPosition fp1 = fac1.getPosition();
-    mFacelet[ fp1 ] = fac1;
+    hFacelet[ fp1 ] = fac1;
 }
 
 Cubelet::Cubelet(Facelet fac1, Facelet fac2): pos( fac1.side(), fac2.side() ) {
@@ -20,8 +20,8 @@ Cubelet::Cubelet(Facelet fac1, Facelet fac2): pos( fac1.side(), fac2.side() ) {
     CubeletPosition cp2(fp2);
     if(cp1 != cp2)
         throw std::runtime_error(std::string() + __func__ + ": Two Facelets provided doesnot belong to same Cubelet");
-    mFacelet[ fp1 ] = fac1;
-    mFacelet[ fp2 ] = fac2;
+    hFacelet[ fp1 ] = fac1;
+    hFacelet[ fp2 ] = fac2;
 }
 
 Cubelet::Cubelet(Facelet fac1, Facelet fac2, Facelet fac3): pos( fac1.side(), fac2.side(), fac3.side() ) {
@@ -34,9 +34,9 @@ Cubelet::Cubelet(Facelet fac1, Facelet fac2, Facelet fac3): pos( fac1.side(), fa
     CubeletPosition cp3(fp3);
     if(cp1 != cp2 || cp1 != cp3 || cp2 != cp3)
         throw std::runtime_error(std::string() + __func__ + ": Three Facelets provided doesnot belong to same Cubelet");
-    mFacelet[ fp1 ] = fac1;
-    mFacelet[ fp2 ] = fac2;
-    mFacelet[ fp3 ] = fac3;
+    hFacelet[ fp1 ] = fac1;
+    hFacelet[ fp2 ] = fac2;
+    hFacelet[ fp3 ] = fac3;
 }
 
 Cubelet::Cubelet(std::vector<Facelet> _vecFac) {
@@ -45,7 +45,7 @@ Cubelet::Cubelet(std::vector<Facelet> _vecFac) {
             {
             FaceletPosition fp1 = _vecFac[0].getPosition();
             pos = CubeletPosition( fp1 );
-            mFacelet[ fp1 ] = _vecFac[0];
+            hFacelet[ fp1 ] = _vecFac[0];
             break;
             }
         case 2:
@@ -57,8 +57,8 @@ Cubelet::Cubelet(std::vector<Facelet> _vecFac) {
             if(cp1 != cp2)
                 throw std::runtime_error(std::string() + __func__ + ": Two Facelets provided doesnot belong to same Cubelet");
             pos = cp1 ;
-            mFacelet[ fp1 ] = _vecFac[0];
-            mFacelet[ fp2 ] = _vecFac[1];
+            hFacelet[ fp1 ] = _vecFac[0];
+            hFacelet[ fp2 ] = _vecFac[1];
             break;
             }
         case 3:
@@ -71,9 +71,9 @@ Cubelet::Cubelet(std::vector<Facelet> _vecFac) {
             CubeletPosition cp3(fp3);
             if(cp1 != cp2 || cp1 != cp3 || cp2 != cp3)
                 throw std::runtime_error(std::string() + __func__ + ": Three Facelets provided doesnot belong to same Cubelet");
-            mFacelet[ fp1 ] = _vecFac[0];
-            mFacelet[ fp2 ] = _vecFac[1];
-            mFacelet[ fp3 ] = _vecFac[2];
+            hFacelet[ fp1 ] = _vecFac[0];
+            hFacelet[ fp2 ] = _vecFac[1];
+            hFacelet[ fp3 ] = _vecFac[2];
             break;
             }
         default:
@@ -84,7 +84,7 @@ Cubelet::Cubelet(std::vector<Facelet> _vecFac) {
 
 std::ostream& operator<<(std::ostream& os, Cubelet C){
     os << "Facelet(s): {";
-    for(const auto& it: C.mFacelet)
+    for(const auto& it: C.hFacelet)
         os << " (" << it.second.side() << ", " << it.second.getColor() << ") ";
     os << "}";
     return os;
@@ -94,11 +94,11 @@ bool operator==(const Cubelet& lhs, const Cubelet& rhs){
     if( lhs.pos != rhs.pos)
         return false;
 
-    if(lhs.mFacelet.size() != rhs.mFacelet.size())
+    if(lhs.hFacelet.size() != rhs.hFacelet.size())
         return false;
 
-    for( const auto& it: lhs.mFacelet )
-        if( it.second != rhs.mFacelet.at( it.first ) )
+    for( const auto& it: lhs.hFacelet )
+        if( it.second != rhs.hFacelet.at( it.first ) )
             return false;
 
     return true;

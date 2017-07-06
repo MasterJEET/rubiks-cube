@@ -172,9 +172,11 @@ TEST_F(OverloadingTest, compoundassignment){
 
 TEST_F(OverloadingTest, check) {
     //Same FaceSide
-    EXPECT_THROW(front*front, std::runtime_error);
+    EXPECT_EQ(front, front*front);
     //Opposite FaceSide
-    EXPECT_THROW(up*down, std::runtime_error);
+    EXPECT_EQ(up, up*down);
+    //
+    EXPECT_EQ(undefside, undefside*down);
     //F_UNDEFINED FaceSide
     EXPECT_NO_THROW(right*undefside);
 

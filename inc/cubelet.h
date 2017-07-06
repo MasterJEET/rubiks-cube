@@ -13,7 +13,7 @@
 #include <unordered_map>
 #include <vector>
 
-typedef std::unordered_map<FaceletPosition, Facelet> mapFacelet;
+typedef std::unordered_map<FaceletPosition, Facelet> hashFacelet;
 
 
 class CubeletPosition : public Position {
@@ -41,7 +41,7 @@ class Cubelet{
     private:
 
         //to hold Facelets with FaceletPosition as thek key
-        mapFacelet mFacelet;
+        hashFacelet hFacelet;
         //Holds Position of Cubelet in the Cube
         CubeletPosition pos;
 
@@ -63,10 +63,10 @@ class Cubelet{
         Cubelet( std::vector<Facelet> _vecFac );
        
         //Returns vector of facelets for the cubelet
-        const mapFacelet getMapFacelet() const {return mFacelet;}
+        const hashFacelet getMapFacelet() const {return hFacelet;}
        
         // Returns vecFac[index]
-        Facelet getFacelet(const FaceletPosition& fp) const{ return mFacelet.at(fp);}
+        Facelet getFacelet(const FaceletPosition& fp) const{ return hFacelet.at(fp);}
 
         //Returns Position
         CubeletPosition getPosition() const{ return pos;}
