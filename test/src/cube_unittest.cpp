@@ -60,87 +60,87 @@ class CubeTest: public ::testing::Test {
 
 TEST_F(CubeTest, facelet) {
 
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = White, side = Front", cube.getFacelet(front));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = W, side = Front", cube.getFacelet(front));
 
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Red, side = Front", cube.getFacelet(front, up));
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Green, side = Front", cube.getFacelet(front, left));
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Blue, side = Front", cube.getFacelet(front, down));
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Orange, side = Front", cube.getFacelet(front, right));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = R, side = Front", cube.getFacelet(front, up));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = G, side = Front", cube.getFacelet(front, left));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = B, side = Front", cube.getFacelet(front, down));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = O, side = Front", cube.getFacelet(front, right));
     
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Green, side = Front", cube.getFacelet(front, up, left));
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Red, side = Front", cube.getFacelet(front, up, right));
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Orange, side = Front", cube.getFacelet(front, down, left));
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = White, side = Front", cube.getFacelet(front, down, right));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = G, side = Front", cube.getFacelet(front, up, left));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = R, side = Front", cube.getFacelet(front, up, right));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = O, side = Front", cube.getFacelet(front, down, left));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = W, side = Front", cube.getFacelet(front, down, right));
 
 
 
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Blue, side = Up", cube.getFacelet(up));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = B, side = Up", cube.getFacelet(up));
 
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = White, side = Up", cube.getFacelet(up, back));
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Green, side = Up", cube.getFacelet(up, left));
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Green, side = Up", cube.getFacelet(up, front));
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Red, side = Up", cube.getFacelet(up, right));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = W, side = Up", cube.getFacelet(up, back));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = G, side = Up", cube.getFacelet(up, left));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = G, side = Up", cube.getFacelet(up, front));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = R, side = Up", cube.getFacelet(up, right));
 
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Green, side = Up", cube.getFacelet(up, back, left));
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Yellow, side = Up", cube.getFacelet(up, back, right));
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Red, side = Up", cube.getFacelet(up, front, left));
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Blue, side = Up", cube.getFacelet(up, front, right));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = G, side = Up", cube.getFacelet(up, back, left));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Y, side = Up", cube.getFacelet(up, back, right));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = R, side = Up", cube.getFacelet(up, front, left));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = B, side = Up", cube.getFacelet(up, front, right));
 
 
     
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Red, side = Right", cube.getFacelet(right));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = R, side = Right", cube.getFacelet(right));
 
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = White, side = Right", cube.getFacelet(right, up));
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Yellow, side = Right", cube.getFacelet(right, front));
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Yellow, side = Right", cube.getFacelet(right, down));
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Orange, side = Right", cube.getFacelet(right, back));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = W, side = Right", cube.getFacelet(right, up));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Y, side = Right", cube.getFacelet(right, front));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Y, side = Right", cube.getFacelet(right, down));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = O, side = Right", cube.getFacelet(right, back));
 
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Yellow, side = Right", cube.getFacelet(right, up, front));
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Orange, side = Right", cube.getFacelet(right, up, back));
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Orange, side = Right", cube.getFacelet(right, down, front));
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Yellow, side = Right", cube.getFacelet(right, down, back));
-
-
-
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Orange, side = Left", cube.getFacelet(left));
-
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = White, side = Left", cube.getFacelet(left, up));
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Yellow, side = Left", cube.getFacelet(left, back));
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Blue, side = Left", cube.getFacelet(left, down));
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Orange, side = Left", cube.getFacelet(left, front));
-
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Yellow, side = Left", cube.getFacelet(left, up, back));
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = White, side = Left", cube.getFacelet(left, up, front));
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Red, side = Left", cube.getFacelet(left, down, back));
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Green, side = Left", cube.getFacelet(left, down, front));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Y, side = Right", cube.getFacelet(right, up, front));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = O, side = Right", cube.getFacelet(right, up, back));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = O, side = Right", cube.getFacelet(right, down, front));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Y, side = Right", cube.getFacelet(right, down, back));
 
 
 
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Yellow, side = Back", cube.getFacelet(back));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = O, side = Left", cube.getFacelet(left));
 
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Orange, side = Back", cube.getFacelet(back, up));
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Green, side = Back", cube.getFacelet(back, down));
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Blue, side = Back", cube.getFacelet(back, right));
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Red, side = Back", cube.getFacelet(back, left));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = W, side = Left", cube.getFacelet(left, up));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Y, side = Left", cube.getFacelet(left, back));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = B, side = Left", cube.getFacelet(left, down));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = O, side = Left", cube.getFacelet(left, front));
 
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Blue, side = Back", cube.getFacelet(back, up, right));
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Orange, side = Back", cube.getFacelet(back, up, left));
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Green, side = Back", cube.getFacelet(back, down, right));
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Blue, side = Back", cube.getFacelet(back, down, left));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Y, side = Left", cube.getFacelet(left, up, back));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = W, side = Left", cube.getFacelet(left, up, front));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = R, side = Left", cube.getFacelet(left, down, back));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = G, side = Left", cube.getFacelet(left, down, front));
 
 
 
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Green, side = Down", cube.getFacelet(down));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Y, side = Back", cube.getFacelet(back));
 
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = White, side = Down", cube.getFacelet(down, front));
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Yellow, side = Down", cube.getFacelet(down, back));
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Red, side = Down", cube.getFacelet(down, left));
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Blue, side = Down", cube.getFacelet(down, right));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = O, side = Back", cube.getFacelet(back, up));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = G, side = Back", cube.getFacelet(back, down));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = B, side = Back", cube.getFacelet(back, right));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = R, side = Back", cube.getFacelet(back, left));
 
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = White, side = Down", cube.getFacelet(down, front, left));
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Blue, side = Down", cube.getFacelet(down, front, right));
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = White, side = Down", cube.getFacelet(down, back, left));
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Red, side = Down", cube.getFacelet(down, back, right));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = B, side = Back", cube.getFacelet(back, up, right));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = O, side = Back", cube.getFacelet(back, up, left));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = G, side = Back", cube.getFacelet(back, down, right));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = B, side = Back", cube.getFacelet(back, down, left));
+
+
+
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = G, side = Down", cube.getFacelet(down));
+
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = W, side = Down", cube.getFacelet(down, front));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = Y, side = Down", cube.getFacelet(down, back));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = R, side = Down", cube.getFacelet(down, left));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = B, side = Down", cube.getFacelet(down, right));
+
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = W, side = Down", cube.getFacelet(down, front, left));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = B, side = Down", cube.getFacelet(down, front, right));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = W, side = Down", cube.getFacelet(down, back, left));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = R, side = Down", cube.getFacelet(down, back, right));
 
 }
 
@@ -148,12 +148,12 @@ TEST_F(CubeTest, facelet) {
 
 TEST_F(CubeTest, cubelet){
     //Checking Cubelets with only one Facelet( Center of each Face )
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet(s): { (Front, White) }", cube.getCubelet(front));
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet(s): { (Back, Yellow) }", cube.getCubelet(back));
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet(s): { (Up, Blue) }", cube.getCubelet(up));
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet(s): { (Right, Red) }", cube.getCubelet(right));
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet(s): { (Left, Orange) }", cube.getCubelet(left));
-    EXPECT_PRED_FORMAT2(checkPrint, "Facelet(s): { (Down, Green) }", cube.getCubelet(down));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet(s): { (Front, W) }", cube.getCubelet(front));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet(s): { (Back, Y) }", cube.getCubelet(back));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet(s): { (Up, B) }", cube.getCubelet(up));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet(s): { (Right, R) }", cube.getCubelet(right));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet(s): { (Left, O) }", cube.getCubelet(left));
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet(s): { (Down, G) }", cube.getCubelet(down));
 
     ////Cubelets with double Facelets ( Edge )
     //Vector of vector of pair FaceSides
@@ -208,3 +208,12 @@ TEST_F(CubeTest, cubelet){
 
 }
 
+
+TEST_F(CubeTest, show){
+    cube.show(front);
+    cube.show(back);
+    cube.show(left);
+    cube.show(right);
+    cube.show(up);
+    cube.show(down);
+}

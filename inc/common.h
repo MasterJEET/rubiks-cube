@@ -77,6 +77,9 @@ extern FaceSide FaceSideFromLetter(std::string fs);
 //SIGTERM handler
 void handler(int sig);
 
+//Colored output format for Color
+std::string colorFormat(const Color col);
+
 //Print all elements of toColor map
 void printAllColor();
 

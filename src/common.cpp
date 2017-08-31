@@ -13,12 +13,14 @@ std::unordered_map<std::string, Color> toColor;                                 
 std::unordered_map<std::string, FaceSide> toFaceSide;                                             //Maps first letter of FaceSide to FaceSide itself
 
 //============ Define <index,type> pair start ===========
-#   define X(a,b) #a,
+#   define X(a,b) b,
 const char *Color_str[] = {
 #   include "Color.def"
     "C_UNDEFINED"
 };
+#   undef X
 
+#   define X(a,b) #a,
 const char *FaceSide_str[] = {
 #   include "FaceSide.def"
     "F_UNDEFINED"
@@ -175,6 +177,37 @@ void handler(int sig) {
           fprintf(stderr, "Error: signal %d:\n", sig);
           backtrace_symbols_fd(array, size, STDERR_FILENO);
           exit(1);
+};
+
+std::string colorFormat(const Color col){
+    std::string setcolor, reset;
+    reset = "\033[0m";
+
+    switch(col){
+        case White:
+            setcolor = "\033[37m";
+            break;
+        case Orange:
+            setcolor = "\033[35m";
+            break;
+        case Red:
+            setcolor = "\033[31m";
+            break;
+        case Yellow:
+            setcolor = "\033[33m";
+            break;
+        case Green:
+            setcolor = "\033[32m";
+            break;
+        case Blue:
+            setcolor = "\033[34m";
+            break;
+        default:
+            break;
+    }
+
+    return setcolor + Color_str[col] + reset;
+
 };
 
 void printAllColor(){

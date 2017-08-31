@@ -97,3 +97,66 @@ void Cube::createCubelet(hashFacelet& hFacelet){
     }
 }
 
+void Cube::show(const FaceSide f){
+    auto tlist = getFaceletPosition(f);
+    auto it = tlist.begin();
+    while( it != tlist.end()){
+        for(int i=0;i<3;i++,it++){
+            Color c = getFacelet(*it).getColor();
+            std::cout << colorFormat(c) << " " ;
+        }
+        std::cout << std::endl;
+    }
+}
+
+
+
+/*
+ *             U U U
+ *             U U U
+ *             U U U
+ * B B B L L L F F F R R R      1 2 3 #
+ * B B B L L L F F F R R R      4 5 6 # This is the sequence
+ * B B B L L L F F F R R R      7 8 9 #
+ *             D D D
+ *             D D D
+ *             D D D
+ *
+ * Following function returns above positions for a face,
+ * Order of positions in the list is depicted by above diagram
+ *
+ * */
+
+std::list<FaceletPosition> Cube::getFaceletPosition(const FaceSide f){
+    std::list<FaceletPosition> tlist;
+    FaceSide u,r,d,l;
+
+    switch(f){
+        case Front:
+            u = up; r = right; d = down; l = left;
+            break;
+        case Back:
+            u = up; r = left; d = down; l = right;
+            break;
+        case Right:
+            u = up; r = back; d = down; l = front;
+            break;
+        case Left:
+            u = up; r = front; d = down; l = back;
+            break;
+        case Up:
+            u = back; r = right; d = front; l = left;
+            break;
+        case Down:
+            u = front; r = right; d = back; l = left;
+            break;
+        default:
+            break;
+    }
+
+    tlist.push_back({ f,l,u }); tlist.push_back({ f,u });   tlist.push_back({ f,r,u });
+    tlist.push_back({ f,l });   tlist.push_back(f);         tlist.push_back({ f,r });
+    tlist.push_back({ f,l,d }); tlist.push_back({ f,d });   tlist.push_back({ f,r,d });
+
+    return tlist;
+}

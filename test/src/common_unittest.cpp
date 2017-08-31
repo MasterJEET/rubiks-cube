@@ -53,12 +53,12 @@ TEST(cubecell, color) {
      */
 
 
-    EXPECT_PRED_FORMAT2(checkPrint, "Red", red);
-    EXPECT_PRED_FORMAT2(checkPrint, "White", white);
-    EXPECT_PRED_FORMAT2(checkPrint, "Yellow", yellow);
-    EXPECT_PRED_FORMAT2(checkPrint, "Green", green);
-    EXPECT_PRED_FORMAT2(checkPrint, "Blue", blue);
-    EXPECT_PRED_FORMAT2(checkPrint, "Orange", orange);
+    EXPECT_PRED_FORMAT2(checkPrint, "R", red);
+    EXPECT_PRED_FORMAT2(checkPrint, "W", white);
+    EXPECT_PRED_FORMAT2(checkPrint, "Y", yellow);
+    EXPECT_PRED_FORMAT2(checkPrint, "G", green);
+    EXPECT_PRED_FORMAT2(checkPrint, "B", blue);
+    EXPECT_PRED_FORMAT2(checkPrint, "O", orange);
     EXPECT_PRED_FORMAT2(checkPrint, "C_UNDEFINED", undefcol);
 
 }
@@ -189,5 +189,6 @@ TEST_F(OverloadingTest, check) {
  * 1. void handler(int sig)
  * 2. printAllColor()
  * 3. printAllFaceSide()
+ * 4. colorFormat()
  * ==================================================
  */

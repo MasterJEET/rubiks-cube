@@ -10,6 +10,7 @@
 
 #include <iostream>
 #include <vector>
+#include <list>
 #include <utility>
 #include <unordered_map>
 #include "cubelet.h"
@@ -23,6 +24,10 @@ class Cube {
 
         //Map for storing pointers to Cubelets with Position as key
         hashCubelet hCubelet;
+
+        //Auxilliary functions only to be used by the class
+        //Given a FaceSide it return all the FaceletPosition that corresponds that FaceSide
+        std::list<FaceletPosition> getFaceletPosition(const FaceSide f);
 
     public:
 
@@ -49,6 +54,9 @@ class Cube {
 
         //get Cubelet from Position
         Cubelet getCubelet(const CubeletPosition pos) const{ return hCubelet.at( pos ); }
+
+        //display a given face (position and color)
+        void show(const FaceSide f);
 
         //Cube multiplication with a FaceSide
         Cube& operator*=(const FaceSide& rhs);
