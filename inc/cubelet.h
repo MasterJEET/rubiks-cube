@@ -18,21 +18,21 @@ typedef std::unordered_map<FaceletPosition, Facelet> hashFacelet;
 
 class CubeletPosition : public Position {
     public:
-        //Constructors same as those of Position
+        ///Constructors same as those of Position
         CubeletPosition(){};
         CubeletPosition(const FaceSide first): Position(first){};
         CubeletPosition(const FaceSide first, const FaceSide second): Position(first, second){};
         CubeletPosition(const FaceSide first, const FaceSide second, const FaceSide third): Position(first, second, third){};
         CubeletPosition(const std::vector<FaceSide> _vecSide): Position(_vecSide){};
         
-        //New construtor, initialize from  FaceletPosition
+        ///New construtor, initialize from  FaceletPosition
         CubeletPosition(const FaceletPosition fp): Position( *fp.getSide() ){};
 
 
-        //Equality
+        ///Equality
         friend bool operator==(const CubeletPosition& lhs, const CubeletPosition& rhs);
 
-        //Inequality
+        ///Inequality
         friend bool operator!=(const CubeletPosition& lhs, const CubeletPosition& rhs){ return !(lhs == rhs); }
 };
 
@@ -40,47 +40,47 @@ class CubeletPosition : public Position {
 class Cubelet{
     private:
 
-        //to hold Facelets with FaceletPosition as thek key
+        ///to hold Facelets with FaceletPosition as thek key
         hashFacelet hFacelet;
-        //Holds Position of Cubelet in the Cube
+        ///Holds Position of Cubelet in the Cube
         CubeletPosition pos;
 
     public:
 
-        //Default constructor
+        ///Default constructor
         Cubelet(){};
         
-        //Constructor for Center cubelets
+        ///Constructor for Center cubelets
         Cubelet(Facelet fac1);
         
-        //Constructor for Edge cubelets
+        ///Constructor for Edge cubelets
         Cubelet(Facelet fac1, Facelet fac2);
         
-        //Constructor for Corner cubelets
+        ///Constructor for Corner cubelets
         Cubelet(Facelet fac1, Facelet fac2, Facelet fac3);
 
-        //Initializaton from vector of Facelets
+        ///Initializaton from vector of Facelets
         Cubelet( std::vector<Facelet> _vecFac );
        
-        //Returns vector of facelets for the cubelet
+        ///Returns vector of facelets for the cubelet
         const hashFacelet getMapFacelet() const {return hFacelet;}
        
-        // Returns vecFac[index]
+        /// Returns vecFac[index]
         Facelet getFacelet(const FaceletPosition& fp) const{ return hFacelet.at(fp);}
 
-        //Returns Position
+        ///Returns Position
         CubeletPosition getPosition() const{ return pos;}
 
-        //Sets Position for cubelet
+        ///Sets Position for cubelet
         void setPosition(const CubeletPosition _pos){ pos = _pos; }
 
-        //operator<< overloading for writing Cubelet to ostream
+        ///operator<< overloading for writing Cubelet to ostream
         friend std::ostream& operator<<(std::ostream& os, Cubelet C);
 
-        //Equality
+        ///Equality
         friend bool operator==(const Cubelet& lhs, const Cubelet& rhs);
 
-        //Inequality
+        ///Inequality
         friend bool operator!=(const Cubelet& lhs, const Cubelet& rhs){ return !(lhs == rhs); }
 };
 
@@ -97,10 +97,10 @@ namespace std {
                 FaceSide f2 = p.getSideAt(1);
                 FaceSide f3 = p.getSideAt(2);
 
-                // Arrange in decreasing order
-                // This is required to make this implementaion
-                // insensitive to order of FaceSides in Position object i.e.
-                // (front, up, left) == (up, left, front) == (left, up, front)
+                /// Arrange in decreasing order
+                /// This is required to make this implementaion
+                /// insensitive to order of FaceSides in Position object i.e.
+                /// (front, up, left) == (up, left, front) == (left, up, front)
 
                 if(f1 > f2)
                     swap(f1, f2);

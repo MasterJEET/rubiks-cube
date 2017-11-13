@@ -46,17 +46,17 @@ FaceSide Position::getSideAt(size_t index) const{
     return F_UNDEFINED;
 };
 
-//template<typename T> T& Position::operator*=(const FaceSide& rhs){
-//    switch( vecSide.size() ) {
-//        case 1:
-//            return *this;
-//        case 2:
-//            vecSide[1] *= rhs;
-//            return *this;
-//    }
-//}
+///template<typename T> T& Position::operator*=(const FaceSide& rhs){
+///    switch( vecSide.size() ) {
+///        case 1:
+///            return *this;
+///        case 2:
+///            vecSide[1] *= rhs;
+///            return *this;
+///    }
+///}
 
-//template Position& Position::operator*=(const FaceSide& rhs);
+///template Position& Position::operator*=(const FaceSide& rhs);
 
 std::ostream& operator<<(std::ostream& os, Position P){
     os << "Position: ptype = " << P.ptype;
@@ -86,10 +86,10 @@ std::ostream& operator<<(std::ostream& os, Position P){
  *   be part of Position object so that total number of FaceSides
  *   Position becomes three
  *   e.g. if we have
- *   Position P1(front, left); //One more FaceSide required
- *                             //Assume F_UNDEFINED appended
- *                             //to FaceSide vecotr of object P1
- *   Position P2(front); //Similarly two more required
+ *   Position P1(front, left); ///One more FaceSide required
+ *                             ///Assume F_UNDEFINED appended
+ *                             ///to FaceSide vecotr of object P1
+ *   Position P2(front); ///Similarly two more required
  *
  * 2. Now all Position objects can be assumed to have FaceSide
  *   number equal to three. Two Position objects are equal if
@@ -115,9 +115,9 @@ bool operator==(const Position& lhs, const Position& rhs){
 }
 
 Position& Position::operator*=(const FaceSide& rhs){
-    //If position face (first entry in vector Position.vecSide) matches with with rhs and
-    //position face and rhs form oppsite
-    //then don't multiply with it
+    ///If position face (first entry in vector Position.vecSide) matches with with rhs and
+    ///position face and rhs form oppsite
+    ///then don't multiply with it
     for(auto& el:vecSide){
         if( el != rhs && !areOpposite( el, rhs ) )
             el *= rhs;

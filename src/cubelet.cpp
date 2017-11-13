@@ -105,9 +105,9 @@ bool operator==(const Cubelet& lhs, const Cubelet& rhs){
 }
 
 
-//Equality
+///Equality
 bool operator==(const CubeletPosition& lhs, const CubeletPosition& rhs){
-   //sorting FaceSides of lhs
+   ///sorting FaceSides of lhs
    FaceSide lfs0 = lhs.getSideAt(0);
    FaceSide lfs1 = lhs.getSideAt(1);
    FaceSide lfs2 = lhs.getSideAt(2);
@@ -118,7 +118,7 @@ bool operator==(const CubeletPosition& lhs, const CubeletPosition& rhs){
        std::swap(lfs1, lfs2);
    if( lfs0 > lfs1 )
        std::swap(lfs0, lfs1);
-   //sorting FaceSides of rhs
+   ///sorting FaceSides of rhs
    FaceSide rfs0 = rhs.getSideAt(0);
    FaceSide rfs1 = rhs.getSideAt(1);
    FaceSide rfs2 = rhs.getSideAt(2);

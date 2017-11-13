@@ -22,43 +22,43 @@ typedef std::unordered_map<CubeletPosition, Cubelet> hashCubelet;
 class Cube {
     private:
 
-        //Map for storing pointers to Cubelets with Position as key
+        ///Map for storing pointers to Cubelets with Position as key
         hashCubelet hCubelet;
 
-        //Auxilliary functions only to be used by the class
-        //Given a FaceSide it return all the FaceletPosition that corresponds that FaceSide
+        ///Auxilliary functions only to be used by the class
+        ///Given a FaceSide it return all the FaceletPosition that corresponds that FaceSide
         std::list<FaceletPosition> getFaceletPosition(const FaceSide f);
 
     public:
 
-        //Default constructor
+        ///Default constructor
         Cube(){};
 
-        //Constructor that takes std::istream and create cubelets
+        ///Constructor that takes std::istream and create cubelets
         Cube(std::istream &is);
         
-        //get all Facelets of a face from std::stream
+        ///get all Facelets of a face from std::stream
         void createFace(std::istream &is, hashFacelet& hFacelet);
 
-        //get Facelet at position specified by FaceSide from unordered_map hCubelet, three FaceSides specified
+        ///get Facelet at position specified by FaceSide from unordered_map hCubelet, three FaceSides specified
         Facelet getFacelet(const FaceSide fside1, const FaceSide fside2, const FaceSide fside3) const { return getFacelet( {fside1, fside2, fside3} );}
 
-        //get Facelet at position specified by FaceSide from unordered_map hCubelet, two FaceSides specified
+        ///get Facelet at position specified by FaceSide from unordered_map hCubelet, two FaceSides specified
         Facelet getFacelet(const FaceSide fside1, const FaceSide fside2) const{ return getFacelet( {fside1, fside2 } ); }
 
-        //get Facelet from unordered_map hCubelet, where position is specified by FaceletPosition object
+        ///get Facelet from unordered_map hCubelet, where position is specified by FaceletPosition object
         Facelet getFacelet(const FaceletPosition pos ) const{ return hCubelet.at( pos ).getFacelet( pos )   ; }
 
-        //create Cubelets and store in map with help of hashFacelet
+        ///create Cubelets and store in map with help of hashFacelet
         void createCubelet(hashFacelet& hFacelet);
 
-        //get Cubelet from Position
+        ///get Cubelet from Position
         Cubelet getCubelet(const CubeletPosition pos) const{ return hCubelet.at( pos ); }
 
-        //display a given face (position and color)
+        ///display a given face (position and color)
         void show(const FaceSide f);
 
-        //Cube multiplication with a FaceSide
+        ///Cube multiplication with a FaceSide
         Cube& operator*=(const FaceSide& rhs);
 };
 
