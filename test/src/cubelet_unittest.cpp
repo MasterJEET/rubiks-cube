@@ -78,7 +78,7 @@ TEST_F(CubeletTest, overloading) {
 
 
 TEST_F(CubeletTest, CubeletPosition){
-    ///Create CubeletPositons
+    //Create CubeletPositons
     CubeletPosition cp_f(front);
     CubeletPosition cp_fl(front, left);
     CubeletPosition cp_fld(front, left, down);
@@ -93,7 +93,7 @@ TEST_F(CubeletTest, CubeletPosition){
 
 
 TEST_F(CubeletTest, vectorinitializer){
-    ///Create vector of Facelets
+    //Create vector of Facelets
     std::vector<Facelet> vf{fgb, fol, fwd};
     Cubelet c1(vf);
     EXPECT_EQ(c1.getFacelet(fp_bld), Facelet(green, fp_bld));

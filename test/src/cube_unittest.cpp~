@@ -59,15 +59,15 @@ class CubeTest: public ::testing::Test {
  */
 
 TEST_F(CubeTest, face) {
-    ///std::cout << "I'm here" << std::endl;
-    ///Position pos(front);
-    ///cube_f.getFacelet(front);
-    ///EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = W, side = Front", cube_f.getFacelet(front));
-    ///EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = B, side = Front", cube_f.getFacelet(front, down));
-    ///EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = R, side = Front", cube_f.getFacelet(front, up, right));
-    ///EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = W, side = Front", cube_f.getFacelet(pf));
-    ///EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = B, side = Front", cube_f.getFacelet(pfd));
-    ///ASSERT_PRED_FORMAT2(checkPrint, "Facelet: col = R, side = Front", cube_f.getFacelet(pfur));
+    //std::cout << "I'm here" << std::endl;
+    //Position pos(front);
+    //cube_f.getFacelet(front);
+    //EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = W, side = Front", cube_f.getFacelet(front));
+    //EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = B, side = Front", cube_f.getFacelet(front, down));
+    //EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = R, side = Front", cube_f.getFacelet(front, up, right));
+    //EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = W, side = Front", cube_f.getFacelet(pf));
+    //EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = B, side = Front", cube_f.getFacelet(pfd));
+    //ASSERT_PRED_FORMAT2(checkPrint, "Facelet: col = R, side = Front", cube_f.getFacelet(pfur));
 }
 
 
@@ -172,15 +172,15 @@ TEST_F(CubeTest, cubelet){
     EXPECT_PRED_FORMAT2(checkPrint, "Colors: { R } Position: ptype = Center, vecSide = { Right }", cube.getCubelet(right));
     EXPECT_PRED_FORMAT2(checkPrint, "Colors: { O } Position: ptype = Center, vecSide = { Left }", cube.getCubelet(left));
     EXPECT_PRED_FORMAT2(checkPrint, "Colors: { G } Position: ptype = Center, vecSide = { Down }", cube.getCubelet(down));
-    ///Facelet f1 = cube.getFacelet(front, down);
-    ///Facelet f2 = cube.getFacelet(down, front);
-    ///std::cout << f1 << std::endl;
-    ///std::cout << f2 << std::endl;
-    ///Cubelet c(&f1, &f2);
-    ///std::cout << c << std::endl;
-    ///Position pos(front, down);
-    ///Position pos2(down, front);
-    ///std::cout << cube.getCubelet(pos) << std::endl;
-    ///std::cout << cube.getCubelet(pos2) << std::endl;
+    //Facelet f1 = cube.getFacelet(front, down);
+    //Facelet f2 = cube.getFacelet(down, front);
+    //std::cout << f1 << std::endl;
+    //std::cout << f2 << std::endl;
+    //Cubelet c(&f1, &f2);
+    //std::cout << c << std::endl;
+    //Position pos(front, down);
+    //Position pos2(down, front);
+    //std::cout << cube.getCubelet(pos) << std::endl;
+    //std::cout << cube.getCubelet(pos2) << std::endl;
 }
 */

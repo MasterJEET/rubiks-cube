@@ -5,7 +5,7 @@
  *
  * */
 
-///First google test ever
+//First google test ever
 #include "gtest/gtest.h"
 #include "common.h"
 #include "testcommon.h"
@@ -105,18 +105,18 @@ TEST(cubemetabolism, mapping) {
      * ==================================================
      */
 
-    /// Color from std::string with single letter
+    // Color from std::string with single letter
     EXPECT_EQ(blue, ColorFromLetter(std::string("B")));
-    /// Color from string literal of single character
+    // Color from string literal of single character
     EXPECT_EQ(white, ColorFromLetter("W"));
-    /// Color from a single character literal
+    // Color from a single character literal
     EXPECT_EQ(green, ColorFromLetter('G'));
 
-    /// FaceSide from std::string with single letter
+    // FaceSide from std::string with single letter
     EXPECT_EQ(down, FaceSideFromLetter(std::string("D")));
-    /// FaceSide from string literal of single character
+    // FaceSide from string literal of single character
     EXPECT_EQ(left, FaceSideFromLetter("L"));
-    /// FaceSide from a single character literal
+    // FaceSide from a single character literal
     EXPECT_EQ(back, FaceSideFromLetter('B'));
 
 }
@@ -126,37 +126,37 @@ TEST_F(OverloadingTest, basics) {
      * Call to operator* makes call to 'operator*='
      * So need to test it explicitly
      */
-    ///Front first
+    //Front first
     EXPECT_EQ(up, front*right);
     EXPECT_EQ(down, front*left);
     EXPECT_EQ(left, front*up);
     EXPECT_EQ(right, front*down);
 
-    ///Back first
+    //Back first
     EXPECT_EQ(down, back*right);
     EXPECT_EQ(up, back*left);
     EXPECT_EQ(right, back*up);
     EXPECT_EQ(left, back*down);
 
-    ///Right first
+    //Right first
     EXPECT_EQ(down, right*front);
     EXPECT_EQ(up, right*back);
     EXPECT_EQ(front, right*up);
     EXPECT_EQ(back, right*down);
 
-    ///Left first
+    //Left first
     EXPECT_EQ(up, left*front);
     EXPECT_EQ(down, left*back);
     EXPECT_EQ(back, left*up);
     EXPECT_EQ(front, left*down);
 
-    ///Up first
+    //Up first
     EXPECT_EQ(right, up*front);
     EXPECT_EQ(left, up*back);
     EXPECT_EQ(front, up*left);
     EXPECT_EQ(back, up*right);
 
-    ///Down first
+    //Down first
     EXPECT_EQ(left, down*front);
     EXPECT_EQ(right, down*back);
     EXPECT_EQ(back, down*left);
@@ -171,13 +171,13 @@ TEST_F(OverloadingTest, compoundassignment){
 }
 
 TEST_F(OverloadingTest, check) {
-    ///Same FaceSide
+    //Same FaceSide
     EXPECT_EQ(front, front*front);
-    ///Opposite FaceSide
+    //Opposite FaceSide
     EXPECT_EQ(up, up*down);
-    ///
+    //
     EXPECT_EQ(undefside, undefside*down);
-    ///F_UNDEFINED FaceSide
+    //F_UNDEFINED FaceSide
     EXPECT_NO_THROW(right*undefside);
 
 }

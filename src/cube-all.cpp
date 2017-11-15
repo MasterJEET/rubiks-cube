@@ -5,7 +5,7 @@
  *
  * */
 
-///Pulling all source files to here
+//Pulling all source files to here
 
 #include "common.cpp"
 #include "position.cpp"

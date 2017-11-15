@@ -10,12 +10,12 @@
 Cube::Cube(std::istream &is){
 
     hashFacelet hFacelet;
-    ///Get all Faces
+    //Get all Faces
     for(int i=0; i<6; i++)
         createFace(is, hFacelet);
 
 
-    ///Create Cubelets from hashFacelet and store it in map
+    //Create Cubelets from hashFacelet and store it in map
     createCubelet(hFacelet);
 };
 
@@ -25,15 +25,15 @@ void Cube::createFace(std::istream &is, hashFacelet& hFacelet){
     FaceSide ctrSide, edgeSide, corSide;
     Color col;
 
-    ///Get FaceSide and Color for Center Facelet
+    //Get FaceSide and Color for Center Facelet
     is >> strFaceSide >> strColor;
     ctrSide = FaceSideFromLetter(strFaceSide);
     col = ColorFromLetter(strColor);
 
-    ///Create Center Facelet and add it to map
+    //Create Center Facelet and add it to map
     hFacelet[ FaceletPosition(ctrSide) ] = Facelet(col, ctrSide);
 
-    ///Get FaceSide and Color for Edge Facelets and add them to map
+    //Get FaceSide and Color for Edge Facelets and add them to map
     for(size_t i=0; i<4; i++){
         is >> strFaceSide >> strColor;
         edgeSide = FaceSideFromLetter(strFaceSide);
@@ -42,7 +42,7 @@ void Cube::createFace(std::istream &is, hashFacelet& hFacelet){
         hFacelet[ fp ] = Facelet(col, fp);
     }
 
-    ///Get FaceSide and Color for Corner Facelets and add them to map
+    //Get FaceSide and Color for Corner Facelets and add them to map
     for(size_t i=0; i<4; i++){
         is >> strFaceSide >> strFaceSide2 >> strColor;
         edgeSide = FaceSideFromLetter(strFaceSide);
@@ -57,12 +57,12 @@ void Cube::createFace(std::istream &is, hashFacelet& hFacelet){
 
 void Cube::createCubelet(hashFacelet& hFacelet){
    
-    ///Vector of all valid FaceSides
+    //Vector of all valid FaceSides
     std::vector<FaceSide> vSingleFS = {
         {front} , {back} , {up} , {down} , {right} , {left}
     };
 
-    ///Create center Cubelets and add to map
+    //Create center Cubelets and add to map
     for( const auto& vfs: vSingleFS ){
         FaceletPosition fp(vfs);
         CubeletPosition cp(vfs);
@@ -70,7 +70,7 @@ void Cube::createCubelet(hashFacelet& hFacelet){
     }
 
 
-    ///Vector of vector of pair FaceSides
+    //Vector of vector of pair FaceSides
     std::vector< std::vector<FaceSide> > vDoubleFS = { 
                                         { front, up }, { front, right }, { front, down }, { front, left },
                                         { up, right }, { down, right }, { down, left }, { up, left },
@@ -84,7 +84,7 @@ void Cube::createCubelet(hashFacelet& hFacelet){
         hCubelet[ cp ] = Cubelet( hFacelet[fp1], hFacelet[fp2] );
     }
 
-    ///Vector of vector of triple FaceSides
+    //Vector of vector of triple FaceSides
     std::vector< std::vector<FaceSide> > vTripleFS = { { front, right, up}, { back, right, up }, { back, left, up}, { front, left, up },
                                                        { front, right, down}, { back, right, down }, { back, left, down}, { front, left, down } };
 

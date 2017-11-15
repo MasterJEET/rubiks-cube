@@ -26,27 +26,27 @@ class PositionTest : public ::testing::Test {
 
 TEST_F(PositionTest, constructors) {
 
-    ///Initialization with single FaceSide
+    //Initialization with single FaceSide
     EXPECT_PRED_FORMAT2(checkPrint, "Position: ptype = Center, vecSide = { Front }", pf);
 
-    ///Initialization with double FaceSide
+    //Initialization with double FaceSide
     EXPECT_PRED_FORMAT2(checkPrint, "Position: ptype = Edge, vecSide = { Back Left }", pbl);
 
-    ///Initialization with triple FaceSide
+    //Initialization with triple FaceSide
     EXPECT_PRED_FORMAT2(checkPrint, "Position: ptype = Corner, vecSide = { Down Right Front }", pdrf); 
 
-    ///Initialization with std::vector<FaceSide>
+    //Initialization with std::vector<FaceSide>
     EXPECT_PRED_FORMAT2(checkPrint, "Position: ptype = Corner, vecSide = { Left Up Back }", plub_v); 
 }
 
 TEST_F(PositionTest, minions) {
-    ///getPositionType()
+    //getPositionType()
     EXPECT_EQ(corner, pdrf.getPositionType());
-    ///getSideAt(), index within range
+    //getSideAt(), index within range
     EXPECT_EQ(left, pbl.getSideAt(1));
-    ///getSideAt(), index out of range
+    //getSideAt(), index out of range
     EXPECT_EQ(undefside, pbl.getSideAt(2));
-    ///getVecSide()
+    //getVecSide()
     const std::vector<FaceSide> *pvecSide = pf.getSide();
     EXPECT_EQ(front, pvecSide->at(0));
 }
@@ -83,57 +83,57 @@ TEST_F(PositionTest, size) {
 
 
 TEST_F(PositionTest, multiplication) {
-    //////single//////
-    ///different side
+    ////single////
+    //different side
     pf *= left;
     ASSERT_EQ( pf, Position(down) );
-    ///same side
+    //same side
     pf *= down;
     ASSERT_EQ( pf, Position(down) );
-    ///opposite side
+    //opposite side
     pf *= up;
     ASSERT_EQ( pf, Position(down) );
     
-    //////double//////
-    ///same side on first
+    ////double////
+    //same side on first
     pbl *= back;
     ASSERT_EQ(pbl, Position(back, down));
-    ///same side on second
+    //same side on second
     pbl *= down;
     ASSERT_EQ(pbl, Position(left, down));
-    ///opposite on first
+    //opposite on first
     pbl *= right;
     ASSERT_EQ(pbl, Position(left, front));
-    ///opposite on second
+    //opposite on second
     pbl *= back;
     ASSERT_EQ(pbl, Position(down, front));
-    ///different
+    //different
     pbl *= right;
     ASSERT_EQ(pbl, Position(front, up));
 
-    //////triple//////
-    ///same side on first
+    ////triple////
+    //same side on first
     pdrf *= down;
     ASSERT_EQ(pdrf, Position(down, back, right) );
-    ///same side on second
+    //same side on second
     pdrf *= back;
     ASSERT_EQ(pdrf, Position(right, back, up) );
-    ///same side on third
+    //same side on third
     pdrf *= up;
     ASSERT_EQ(pdrf, Position(front, right, up) );
-    ///opposite on first
+    //opposite on first
     pdrf *= back;
     ASSERT_EQ(pdrf, Position(front, up, left) );
-    ///opposite on second
+    //opposite on second
     pdrf *= down;
     ASSERT_EQ(pdrf, Position(right, up, front) );
-    ///opposite on third
+    //opposite on third
     pdrf *= back;
     ASSERT_EQ(pdrf, Position(up, left, front) );
-    ///different
-    ///not possible
+    //different
+    //not possible
     
-    ///few corner cases
+    //few corner cases
     Position p1(front);
     Position p2(undefside);
     EXPECT_NO_THROW(p1*=undefside);

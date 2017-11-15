@@ -21,47 +21,47 @@ class FaceletTest : public ::testing::Test {
 };
 
 TEST_F(FaceletTest, Initialization) {
-    /// === Facelet(Color, FaceSide) ===
-    /// check Color
+    // === Facelet(Color, FaceSide) ===
+    // check Color
     EXPECT_EQ(red, frl.getColor());
-    /// check FaceSide
+    // check FaceSide
     EXPECT_EQ(left, frl.side());
 
-    /// === Facelet(FaceSide, Color) ===
-    /// check Color
+    // === Facelet(FaceSide, Color) ===
+    // check Color
     EXPECT_EQ(red, flr.getColor());
-    /// check FaceSide
+    // check FaceSide
     EXPECT_EQ(left, flr.side());
 }
 
 TEST_F(FaceletTest, setPosition) {
-    /// === Facelet(Color, FaceSide) ===
+    // === Facelet(Color, FaceSide) ===
     frl.setPosition(right);
     EXPECT_EQ(right, frl.side());
     
-    /// === Facelet(FaceSide, Color) ===
+    // === Facelet(FaceSide, Color) ===
     flr.setPosition(down);
     EXPECT_EQ(down, flr.side());
 }
 
 TEST_F(FaceletTest, overloading) {
-    ///Order is important in these tests
+    //Order is important in these tests
 
-    ///Simple multiplication
+    //Simple multiplication
     EXPECT_EQ( Facelet(red, back), frl*up );
-    ///Multiplying Facelet with FaceSide which Facelet.side == FaceSide
+    //Multiplying Facelet with FaceSide which Facelet.side == FaceSide
     EXPECT_EQ( flr*left, Facelet(left, red) );
-    ///Compund assignment through multiplication, done is constructor
+    //Compund assignment through multiplication, done is constructor
     EXPECT_EQ( Facelet(left, white) , ffw );
-    ///Chaining operator*
+    //Chaining operator*
     EXPECT_EQ( Facelet(right, red), frl*front*front );
-    ///Chaining operator*=
+    //Chaining operator*=
     EXPECT_EQ( Facelet(down, red), (frl *= up) *= right );
 }
 
 
 TEST_F(FaceletTest, FaceletPosition){
-    ///Create few FaceletPositions
+    //Create few FaceletPositions
     FaceletPosition fp_fu( front, up );
     FaceletPosition fp_uf( up, front );
     FaceletPosition fp_bdl( back, down, left );

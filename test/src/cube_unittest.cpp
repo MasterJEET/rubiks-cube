@@ -147,7 +147,7 @@ TEST_F(CubeTest, facelet) {
 
 
 TEST_F(CubeTest, cubelet){
-    ///Checking Cubelets with only one Facelet( Center of each Face )
+    //Checking Cubelets with only one Facelet( Center of each Face )
     EXPECT_PRED_FORMAT2(checkPrint, "Facelet(s): { (Front, W) }", cube.getCubelet(front));
     EXPECT_PRED_FORMAT2(checkPrint, "Facelet(s): { (Back, Y) }", cube.getCubelet(back));
     EXPECT_PRED_FORMAT2(checkPrint, "Facelet(s): { (Up, B) }", cube.getCubelet(up));
@@ -155,15 +155,15 @@ TEST_F(CubeTest, cubelet){
     EXPECT_PRED_FORMAT2(checkPrint, "Facelet(s): { (Left, O) }", cube.getCubelet(left));
     EXPECT_PRED_FORMAT2(checkPrint, "Facelet(s): { (Down, G) }", cube.getCubelet(down));
 
-    //////Cubelets with double Facelets ( Edge )
-    ///Vector of vector of pair FaceSides
+    ////Cubelets with double Facelets ( Edge )
+    //Vector of vector of pair FaceSides
     typedef std::vector< std::vector<FaceSide> > vFS;
     vFS vdfs = { 
                                         { front, up }, { front, right }, { front, down }, { front, left },
                                         { up, right }, { down, right }, { down, left }, { up, left },
                                         { back, up }, { back, right }, { back, down }, { back, left }
                                       };
-    ///Vector of vector of poir Colors
+    //Vector of vector of poir Colors
     typedef std::vector< std::vector<Color> > vCol;
     vCol vdc = {
                                         { red, green }, { orange, yellow }, { blue, white  }, { green, orange  },
@@ -182,8 +182,8 @@ TEST_F(CubeTest, cubelet){
     }
     }
 
-    //////Cubelets with triple Facelets ( Corner )
-    ///Vector of vector of triple FaceSides
+    ////Cubelets with triple Facelets ( Corner )
+    //Vector of vector of triple FaceSides
     vFS vtfs = {
         { front, right, up}, { back, right, up }, { back, left, up}, { front, left, up },
         { front, right, down}, { back, right, down }, { back, left, down}, { front, left, down }
