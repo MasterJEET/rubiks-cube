@@ -101,3 +101,23 @@ TEST_F(CubeletTest, vectorinitializer){
     EXPECT_EQ(c1.getFacelet(fp_dbl), Facelet(white, fp_dbl));
     EXPECT_THROW( Cubelet(frr, fwf, fgb) , std::runtime_error );
 }
+
+TEST_F(CubeletTest, multiplication){
+    //Center Cubelet rotation
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet(s): { (Front, R) }", cr*=up);
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet(s): { (Left, R) }", cr*=up);
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet(s): { (Back, R) }", cr*=up);
+    EXPECT_EQ(CubeletPosition(back), cr.getPosition());
+
+    //Edge Cubelet rotation
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet(s): { (Back, B)  (Up, W) }", cfu*=right);
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet(s): { (Left, B)  (Up, W) }", cfu*=down);
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet(s): { (Down, B)  (Left, W) }", cfu*=back);
+    EXPECT_EQ(CubeletPosition(down, left), cfu.getPosition());
+
+    //Corner Cubelet rotation
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet(s): { (Up, O)  (Left, W)  (Back, G) }", cbld*=front);
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet(s): { (Front, O)  (Left, W)  (Up, G) }", cbld*=left);
+    EXPECT_PRED_FORMAT2(checkPrint, "Facelet(s): { (Front, O)  (Up, W)  (Right, G) }", cbld*=front);
+    EXPECT_EQ(CubeletPosition(front, up, right), cbld.getPosition());
+}

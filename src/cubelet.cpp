@@ -105,9 +105,9 @@ bool operator==(const Cubelet& lhs, const Cubelet& rhs){
 }
 
 
-//Equality
+///Equality
 bool operator==(const CubeletPosition& lhs, const CubeletPosition& rhs){
-   //sorting FaceSides of lhs
+   ///sorting FaceSides of lhs
    FaceSide lfs0 = lhs.getSideAt(0);
    FaceSide lfs1 = lhs.getSideAt(1);
    FaceSide lfs2 = lhs.getSideAt(2);
@@ -118,7 +118,7 @@ bool operator==(const CubeletPosition& lhs, const CubeletPosition& rhs){
        std::swap(lfs1, lfs2);
    if( lfs0 > lfs1 )
        std::swap(lfs0, lfs1);
-   //sorting FaceSides of rhs
+   ///sorting FaceSides of rhs
    FaceSide rfs0 = rhs.getSideAt(0);
    FaceSide rfs1 = rhs.getSideAt(1);
    FaceSide rfs2 = rhs.getSideAt(2);
@@ -135,4 +135,21 @@ bool operator==(const CubeletPosition& lhs, const CubeletPosition& rhs){
 
    return true;
 
+};
+
+
+/*
+ * Suppose we multiply Cubelet on Position p1(up,right,front) with FaceSide Up,
+ * It will relocate to Position p2(up,front,left). FaceSide components of Positions will be multiplied with given FaceSide. New Cubelet Position is attained as if
+ * Cube was rotated about axis perpendicular to 'given FaceSide (rhs)' in a clockwise fashion as viewed from 'given FaceSide'
+ *
+ * p1*Up = Position(up,right,front)*Up = Position(up*Up,right*Up,front*Up) = Position(up,front,left) = p2
+ *
+ * */
+Cubelet& Cubelet::operator*=(const FaceSide& rhs){
+    hashFacelet::iterator it;
+    for(it = hFacelet.begin(); it != hFacelet.end(); it++)
+        it->second *= rhs;
+    pos *= rhs;
+    return *this;
 };

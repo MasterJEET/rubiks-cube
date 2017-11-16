@@ -9,10 +9,10 @@
 #include <unordered_map>
 #include <stdexcept>
 
-std::unordered_map<std::string, Color> toColor;                                                   //Maps first letter of Color to Color itself
-std::unordered_map<std::string, FaceSide> toFaceSide;                                             //Maps first letter of FaceSide to FaceSide itself
+std::unordered_map<std::string, Color> toColor;                                                   ///Maps first letter of Color to Color itself
+std::unordered_map<std::string, FaceSide> toFaceSide;                                             ///Maps first letter of FaceSide to FaceSide itself
 
-//============ Define <index,type> pair start ===========
+///============ Define <index,type> pair start ===========
 #   define X(a,b) b,
 const char *Color_str[] = {
 #   include "Color.def"
@@ -31,7 +31,7 @@ const char *PositionType_str[] = {
     "P_UNDEFINED"
 };
 #   undef X
-//==================== Define end ======================
+///==================== Define end ======================
 
 std::ostream& operator <<(std::ostream& os, Color col){
     return os << Color_str[col];
@@ -47,53 +47,53 @@ std::ostream& operator <<(std::ostream& os, PositionType ptype){
 
 FaceSide& operator*=(FaceSide& lhs, const FaceSide& rhs){
 
-    //if(lhs == rhs)
-    //    throw std::runtime_error("Cannot multiply same FaceSide...");
-    //
-    //if( areOpposite(lhs, rhs))
-    //    throw std::runtime_error("Cannot multiply opposite FaceSide...");
+    ///if(lhs == rhs)
+    ///    throw std::runtime_error("Cannot multiply same FaceSide...");
+    ///
+    ///if( areOpposite(lhs, rhs))
+    ///    throw std::runtime_error("Cannot multiply opposite FaceSide...");
 
-    //Handling undefside
+    ///Handling undefside
     if( lhs == F_UNDEFINED || rhs == F_UNDEFINED ){ lhs = undefside; return lhs;}
 
-    //Front lhs
+    ///Front lhs
     if(lhs == front && rhs == right){ lhs = up; return lhs; }
     if(lhs == front && rhs == left){ lhs = down; return lhs; }
     if(lhs == front && rhs == up){ lhs = left; return lhs; }
     if(lhs == front && rhs == down){ lhs = right; return lhs; }
 
-    //Back lhs
+    ///Back lhs
     if(lhs == back && rhs == right){ lhs = down; return lhs; }
     if(lhs == back && rhs == left){ lhs = up; return lhs; }
     if(lhs == back && rhs == up){ lhs = right; return lhs; }
     if(lhs == back && rhs == down){ lhs = left; return lhs; }
 
-    //Right lhs
+    ///Right lhs
     if(lhs == right && rhs == front){ lhs = down; return lhs; }
     if(lhs == right && rhs == back){ lhs = up; return lhs; }
     if(lhs == right && rhs == up){ lhs = front; return lhs; }
     if(lhs == right && rhs == down){ lhs = back; return lhs; }
 
-    //Left lhs
+    ///Left lhs
     if(lhs == left && rhs == front){ lhs = up; return lhs; }
     if(lhs == left && rhs == back){ lhs = down; return lhs; }
     if(lhs == left && rhs == up){ lhs = back; return lhs; }
     if(lhs == left && rhs == down){ lhs = front; return lhs; }
 
-    //Up lhs
+    ///Up lhs
     if(lhs == up && rhs == front){ lhs = right; return lhs; }
     if(lhs == up && rhs == back){ lhs = left; return lhs; }
     if(lhs == up && rhs == right){ lhs = back; return lhs; }
     if(lhs == up && rhs == left){ lhs = front; return lhs; }
 
-    //Down lhs
+    ///Down lhs
     if(lhs == down && rhs == front){ lhs = left; return lhs; }
     if(lhs == down && rhs == back){ lhs = right; return lhs; }
     if(lhs == down && rhs == right){ lhs = front; return lhs; }
     if(lhs == down && rhs == left){ lhs = back; return lhs; }
 
-    //Executin reached here it means either lhs == rhs or lhs is opposite of rhs
-    //In both case return lhs
+    ///Executin reached here it means either lhs == rhs or lhs is opposite of rhs
+    ///In both case return lhs
     return lhs;
 };
 
@@ -118,7 +118,7 @@ bool anyOpposite(const FaceSide first,const FaceSide second,const FaceSide third
     return (areOpposite(first, second) || areOpposite(first, third) || areOpposite(second, third));
 }
 
-//======== Create maps | Start =========
+///======== Create maps | Start =========
 void createmapColor(){
     if(toColor.size())
         return;
@@ -134,7 +134,7 @@ void createmapFaceSide(){
 #   include "FaceSide.def"
 #   undef X
 }
-//======== Create maps | End =========
+///======== Create maps | End =========
 
 
 
@@ -165,15 +165,15 @@ FaceSide FaceSideFromLetter(std::string fac){
     return it->second;
 };
 
-//Handler for signal SIGABRT
+///Handler for signal SIGABRT
 void handler(int sig) {
       void *array[20];
         size_t size;
 
-          // get void*'s for all entries on the stack
+          /// get void*'s for all entries on the stack
           size = backtrace(array, 20);
           
-          // print out all the frames to stderr
+          /// print out all the frames to stderr
           fprintf(stderr, "Error: signal %d:\n", sig);
           backtrace_symbols_fd(array, size, STDERR_FILENO);
           exit(1);
