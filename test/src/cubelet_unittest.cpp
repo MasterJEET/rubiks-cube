@@ -102,13 +102,10 @@ TEST_F(CubeletTest, vectorinitializer){
     EXPECT_THROW( Cubelet(frr, fwf, fgb) , std::runtime_error );
 }
 
-TEST(CubeletAlone, multiplication){
-    Cubelet cr({red, right});
-    Cubelet cr1a({front, red});
-    cr1a *= front;
+TEST_F(CubeletTest, multiplication){
+    Cubelet cr1({front, red});
     cr *= up;
-    std::cout << cr << std::endl;
-    //( cr1a == cr );
+    EXPECT_EQ(cr1, cr);
     //Center Cubelet rotation
     //EXPECT_PRED_FORMAT2(checkPrint, "Facelet(s): { (Front, R) }", cr*=up);
     //EXPECT_PRED_FORMAT2(checkPrint, "Facelet(s): { (Left, R) }", cr*=up);

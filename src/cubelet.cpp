@@ -97,9 +97,11 @@ bool operator==(const Cubelet& lhs, const Cubelet& rhs){
     if(lhs.hFacelet.size() != rhs.hFacelet.size())
         return false;
 
-    for( const auto& it: lhs.hFacelet )
-        if( it.second != rhs.hFacelet.at( it.first ) )
+    for( const auto& it: lhs.hFacelet ){
+        const auto& rit = rhs.hFacelet.find( it.first );
+        if(rit == rhs.hFacelet.end()    ||  it.second != rit->second )
             return false;
+    }
 
     return true;
 }
