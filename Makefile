@@ -39,7 +39,7 @@ cleanall :
 cube-all.o : $(CUBE_SRC)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(SRC_DIR)/cube-all.cpp
 
-main.o : $(CUBE_SRC)
+main.o : $(CUBE_SRC) main.cpp
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c main.cpp
 
 
