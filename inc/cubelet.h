@@ -38,20 +38,15 @@ class CubeletPosition : public Position {
 
 
 class Cubelet{
-//    private:
-//
-//        ///to hold Facelets with FaceletPosition as the key
-//        hashFacelet hFacelet;
-//        ///Holds Position of Cubelet in the Cube
-//        CubeletPosition pos;
-
-    public:
+    private:
 
         ///to hold Facelets with FaceletPosition as the key
         hashFacelet hFacelet;
         ///Holds Position of Cubelet in the Cube
         CubeletPosition pos;
-        ///Default constructor
+
+    public:
+
         Cubelet(){};
         
         ///Constructor for Center cubelets
