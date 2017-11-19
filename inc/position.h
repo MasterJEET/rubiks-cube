@@ -60,14 +60,18 @@ class Position {
         ///Inequality
         friend bool operator!=(const Position& lhs, const Position& rhs){ return !(lhs == rhs); }
 
-        ///Multiplication
+        ///Multiplication, modify object
         Position& operator*=(const FaceSide& rhs);
+
+        ///Multiplication, return object copy
         friend Position operator*(Position lhs, const FaceSide& rhs){ lhs *= rhs; return lhs; }
+
 
 };
 
 
 
+namespace std {
 ///Following comment need to be changed
 /* =============== Hash for Position ================
  * This is required so that it can be used as key in
@@ -103,8 +107,6 @@ class Position {
  * /// order does not matter for last FaceSides
  * ==================================================
  */
-
-namespace std {
     template <>
         struct hash<Position> {
             typedef Position argument_type;
@@ -131,6 +133,36 @@ namespace std {
                 return ( i1*100 + i2*10 + i3 );
             }
         };
+
+    
+    ///Specializing std::less, to be used on unordered_map.find( Position )
+    //template<>
+    //    struct less<Position> {
+    //        typedef Position argument_type;
+    //        typedef bool result_type;
+    //        result_type operator()(const argument_type& key1, const argument_type& key2) const{
+    //            FaceSide k1f1 = key1.getSideAt(0);
+    //            FaceSide k1f2 = key1.getSideAt(1);
+    //            FaceSide k1f3 = key1.getSideAt(2);
+
+    //            FaceSide k2f1 = key2.getSideAt(0);
+    //            FaceSide k2f2 = key2.getSideAt(1);
+    //            FaceSide k2f3 = key2.getSideAt(2);
+
+    //            if(k1f1 < k2f1)
+    //                return true;
+    //            if(k1f2 < k2f2)
+    //                return true;
+    //            if(k1f3 < k2f3)
+    //                return true;
+
+    //            return false;
+    //        }
+    //    };
+
 }
 
+
+
+        
 #endif

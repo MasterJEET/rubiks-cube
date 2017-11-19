@@ -35,6 +35,14 @@ bool operator==(const FaceletPosition& lhs, const FaceletPosition& rhs){
 }
 
 
+FaceletPosition& FaceletPosition::operator*=(const FaceSide& rhs){
+    for(auto& el:vecSide){
+        el *= rhs;
+    }    
+    return *this;
+}
+
+
 ///bool operator<(const FaceletPosition& lhs, const FaceletPosition& rhs){
 ///    size_t size1 = lhs.size();
 ///    size_t size2 = rhs.size();

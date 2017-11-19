@@ -6,6 +6,7 @@ obj/*
 *.swp
 common*
 facelet*
+cubelet*
 position*
 rubik*
 tr*

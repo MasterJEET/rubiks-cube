@@ -94,14 +94,8 @@ bool operator==(const Cubelet& lhs, const Cubelet& rhs){
     if( lhs.pos != rhs.pos)
         return false;
 
-    if(lhs.hFacelet.size() != rhs.hFacelet.size())
+    if(lhs.hFacelet != rhs.hFacelet)
         return false;
-
-    for( const auto& it: lhs.hFacelet ){
-        const auto& rit = rhs.hFacelet.find( it.first );
-        if(rit == rhs.hFacelet.end()    ||  it.second != rit->second )
-            return false;
-    }
 
     return true;
 }
@@ -149,9 +143,22 @@ bool operator==(const CubeletPosition& lhs, const CubeletPosition& rhs){
  *
  * */
 Cubelet& Cubelet::operator*=(const FaceSide& rhs){
-    hashFacelet::iterator it;
-    for(it = hFacelet.begin(); it != hFacelet.end(); it++)
-        it->second *= rhs;
+    hashFacelet::iterator it = hFacelet.begin();
+    while( it != hFacelet.end()){
+        //if key need to be changed
+        if( it->first * rhs != it->first  ){
+            //Inserting new entry with updated key-value
+            hFacelet[ it->first * rhs ] = it->second * rhs;
+            //Deleting obsolete entry
+            it = hFacelet.erase(it);
+        }
+        else
+        //if key need not be changed
+        {
+            it->second *= rhs;
+            it++;
+        }
+    }
     pos *= rhs;
     return *this;
 };

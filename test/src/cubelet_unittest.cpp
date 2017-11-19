@@ -103,24 +103,22 @@ TEST_F(CubeletTest, vectorinitializer){
 }
 
 TEST_F(CubeletTest, multiplication){
-    Cubelet cr1({front, red});
-    cr *= up;
-    EXPECT_EQ(cr1, cr);
+    
     //Center Cubelet rotation
-    //EXPECT_PRED_FORMAT2(checkPrint, "Facelet(s): { (Front, R) }", cr*=up);
-    //EXPECT_PRED_FORMAT2(checkPrint, "Facelet(s): { (Left, R) }", cr*=up);
-    //EXPECT_PRED_FORMAT2(checkPrint, "Facelet(s): { (Back, R) }", cr*=up);
-    //EXPECT_EQ(CubeletPosition(back), cr.getPosition());
+    ASSERT_EQ(Cubelet({front, red}), cr *= up);
+    EXPECT_EQ(Cubelet({left, red}), cr *= up );
+    ASSERT_EQ(Cubelet({back, red}), cr *= up);
+    ASSERT_EQ(CubeletPosition(back), cr.getPosition());
 
-    ////Edge Cubelet rotation
-    //EXPECT_PRED_FORMAT2(checkPrint, "Facelet(s): { (Back, B)  (Up, W) }", cfu*=right);
-    //EXPECT_PRED_FORMAT2(checkPrint, "Facelet(s): { (Left, B)  (Up, W) }", cfu*=down);
-    //EXPECT_PRED_FORMAT2(checkPrint, "Facelet(s): { (Down, B)  (Left, W) }", cfu*=back);
-    //EXPECT_EQ(CubeletPosition(down, left), cfu.getPosition());
+    //Edge Cubelet rotation
+    ASSERT_EQ(Cubelet(Facelet( {back,up}, blue), Facelet( {up,back}, white)), cfu*=right);
+    ASSERT_EQ(Cubelet(Facelet( {left,up}, blue), Facelet( {up,left}, white)), cfu*=down);
+    ASSERT_EQ(Cubelet(Facelet( {down,left}, blue), Facelet( {left,down}, white)), cfu*=back);
+    ASSERT_EQ(CubeletPosition(down, left), cfu.getPosition());
 
-    ////Corner Cubelet rotation
-    //EXPECT_PRED_FORMAT2(checkPrint, "Facelet(s): { (Up, O)  (Left, W)  (Back, G) }", cbld*=front);
-    //EXPECT_PRED_FORMAT2(checkPrint, "Facelet(s): { (Front, O)  (Left, W)  (Up, G) }", cbld*=left);
-    //EXPECT_PRED_FORMAT2(checkPrint, "Facelet(s): { (Front, O)  (Up, W)  (Right, G) }", cbld*=front);
-    //EXPECT_EQ(CubeletPosition(front, up, right), cbld.getPosition());
+    //Corner Cubelet rotation
+    ASSERT_EQ(Cubelet( Facelet( {back,up,left}, green), Facelet( {up,left,back}, orange), Facelet( {left,back,up}, white ) ), cbld*=front);
+    ASSERT_EQ(Cubelet( Facelet( {up,front,left}, green), Facelet( {front,left,up}, orange), Facelet( {left,up,front}, white ) ), cbld*=left);
+    ASSERT_EQ(Cubelet( Facelet( {right,front,up}, green), Facelet( {front,up,right}, orange), Facelet( {up,right,front}, white ) ), cbld*=front);
+    ASSERT_EQ(CubeletPosition(front, up, right), cbld.getPosition());
 }
