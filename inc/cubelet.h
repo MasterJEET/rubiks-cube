@@ -38,10 +38,11 @@ class CubeletPosition : public Position {
 
 
 class Cubelet{
+
     private:
 
         ///to hold Facelets with FaceletPosition as the key
-        hashFacelet hFacelet;
+        static hashFacelet hFacelet;
         ///Holds Position of Cubelet in the Cube
         CubeletPosition pos;
 
@@ -87,6 +88,9 @@ class Cubelet{
 
         /// Rotate about axis defined by FaceSide, return the object
         friend Cubelet operator*(Cubelet lhs, const FaceSide& rhs){ lhs *= rhs; return lhs; }
+        
+        friend class Cube;
+
 };
 
 

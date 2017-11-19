@@ -38,7 +38,7 @@ class Cube {
         Cube(std::istream &is);
         
         ///get all Facelets of a face from std::stream
-        void createFace(std::istream &is, hashFacelet& hFacelet);
+        void createFace(std::istream &is );
 
         ///get Facelet at position specified by FaceSide from unordered_map hCubelet, three FaceSides specified
         Facelet getFacelet(const FaceSide fside1, const FaceSide fside2, const FaceSide fside3) const { return getFacelet( {fside1, fside2, fside3} );}
@@ -50,7 +50,7 @@ class Cube {
         Facelet getFacelet(const FaceletPosition pos ) const{ return hCubelet.at( pos ).getFacelet( pos )   ; }
 
         ///create Cubelets and store in map with help of hashFacelet
-        void createCubelet(hashFacelet& hFacelet);
+        void createCube();
 
         ///get Cubelet from Position
         Cubelet getCubelet(const CubeletPosition pos) const{ return hCubelet.at( pos ); }

@@ -7,6 +7,9 @@
 
 #include "cubelet.h"
 
+
+hashFacelet Cubelet::hFacelet;
+
 Cubelet::Cubelet(Facelet fac1): pos( fac1.side() ) {
     FaceletPosition fp1 = fac1.getPosition();
     hFacelet[ fp1 ] = fac1;
@@ -84,8 +87,30 @@ Cubelet::Cubelet(std::vector<Facelet> _vecFac) {
 
 std::ostream& operator<<(std::ostream& os, Cubelet C){
     os << "Facelet(s): {";
-    for(const auto& it: C.hFacelet)
-        os << " (" << it.second.side() << ", " << it.second.getColor() << ") ";
+    FaceSide fside0 = C.pos.getSideAt(0);
+    FaceSide fside1 = C.pos.getSideAt(1);
+    FaceSide fside2 = C.pos.getSideAt(2);
+
+    Facelet flet;
+    FaceletPosition fpos;
+    if(fside0 != undefside){
+        fpos = FaceletPosition(fside0);
+        flet = C.hFacelet.at(fpos);
+        os << " (" << flet.side() << ", " << flet.getColor() << ") ";
+    }
+
+    if(fside0 != undefside && fside1 != undefside){
+        fpos = FaceletPosition(fside1, fside0);
+        flet = C.hFacelet.at(fpos);
+        os << " (" << flet.side() << ", " << flet.getColor() << ") ";
+    }
+
+    if(fside0 != undefside && fside1 != undefside && fside2 != undefside){
+        fpos = FaceletPosition(fside2, fside1, fside0);
+        flet = C.hFacelet.at(fpos);
+        os << " (" << flet.side() << ", " << flet.getColor() << ") ";
+    }
+
     os << "}";
     return os;
 }
