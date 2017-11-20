@@ -66,7 +66,6 @@ class Position {
         ///Multiplication, return object copy
         friend Position operator*(Position lhs, const FaceSide& rhs){ lhs *= rhs; return lhs; }
 
-
 };
 
 

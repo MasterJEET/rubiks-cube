@@ -12,8 +12,10 @@
 #include "position.h"
 #include <unordered_map>
 #include <vector>
+#include <array>
 
 typedef std::unordered_map<FaceletPosition, Facelet> hashFacelet;
+typedef std::array<Facelet, _MAX_> arrFacelet;
 
 
 class CubeletPosition : public Position {

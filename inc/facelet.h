@@ -31,8 +31,9 @@ class FaceletPosition: public Position  {
 
         ///Multiplication, return object copy
         friend FaceletPosition operator*(FaceletPosition lhs, const FaceSide& rhs){ lhs *= rhs; return lhs; }
-///        ///Less than
-///        friend bool operator<(const FaceletPosition& lhs, const FaceletPosition& rhs);
+
+        ///Type operator, converting to size_t to be used as array index later
+        operator std::size_t() const;
 
 };
 
