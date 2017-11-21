@@ -10,6 +10,43 @@
 
 hashFacelet Cubelet::hFacelet;
 
+///Equality
+bool operator==(const CubeletPosition& lhs, const CubeletPosition& rhs){
+   ///sorting FaceSides of lhs
+   FaceSide lfs0 = lhs.getSideAt(0);
+   FaceSide lfs1 = lhs.getSideAt(1);
+   FaceSide lfs2 = lhs.getSideAt(2);
+
+   if( lfs0 > lfs1 )
+       std::swap(lfs0, lfs1);
+   if( lfs1 > lfs2 )
+       std::swap(lfs1, lfs2);
+   if( lfs0 > lfs1 )
+       std::swap(lfs0, lfs1);
+   ///sorting FaceSides of rhs
+   FaceSide rfs0 = rhs.getSideAt(0);
+   FaceSide rfs1 = rhs.getSideAt(1);
+   FaceSide rfs2 = rhs.getSideAt(2);
+
+   if( rfs0 > rfs1 )
+       std::swap(rfs0, rfs1);
+   if( rfs1 > rfs2 )
+       std::swap(rfs1, rfs2);
+   if( rfs0 > rfs1 )
+       std::swap(rfs0, rfs1);
+
+   if( lfs0 != rfs0 || lfs1 != rfs1 || lfs2 != rfs2 )
+       return false;
+
+   return true;
+
+};
+
+std::ostream& operator<<(std::ostream& os, CubeletPosition CP){
+    return os << Position(CP.vecSide);
+}
+
+
 Cubelet::Cubelet(Facelet fac1): pos( fac1.side() ) {
     FaceletPosition fp1 = fac1.getPosition();
     hFacelet[ fp1 ] = fac1;
@@ -126,39 +163,6 @@ bool operator==(const Cubelet& lhs, const Cubelet& rhs){
 }
 
 
-///Equality
-bool operator==(const CubeletPosition& lhs, const CubeletPosition& rhs){
-   ///sorting FaceSides of lhs
-   FaceSide lfs0 = lhs.getSideAt(0);
-   FaceSide lfs1 = lhs.getSideAt(1);
-   FaceSide lfs2 = lhs.getSideAt(2);
-
-   if( lfs0 > lfs1 )
-       std::swap(lfs0, lfs1);
-   if( lfs1 > lfs2 )
-       std::swap(lfs1, lfs2);
-   if( lfs0 > lfs1 )
-       std::swap(lfs0, lfs1);
-   ///sorting FaceSides of rhs
-   FaceSide rfs0 = rhs.getSideAt(0);
-   FaceSide rfs1 = rhs.getSideAt(1);
-   FaceSide rfs2 = rhs.getSideAt(2);
-
-   if( rfs0 > rfs1 )
-       std::swap(rfs0, rfs1);
-   if( rfs1 > rfs2 )
-       std::swap(rfs1, rfs2);
-   if( rfs0 > rfs1 )
-       std::swap(rfs0, rfs1);
-
-   if( lfs0 != rfs0 || lfs1 != rfs1 || lfs2 != rfs2 )
-       return false;
-
-   return true;
-
-};
-
-
 /*
  * Suppose we multiply Cubelet on Position p1(up,right,front) with FaceSide Up,
  * It will relocate to Position p2(up,front,left). FaceSide components of Positions will be multiplied with given FaceSide. New Cubelet Position is attained as if
@@ -187,3 +191,4 @@ Cubelet& Cubelet::operator*=(const FaceSide& rhs){
     pos *= rhs;
     return *this;
 };
+

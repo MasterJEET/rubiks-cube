@@ -66,6 +66,8 @@ class Position {
         ///Multiplication, return object copy
         friend Position operator*(Position lhs, const FaceSide& rhs){ lhs *= rhs; return lhs; }
 
+        ///Type operator, converting to size_t to be used as array index later
+        operator std::size_t() const;
 };
 
 

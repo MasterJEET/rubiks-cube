@@ -30,6 +30,8 @@ class CubeletPosition : public Position {
         ///New construtor, initialize from  FaceletPosition
         CubeletPosition(const FaceletPosition fp): Position( *fp.getSide() ){};
 
+        ///operator<< overloading to write CubeletPosition to ostream
+        friend std::ostream& operator<<(std::ostream& os, CubeletPosition P);
 
         ///Equality
         friend bool operator==(const CubeletPosition& lhs, const CubeletPosition& rhs);

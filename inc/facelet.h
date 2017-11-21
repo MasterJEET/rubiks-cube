@@ -20,6 +20,9 @@ class FaceletPosition: public Position  {
         FaceletPosition(const FaceSide first, const FaceSide second, const FaceSide third): Position(first, second, third){};
         FaceletPosition(const std::vector<FaceSide> _vecSide): Position(_vecSide){};
 
+        ///operator<< overloading to write FaceletPosition to ostream
+        friend std::ostream& operator<<(std::ostream& os, FaceletPosition FP);
+
         ///Equality
         friend bool operator==(const FaceletPosition& lhs, const FaceletPosition& rhs);
 

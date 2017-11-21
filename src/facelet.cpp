@@ -7,10 +7,8 @@
 
 #include "facelet.h"
 
-
-Facelet& Facelet::operator*=(const FaceSide& rhs){
-    pos *= rhs;
-    return *this;
+std::ostream& operator<<(std::ostream& os, FaceletPosition FP){
+    return os << Position(FP.vecSide);
 }
 
 
@@ -56,10 +54,15 @@ FaceletPosition::operator std::size_t() const{
     if(getSideAt(0) == undefside)
         throw std::runtime_error(std::string() + __func__ + ": FaceletPosition must be instantiated with at least one FaceSide." );
 
+
     /// FaceSide being an enum, each of its values are basically integer type (with unique value) and thus unique number for each FaceSide is automatically defined
     std::size_t num_faceside = getSideAt(0);
 
+
     // Evaluating unique number for each FaceletPosition within a given FaceSide by rotating it to front and assigning a number (0-8) to front FaceletPositions
+
+    std::size_t num_facelet;
+
     FaceSide fac0 = getSideAt(0);
     FaceSide fac1 = getSideAt(1);
     FaceSide fac2 = getSideAt(2);
@@ -84,8 +87,6 @@ FaceletPosition::operator std::size_t() const{
         default: //No rotation is required if it's already at front
             break;
     }
-
-    std::size_t num_facelet;
 
     if(fac1 == undefside && fac2 == undefside)
         num_facelet = 0;
@@ -120,5 +121,12 @@ FaceletPosition::operator std::size_t() const{
             num_facelet = 8;
     }
 
+    // Finally assigning an integer between 0 to _MAX_ to FaceletPosition
     return num_faceside*9 + num_facelet;
+}
+
+
+Facelet& Facelet::operator*=(const FaceSide& rhs){
+    pos *= rhs;
+    return *this;
 }
