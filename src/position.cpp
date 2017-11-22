@@ -8,42 +8,40 @@
 #include "position.h"
 #include <iostream>
 
-Position::Position(const FaceSide first,const FaceSide second): vecSide{first, second}, ptype(Edge){
-    if(areOpposite(first, second))
-        throw std::runtime_error(__func__ + std::string(": Contain opposite faces."));
-}
-
-Position::Position(const FaceSide first,const FaceSide second,const FaceSide third): vecSide{first, second, third}, ptype(Corner){
-    if(anyOpposite(first, second, third))
-        throw std::runtime_error(__func__ + std::string(": Contain opposite faces."));
-}
-
 
 Position::Position(const std::vector<FaceSide> _vecSide):vecSide(_vecSide){
         
-    switch (_vecSide.size()) {
-        case 1:
-            ptype = center;
-            break;
-        case 2:
-            if(areOpposite(_vecSide[0], _vecSide[1]))
-                throw std::runtime_error(__func__ + std::string(": Contain opposite faces."));
-            ptype = edge;
-            break;
-        case 3:
-            if(anyOpposite(_vecSide[0], _vecSide[1], _vecSide[2]))
-                throw std::runtime_error(__func__ + std::string(": Contain opposite faces."));
-            ptype = corner;
-            break;
-        default:
-            throw std::runtime_error(__func__ + std::string(": std::vector<FaceSide> must satisfy, 0 < size <= 3"));
+    if(_vecSide.size() > 3){
+        throw std::runtime_error(__func__ + std::string(": Number of FaceSides should be at most three for a Position specification"));
     }
+
+
+    FaceSide fac1 = vecSide[1];
+    FaceSide fac2 = vecSide[2];
+
+    if(fac1 == undefside && fac2 == undefside)
+        ptype = center;
+
+    if(fac1 != undefside && fac2 == undefside){
+        if(areOpposite(fac1, fac2))
+            throw std::runtime_error(__func__ + std::string(": Pair of FaceSides contain opposite faces."));
+        ptype = edge;
+    }
+
+    if(fac1 != undefside && fac2 != undefside){
+        if(anyOpposite(_vecSide[0], _vecSide[1], _vecSide[2]))
+            throw std::runtime_error(__func__ + std::string(": Triplet of FaceSides contain opposite faces."));
+        ptype = corner;
+    }
+
 }
 
 FaceSide Position::getSideAt(size_t index) const{
-    if(index < vecSide.size())
-        return vecSide.at(index);
-    return F_UNDEFINED;
+    if(index > 2 )
+        throw std::runtime_error(__func__ + std::string(": There are only three allowed values for index: 0 , 1 & 2 whereas " + std::to_string(index) + std::string(" was provided")));
+    if(index >= vecSide.size())
+        return undefside;
+    return vecSide.at(index);
 };
 
 //template<typename T> T& Position::operator*=(const FaceSide& rhs){
@@ -62,7 +60,8 @@ std::ostream& operator<<(std::ostream& os, Position P){
     os << "Position: ptype = " << P.ptype;
     os << ", vecSide = { ";
     for(const auto& face : P.vecSide){
-        os << face << " ";
+        if(face != undefside)
+            os << face << " ";
     }
     os << "}";
     return os;
@@ -70,9 +69,10 @@ std::ostream& operator<<(std::ostream& os, Position P){
 
 
 
-/** ================= operator== overloading ================
- * == This doesn't apply here anymore.
- * == This condition has been implemented for FaceletPosition
+/** ================= operator overloading ================
+ *
+ *  This doesn't apply here anymore.
+ *  This condition has been implemented for FaceletPosition
  * =========================================================
  * Required for Implemention of std::unordered_map with 
  * Position as key
@@ -86,19 +86,24 @@ std::ostream& operator<<(std::ostream& os, Position P){
  *   be part of Position object so that total number of FaceSides
  *   Position becomes three
  *   e.g. if we have
- *   Position P1(front, left); ///One more FaceSide required
- *                             ///Assume F_UNDEFINED appended
- *                             ///to FaceSide vecotr of object P1
+ *
+ *   Position P1(front, left); //One more FaceSide required \
+ *                             Assume F_UNDEFINED appended \
+ *                             to FaceSide vecotr of object P1
+ *
  *   Position P2(front); ///Similarly two more required
  *
  * 2. Now all Position objects can be assumed to have FaceSide
  *   number equal to three. Two Position objects are equal if
  *   and only if they satisfy both 'a' and 'b'
+ *
  *      a. Their first FaceSides are equal i.e.
  *          P1.firstFS == P2.firstFS
+ *
  *      b. 2nd and 3rd FS of 1st and 2nd are equal OR
  *         2nd and 3rd FS 1st P are equal with 3rd and 2nd FS of
  *         2nd P respectively
+ *
  *          i.  P1.secondFS == P2.secondFS AND P1.thirdFS == P2.thirdFS, OR
  *          ii. P1.secondFS == P2.thirdFS AND P1.thirdFS == P2.secondFS
  *

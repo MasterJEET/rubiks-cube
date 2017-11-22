@@ -9,6 +9,11 @@
 
 
 hashFacelet Cubelet::hFacelet;
+arrFacelet Cubelet::aFacelet; 
+
+std::ostream& operator<<(std::ostream& os, CubeletPosition CP){
+    return os << Position(CP.vecSide);
+}
 
 ///Equality
 bool operator==(const CubeletPosition& lhs, const CubeletPosition& rhs){
@@ -42,14 +47,10 @@ bool operator==(const CubeletPosition& lhs, const CubeletPosition& rhs){
 
 };
 
-std::ostream& operator<<(std::ostream& os, CubeletPosition CP){
-    return os << Position(CP.vecSide);
-}
-
 
 Cubelet::Cubelet(Facelet fac1): pos( fac1.side() ) {
     FaceletPosition fp1 = fac1.getPosition();
-    hFacelet[ fp1 ] = fac1;
+    aFacelet[ fp1 ] = fac1;
 }
 
 Cubelet::Cubelet(Facelet fac1, Facelet fac2): pos( fac1.side(), fac2.side() ) {
@@ -60,8 +61,8 @@ Cubelet::Cubelet(Facelet fac1, Facelet fac2): pos( fac1.side(), fac2.side() ) {
     CubeletPosition cp2(fp2);
     if(cp1 != cp2)
         throw std::runtime_error(std::string() + __func__ + ": Two Facelets provided doesnot belong to same Cubelet");
-    hFacelet[ fp1 ] = fac1;
-    hFacelet[ fp2 ] = fac2;
+    aFacelet[ fp1 ] = fac1;
+    aFacelet[ fp2 ] = fac2;
 }
 
 Cubelet::Cubelet(Facelet fac1, Facelet fac2, Facelet fac3): pos( fac1.side(), fac2.side(), fac3.side() ) {
@@ -74,9 +75,9 @@ Cubelet::Cubelet(Facelet fac1, Facelet fac2, Facelet fac3): pos( fac1.side(), fa
     CubeletPosition cp3(fp3);
     if(cp1 != cp2 || cp1 != cp3 || cp2 != cp3)
         throw std::runtime_error(std::string() + __func__ + ": Three Facelets provided doesnot belong to same Cubelet");
-    hFacelet[ fp1 ] = fac1;
-    hFacelet[ fp2 ] = fac2;
-    hFacelet[ fp3 ] = fac3;
+    aFacelet[ fp1 ] = fac1;
+    aFacelet[ fp2 ] = fac2;
+    aFacelet[ fp3 ] = fac3;
 }
 
 Cubelet::Cubelet(std::vector<Facelet> _vecFac) {
@@ -85,7 +86,7 @@ Cubelet::Cubelet(std::vector<Facelet> _vecFac) {
             {
             FaceletPosition fp1 = _vecFac[0].getPosition();
             pos = CubeletPosition( fp1 );
-            hFacelet[ fp1 ] = _vecFac[0];
+            aFacelet[ fp1 ] = _vecFac[0];
             break;
             }
         case 2:
@@ -97,8 +98,8 @@ Cubelet::Cubelet(std::vector<Facelet> _vecFac) {
             if(cp1 != cp2)
                 throw std::runtime_error(std::string() + __func__ + ": Two Facelets provided doesnot belong to same Cubelet");
             pos = cp1 ;
-            hFacelet[ fp1 ] = _vecFac[0];
-            hFacelet[ fp2 ] = _vecFac[1];
+            aFacelet[ fp1 ] = _vecFac[0];
+            aFacelet[ fp2 ] = _vecFac[1];
             break;
             }
         case 3:
@@ -111,9 +112,9 @@ Cubelet::Cubelet(std::vector<Facelet> _vecFac) {
             CubeletPosition cp3(fp3);
             if(cp1 != cp2 || cp1 != cp3 || cp2 != cp3)
                 throw std::runtime_error(std::string() + __func__ + ": Three Facelets provided doesnot belong to same Cubelet");
-            hFacelet[ fp1 ] = _vecFac[0];
-            hFacelet[ fp2 ] = _vecFac[1];
-            hFacelet[ fp3 ] = _vecFac[2];
+            aFacelet[ fp1 ] = _vecFac[0];
+            aFacelet[ fp2 ] = _vecFac[1];
+            aFacelet[ fp3 ] = _vecFac[2];
             break;
             }
         default:
@@ -132,19 +133,19 @@ std::ostream& operator<<(std::ostream& os, Cubelet C){
     FaceletPosition fpos;
     if(fside0 != undefside){
         fpos = FaceletPosition(fside0);
-        flet = C.hFacelet.at(fpos);
+        flet = C.aFacelet.at(fpos);
         os << " (" << flet.side() << ", " << flet.getColor() << ") ";
     }
 
     if(fside0 != undefside && fside1 != undefside){
         fpos = FaceletPosition(fside1, fside0);
-        flet = C.hFacelet.at(fpos);
+        flet = C.aFacelet.at(fpos);
         os << " (" << flet.side() << ", " << flet.getColor() << ") ";
     }
 
     if(fside0 != undefside && fside1 != undefside && fside2 != undefside){
         fpos = FaceletPosition(fside2, fside1, fside0);
-        flet = C.hFacelet.at(fpos);
+        flet = C.aFacelet.at(fpos);
         os << " (" << flet.side() << ", " << flet.getColor() << ") ";
     }
 
@@ -156,7 +157,24 @@ bool operator==(const Cubelet& lhs, const Cubelet& rhs){
     if( lhs.pos != rhs.pos)
         return false;
 
-    if(lhs.hFacelet != rhs.hFacelet)
+    FaceSide fs0 = lhs.getPosition().getSideAt(0);
+    FaceSide fs1 = lhs.getPosition().getSideAt(1);
+    FaceSide fs2 = lhs.getPosition().getSideAt(2);
+
+    FaceletPosition fp0(fs0,fs1,fs2);
+    FaceletPosition fp1(fs1,fs2,fs0);
+    FaceletPosition fp2(fs2,fs0,fs1);
+
+
+    Facelet lfl0( lhs.getFacelet(fp0) );
+    Facelet lfl1( lhs.getFacelet(fp1) );
+    Facelet lfl2( lhs.getFacelet(fp2) );
+
+    Facelet rfl0( rhs.getFacelet(fp0) );
+    Facelet rfl1( rhs.getFacelet(fp1) );
+    Facelet rfl2( rhs.getFacelet(fp2) );
+
+    if( lfl0 != rfl0 || lfl1 != rfl1 || lfl2 != rfl2 )
         return false;
 
     return true;

@@ -15,11 +15,11 @@ std::ostream& operator<<(std::ostream& os, FaceletPosition FP){
 ///Definition of friend function of class FaceletPosition
 
 bool operator==(const FaceletPosition& lhs, const FaceletPosition& rhs){
-    ///First FaceSides must be equal, point 2.a descrived above
+    ///First FaceSides must be equal
     if( lhs.getSideAt(0) != rhs.getSideAt(0) )
         return false;
 
-    ///2nd and 3rd FaceSide equal in same order, 2.b.i describe above
+    ///2nd and 3rd FaceSide equal in same order
     if ( lhs.getSideAt(1) == rhs.getSideAt(1) && lhs.getSideAt(2) == rhs.getSideAt(2) )
         return true;
 
@@ -27,7 +27,7 @@ bool operator==(const FaceletPosition& lhs, const FaceletPosition& rhs){
     if ( lhs.getSideAt(1) == rhs.getSideAt(2) && lhs.getSideAt(2) == rhs.getSideAt(1) )
         return true;
 
-    ///If above conditions doesn't satisfy return false
+    //If above conditions doesn't satisfy return false
     return false;
     
 }
@@ -51,7 +51,7 @@ FaceletPosition& FaceletPosition::operator*=(const FaceSide& rhs){
  */
 FaceletPosition::operator std::size_t() const{
 
-    if(getSideAt(0) == undefside)
+    if(size() == 0)
         throw std::runtime_error(std::string() + __func__ + ": FaceletPosition must be instantiated with at least one FaceSide." );
 
 

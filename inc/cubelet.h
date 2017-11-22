@@ -47,6 +47,8 @@ class Cubelet{
 
         ///to hold Facelets with FaceletPosition as the key
         static hashFacelet hFacelet;
+        //.to hold Facelets in array with FaceletPosition as index
+        static arrFacelet aFacelet;
         ///Holds Position of Cubelet in the Cube
         CubeletPosition pos;
 
@@ -70,7 +72,7 @@ class Cubelet{
         const hashFacelet getMapFacelet() const {return hFacelet;}
        
         /// Returns vecFac[index]
-        Facelet getFacelet(const FaceletPosition& fp) const{ return hFacelet.at(fp);}
+        Facelet getFacelet(const FaceletPosition& fp) const{ return aFacelet.at(fp);}
 
         ///Returns Position
         CubeletPosition getPosition() const{ return pos;}

@@ -27,14 +27,9 @@ class Position {
         ///Default constructor
         Position(){};
 
-        ///For initailizing a FaceSide from parameter, specifies which center
-        Position(const FaceSide first): vecSide{first}, ptype(Center){};
-        
-        ///For initializing two FaceSides from parameter list, specifies which edge
-        Position(const FaceSide first,const FaceSide second);
-        
-        ///For initializing all three FaceSides from parameter list, specifies which corner
-        Position(const FaceSide first,const FaceSide second,const FaceSide third);
+        ///For initializing any number (1-3) of FaceSides, this constructor is intended to
+        //delegated from other constructors
+        Position(const FaceSide first,const FaceSide second = undefside,const FaceSide third = undefside): Position( std::vector<FaceSide>({first,second,third}) ){};
         
         ///Initialization from vector for FaceSides
         Position(const std::vector<FaceSide> _vecSide);
@@ -48,8 +43,8 @@ class Position {
         ///Returns pointer to 'ptype'
         PositionType getPositionType() const {return ptype; }
 
-        ///size for vector that stores FaceSides for given position
-        size_t size() const{ return vecSide.size();}
+        ///Number of FaceSides with valid (not undefside) value
+        size_t size() const{ return vecSide.size()==0 ? 0 : (vecSide[0] != undefside) + (vecSide[1] != undefside) + (vecSide[2] != undefside);}
 
         ///operator<< overloading to write Position to ostream
         friend std::ostream& operator<<(std::ostream& os, Position P);
