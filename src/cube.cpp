@@ -14,7 +14,7 @@ Cube::Cube(std::istream &is){
         createFace(is);
 
 
-    ///Create Cubelets from hashFacelet and store it in map
+    ///Create Cubelets from arrFacelet and store it in map
     createCube();
 };
 
@@ -30,7 +30,6 @@ void Cube::createFace(std::istream &is ){
     col = ColorFromLetter(strColor);
 
     ///Create Center Facelet and add it to map
-    Cubelet::hFacelet[ FaceletPosition(ctrSide) ] = Facelet(col, ctrSide);
     Cubelet::aFacelet[ FaceletPosition(ctrSide) ] = Facelet(col, ctrSide);
 
     ///Get FaceSide and Color for Edge Facelets and add them to map
@@ -39,7 +38,6 @@ void Cube::createFace(std::istream &is ){
         edgeSide = FaceSideFromLetter(strFaceSide);
         col = ColorFromLetter(strColor);
         FaceletPosition fp(ctrSide, edgeSide);
-        Cubelet::hFacelet[ fp ] = Facelet(col, fp);
         Cubelet::aFacelet[ fp ] = Facelet(col, fp);
     }
 
@@ -50,7 +48,6 @@ void Cube::createFace(std::istream &is ){
         corSide = FaceSideFromLetter(strFaceSide2);
         col = ColorFromLetter(strColor);
         FaceletPosition fp(ctrSide, edgeSide, corSide);
-        Cubelet::hFacelet[ fp ] = Facelet(col, fp);
         Cubelet::aFacelet[ fp ] = Facelet(col, fp);
     }
 

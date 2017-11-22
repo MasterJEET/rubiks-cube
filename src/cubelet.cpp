@@ -8,7 +8,6 @@
 #include "cubelet.h"
 
 
-hashFacelet Cubelet::hFacelet;
 arrFacelet Cubelet::aFacelet; 
 
 std::ostream& operator<<(std::ostream& os, CubeletPosition CP){
@@ -123,6 +122,33 @@ Cubelet::Cubelet(std::vector<Facelet> _vecFac) {
     }
 }
 
+listFaceletPosition Cubelet::getFaceletPositionList() const{
+    listFaceletPosition lFaceletPosition;
+
+    if(pos.size() == 1)
+        lFaceletPosition.push_back( pos.getSideAt(0) );
+
+    if(pos.size() == 2){
+        lFaceletPosition.push_back({ pos.getSideAt(0), pos.getSideAt(1) });
+        lFaceletPosition.push_back({ pos.getSideAt(1), pos.getSideAt(0) });
+    }
+
+    if(pos.size() == 3){
+        lFaceletPosition.push_back({ pos.getSideAt(0), pos.getSideAt(1), pos.getSideAt(2) });
+        lFaceletPosition.push_back({ pos.getSideAt(1), pos.getSideAt(2), pos.getSideAt(0) });
+        lFaceletPosition.push_back({ pos.getSideAt(2), pos.getSideAt(0), pos.getSideAt(1) });
+    }
+
+    return lFaceletPosition;
+};
+
+listFacelet Cubelet::getFaceletList() const{
+    listFacelet lFacelet;
+    for(const auto& fp: getFaceletPositionList())
+        lFacelet.push_back( aFacelet[fp] );
+    return lFacelet;
+}
+
 std::ostream& operator<<(std::ostream& os, Cubelet C){
     os << "Facelet(s): {";
     FaceSide fside0 = C.pos.getSideAt(0);
@@ -157,55 +183,52 @@ bool operator==(const Cubelet& lhs, const Cubelet& rhs){
     if( lhs.pos != rhs.pos)
         return false;
 
-    FaceSide fs0 = lhs.getPosition().getSideAt(0);
-    FaceSide fs1 = lhs.getPosition().getSideAt(1);
-    FaceSide fs2 = lhs.getPosition().getSideAt(2);
+    if( lhs.pos.size() == 1 ){
+        return ( lhs.getFacelet( lhs.getPosition().getSideAt(0) ) == rhs.getFacelet( lhs.getPosition().getSideAt(0) ) );
+    }
 
-    FaceletPosition fp0(fs0,fs1,fs2);
-    FaceletPosition fp1(fs1,fs2,fs0);
-    FaceletPosition fp2(fs2,fs0,fs1);
+    if( lhs.pos.size() == 2 ){
+        Position p_tmp( lhs.getPosition() );
+        Facelet lfl0_tmp( lhs.getFacelet({ p_tmp.getSideAt(0), p_tmp.getSideAt(1) }) );
+        Facelet rfl0_tmp( rhs.getFacelet({ p_tmp.getSideAt(0), p_tmp.getSideAt(1) }) );
+        Facelet lfl1_tmp( lhs.getFacelet({ p_tmp.getSideAt(1), p_tmp.getSideAt(0) }) );
+        Facelet rfl1_tmp( rhs.getFacelet({ p_tmp.getSideAt(1), p_tmp.getSideAt(0) }) );
+        return ( lfl0_tmp == rfl0_tmp && lfl1_tmp == rfl1_tmp );
+    }
 
+    if( lhs.pos.size() == 3 ){
+        Position p_tmp( lhs.getPosition() );
+        Facelet lfl0_tmp( lhs.getFacelet({ p_tmp.getSideAt(0), p_tmp.getSideAt(1), p_tmp.getSideAt(2) }) );
+        Facelet rfl0_tmp( rhs.getFacelet({ p_tmp.getSideAt(0), p_tmp.getSideAt(1), p_tmp.getSideAt(2) }) );
+        Facelet lfl1_tmp( lhs.getFacelet({ p_tmp.getSideAt(1), p_tmp.getSideAt(2), p_tmp.getSideAt(0) }) );
+        Facelet rfl1_tmp( rhs.getFacelet({ p_tmp.getSideAt(1), p_tmp.getSideAt(2), p_tmp.getSideAt(0) }) );
+        Facelet lfl2_tmp( lhs.getFacelet({ p_tmp.getSideAt(2), p_tmp.getSideAt(0), p_tmp.getSideAt(1) }) );
+        Facelet rfl2_tmp( rhs.getFacelet({ p_tmp.getSideAt(2), p_tmp.getSideAt(0), p_tmp.getSideAt(1) }) );
+        return ( lfl0_tmp == rfl0_tmp && lfl1_tmp == rfl1_tmp && lfl2_tmp == rfl2_tmp );
+    }
 
-    Facelet lfl0( lhs.getFacelet(fp0) );
-    Facelet lfl1( lhs.getFacelet(fp1) );
-    Facelet lfl2( lhs.getFacelet(fp2) );
-
-    Facelet rfl0( rhs.getFacelet(fp0) );
-    Facelet rfl1( rhs.getFacelet(fp1) );
-    Facelet rfl2( rhs.getFacelet(fp2) );
-
-    if( lfl0 != rfl0 || lfl1 != rfl1 || lfl2 != rfl2 )
-        return false;
-
+    //This return covers the case when pos.size() = 0
     return true;
 }
 
 
 /*
  * Suppose we multiply Cubelet on Position p1(up,right,front) with FaceSide Up,
- * It will relocate to Position p2(up,front,left). FaceSide components of Positions will be multiplied with given FaceSide. New Cubelet Position is attained as if
- * Cube was rotated about axis perpendicular to 'given FaceSide (rhs)' in a clockwise fashion as viewed from 'given FaceSide'
+ * It will update Cubelet parameters as if it has been relocated to Position p2(up,front,left).
+ * FaceSide components of Positions will be multiplied with given FaceSide. New CubeletPosition is attained as if
+ * Cube was rotated about axis perpendicular to 'given FaceSide (rhs)' in a clockwise fashion as viewed from 'given FaceSide'.
+ * Note that its index is not updated in array as simultaneous update of other Cubelets is required
  *
  * p1*Up = Position(up,right,front)*Up = Position(up*Up,right*Up,front*Up) = Position(up,front,left) = p2
  *
  * */
 Cubelet& Cubelet::operator*=(const FaceSide& rhs){
-    hashFacelet::iterator it = hFacelet.begin();
-    while( it != hFacelet.end()){
-        //if key need to be changed
-        if( it->first * rhs != it->first  ){
-            //Inserting new entry with updated key-value
-            hFacelet[ it->first * rhs ] = it->second * rhs;
-            //Deleting obsolete entry
-            it = hFacelet.erase(it);
-        }
-        else
-        //if key need not be changed
-        {
-            it->second *= rhs;
-            it++;
-        }
-    }
+    if(rhs == undefside)
+        throw std::runtime_error(__func__ + std::string(": Cubelet multiplication with undefside is not allowed."));
+
+    for(auto& fl: getFaceletList())
+        fl *= rhs;
+
     pos *= rhs;
     return *this;
 };

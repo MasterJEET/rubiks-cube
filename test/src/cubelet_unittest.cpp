@@ -60,7 +60,19 @@ TEST_F(CubeletTest, vecside) {
 TEST_F(CubeletTest, get) {
 
     EXPECT_PRED_FORMAT2(checkPrint, "Position: ptype = Center, vecSide = { Right }", cr.getPosition());
-    
+
+    listFaceletPosition lFP;
+    lFP.push_back(fp_bld);
+    lFP.push_back(fp_ldb);
+    lFP.push_back(fp_dbl);
+
+    EXPECT_EQ( lFP, cbld.getFaceletPositionList() );
+
+    listFacelet lF;
+    lF.push_back(fwf);
+    lF.push_back(fbu);
+
+    EXPECT_EQ( lF, cfu.getFaceletList() );
 }
 
 TEST_F(CubeletTest, set) {

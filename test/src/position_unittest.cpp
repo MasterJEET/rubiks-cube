@@ -58,7 +58,7 @@ TEST_F(PositionTest, equality) {
     EXPECT_NE(Position(front), Position(right));
     EXPECT_EQ(Position(front, left), Position(front, left));
     EXPECT_EQ(Position(front, left), Position(front, left, F_UNDEFINED));
-    EXPECT_NE(Position(front, left), Position(front, F_UNDEFINED, left));
+    EXPECT_EQ(Position(front, left), Position(front, F_UNDEFINED, left));
     EXPECT_NE(Position(front, left), Position(front, down));
     EXPECT_NE(Position(front, left), Position(left, front));
     EXPECT_EQ(Position(front, left, down), Position(front, left, down));
@@ -135,9 +135,7 @@ TEST_F(PositionTest, multiplication) {
     
     ///few corner cases
     Position p1(front);
-    Position p2(undefside);
-    EXPECT_NO_THROW(p1*=undefside);
-    EXPECT_NO_THROW(p2*=front);
+    EXPECT_THROW(p1*=undefside, std::runtime_error);
 
     Position p3 = pdrf*right;
     ASSERT_EQ( p3, Position(back, left, up) );

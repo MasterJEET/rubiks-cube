@@ -7,29 +7,34 @@
 
 #include "position.h"
 #include <iostream>
+#include <algorithm>
 
 
 Position::Position(const std::vector<FaceSide> _vecSide):vecSide(_vecSide){
         
-    if(_vecSide.size() > 3){
+    if(vecSide.size() > 3){
         throw std::runtime_error(__func__ + std::string(": Number of FaceSides should be at most three for a Position specification"));
     }
 
 
-    FaceSide fac1 = vecSide[1];
-    FaceSide fac2 = vecSide[2];
+    if(vecSide[0] == undefside)
+        throw std::runtime_error(__func__ + std::string(": First FaceSide cannot be undefside."));
 
-    if(fac1 == undefside && fac2 == undefside)
+    //Keeping undefside to last
+    if(vecSide[1] == undefside && vecSide[2] != undefside)
+        std::iter_swap(vecSide.begin()+1, vecSide.begin()+2);
+
+    if(vecSide[1] == undefside && vecSide[2] == undefside)
         ptype = center;
 
-    if(fac1 != undefside && fac2 == undefside){
-        if(areOpposite(fac1, fac2))
+    if(vecSide[1] != undefside && vecSide[2] == undefside){
+        if(areOpposite(vecSide[1], vecSide[2]))
             throw std::runtime_error(__func__ + std::string(": Pair of FaceSides contain opposite faces."));
         ptype = edge;
     }
 
-    if(fac1 != undefside && fac2 != undefside){
-        if(anyOpposite(_vecSide[0], _vecSide[1], _vecSide[2]))
+    if(vecSide[1] != undefside && vecSide[2] != undefside){
+        if(anyOpposite(vecSide[0], vecSide[1], vecSide[2]))
             throw std::runtime_error(__func__ + std::string(": Triplet of FaceSides contain opposite faces."));
         ptype = corner;
     }
@@ -120,6 +125,8 @@ bool operator==(const Position& lhs, const Position& rhs){
 }
 
 Position& Position::operator*=(const FaceSide& rhs){
+    if(rhs == undefside )
+        throw std::runtime_error(__func__ + std::string(": Position multiplication with undefside is not allowed"));
     for(auto& el:vecSide){
         el *= rhs;
     }    

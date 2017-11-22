@@ -13,9 +13,12 @@
 #include <unordered_map>
 #include <vector>
 #include <array>
+#include <list>
+#include <set>
 
-typedef std::unordered_map<FaceletPosition, Facelet> hashFacelet;
 typedef std::array<Facelet, _MAX_> arrFacelet;
+typedef std::list<Facelet> listFacelet;
+typedef std::list<FaceletPosition> listFaceletPosition;
 
 
 class CubeletPosition : public Position {
@@ -45,9 +48,7 @@ class Cubelet{
 
     private:
 
-        ///to hold Facelets with FaceletPosition as the key
-        static hashFacelet hFacelet;
-        //.to hold Facelets in array with FaceletPosition as index
+        ///to hold Facelets in array with FaceletPosition as index
         static arrFacelet aFacelet;
         ///Holds Position of Cubelet in the Cube
         CubeletPosition pos;
@@ -68,10 +69,13 @@ class Cubelet{
         ///Initializaton from vector of Facelets
         Cubelet( std::vector<Facelet> _vecFac );
        
-        ///Returns vector of facelets for the cubelet
-        const hashFacelet getMapFacelet() const {return hFacelet;}
-       
-        /// Returns vecFac[index]
+        ///Return list of FaceletPostions associated with this Cubelet
+        listFaceletPosition getFaceletPositionList() const;
+
+        ///Fetch a list of Facelets in this Cubelet
+        listFacelet getFaceletList() const;
+
+        ///Returns Facelet at given FaceletPositon 
         Facelet getFacelet(const FaceletPosition& fp) const{ return aFacelet.at(fp);}
 
         ///Returns Position

@@ -34,6 +34,8 @@ bool operator==(const FaceletPosition& lhs, const FaceletPosition& rhs){
 
 
 FaceletPosition& FaceletPosition::operator*=(const FaceSide& rhs){
+    if(rhs == undefside)
+        throw std::runtime_error(__func__ + std::string(": FaceletPosition multiplication with undefside not allowed"));
     for(auto& el:vecSide){
         el *= rhs;
     }    
