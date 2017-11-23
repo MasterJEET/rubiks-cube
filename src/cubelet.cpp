@@ -151,29 +151,9 @@ listFacelet Cubelet::getFaceletList() const{
 
 std::ostream& operator<<(std::ostream& os, Cubelet C){
     os << "Facelet(s): {";
-    FaceSide fside0 = C.pos.getSideAt(0);
-    FaceSide fside1 = C.pos.getSideAt(1);
-    FaceSide fside2 = C.pos.getSideAt(2);
 
-    Facelet flet;
-    FaceletPosition fpos;
-    if(fside0 != undefside){
-        fpos = FaceletPosition(fside0);
-        flet = C.aFacelet.at(fpos);
+    for(const auto& flet: C.getFaceletList())
         os << " (" << flet.side() << ", " << flet.getColor() << ") ";
-    }
-
-    if(fside0 != undefside && fside1 != undefside){
-        fpos = FaceletPosition(fside1, fside0);
-        flet = C.aFacelet.at(fpos);
-        os << " (" << flet.side() << ", " << flet.getColor() << ") ";
-    }
-
-    if(fside0 != undefside && fside1 != undefside && fside2 != undefside){
-        fpos = FaceletPosition(fside2, fside1, fside0);
-        flet = C.aFacelet.at(fpos);
-        os << " (" << flet.side() << ", " << flet.getColor() << ") ";
-    }
 
     os << "}";
     return os;
@@ -183,31 +163,11 @@ bool operator==(const Cubelet& lhs, const Cubelet& rhs){
     if( lhs.pos != rhs.pos)
         return false;
 
-    if( lhs.pos.size() == 1 ){
-        return ( lhs.getFacelet( lhs.getPosition().getSideAt(0) ) == rhs.getFacelet( lhs.getPosition().getSideAt(0) ) );
+    for(const auto& fp: lhs.getFaceletPositionList()){
+        if(lhs.getFacelet(fp) != rhs.getFacelet(fp))
+            return false;
     }
 
-    if( lhs.pos.size() == 2 ){
-        Position p_tmp( lhs.getPosition() );
-        Facelet lfl0_tmp( lhs.getFacelet({ p_tmp.getSideAt(0), p_tmp.getSideAt(1) }) );
-        Facelet rfl0_tmp( rhs.getFacelet({ p_tmp.getSideAt(0), p_tmp.getSideAt(1) }) );
-        Facelet lfl1_tmp( lhs.getFacelet({ p_tmp.getSideAt(1), p_tmp.getSideAt(0) }) );
-        Facelet rfl1_tmp( rhs.getFacelet({ p_tmp.getSideAt(1), p_tmp.getSideAt(0) }) );
-        return ( lfl0_tmp == rfl0_tmp && lfl1_tmp == rfl1_tmp );
-    }
-
-    if( lhs.pos.size() == 3 ){
-        Position p_tmp( lhs.getPosition() );
-        Facelet lfl0_tmp( lhs.getFacelet({ p_tmp.getSideAt(0), p_tmp.getSideAt(1), p_tmp.getSideAt(2) }) );
-        Facelet rfl0_tmp( rhs.getFacelet({ p_tmp.getSideAt(0), p_tmp.getSideAt(1), p_tmp.getSideAt(2) }) );
-        Facelet lfl1_tmp( lhs.getFacelet({ p_tmp.getSideAt(1), p_tmp.getSideAt(2), p_tmp.getSideAt(0) }) );
-        Facelet rfl1_tmp( rhs.getFacelet({ p_tmp.getSideAt(1), p_tmp.getSideAt(2), p_tmp.getSideAt(0) }) );
-        Facelet lfl2_tmp( lhs.getFacelet({ p_tmp.getSideAt(2), p_tmp.getSideAt(0), p_tmp.getSideAt(1) }) );
-        Facelet rfl2_tmp( rhs.getFacelet({ p_tmp.getSideAt(2), p_tmp.getSideAt(0), p_tmp.getSideAt(1) }) );
-        return ( lfl0_tmp == rfl0_tmp && lfl1_tmp == rfl1_tmp && lfl2_tmp == rfl2_tmp );
-    }
-
-    //This return covers the case when pos.size() = 0
     return true;
 }
 

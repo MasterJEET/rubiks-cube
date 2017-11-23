@@ -46,14 +46,14 @@ TEST_F(CubeletTest, constructors) {
 
 TEST_F(CubeletTest, vecside) {
 
-    EXPECT_PRED_FORMAT2(checkPrint, "Back", cbld.getFacelet(fp_bld).side());
-    EXPECT_PRED_FORMAT2(checkPrint, "G", cbld.getFacelet(fp_bld).getColor());
+    EXPECT_EQ(Back, cbld.getFacelet(fp_bld).side());
+    EXPECT_EQ(Green, cbld.getFacelet(fp_bld).getColor());
     
-    EXPECT_PRED_FORMAT2(checkPrint, "Left", cbld.getFacelet(fp_ldb).side());
-    EXPECT_PRED_FORMAT2(checkPrint, "O", cbld.getFacelet(fp_ldb).getColor());
+    EXPECT_EQ(Left, cbld.getFacelet(fp_ldb).side());
+    EXPECT_EQ(Orange, cbld.getFacelet(fp_ldb).getColor());
 
-    EXPECT_PRED_FORMAT2(checkPrint, "Down", cbld.getFacelet(fp_dbl).side());
-    EXPECT_PRED_FORMAT2(checkPrint, "W", cbld.getFacelet(fp_dbl).getColor());
+    EXPECT_EQ(Down, cbld.getFacelet(fp_dbl).side());
+    EXPECT_EQ(White, cbld.getFacelet(fp_dbl).getColor());
 
 }
 

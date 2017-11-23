@@ -14,7 +14,6 @@
 #include <vector>
 #include <array>
 #include <list>
-#include <set>
 
 typedef std::array<Facelet, _MAX_> arrFacelet;
 typedef std::list<Facelet> listFacelet;

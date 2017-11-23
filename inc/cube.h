@@ -29,6 +29,12 @@ class Cube {
         ///Given a FaceSide it return all the FaceletPosition that corresponds that FaceSide
         std::list<FaceletPosition> getFaceletPosition(const FaceSide f);
 
+        ///get all Facelets of a face from std::stream
+        void createFace(std::istream &is );
+
+        ///create Cubelets and store in map with help of hashFacelet
+        void createCube();
+
     public:
 
         ///Default constructor
@@ -37,20 +43,14 @@ class Cube {
         ///Constructor that takes std::istream and create cubelets
         Cube(std::istream &is);
         
-        ///get all Facelets of a face from std::stream
-        void createFace(std::istream &is );
-
         ///get Facelet at position specified by FaceSide from unordered_map hCubelet, three FaceSides specified
         Facelet getFacelet(const FaceSide fside1, const FaceSide fside2, const FaceSide fside3) const { return getFacelet( {fside1, fside2, fside3} );}
 
         ///get Facelet at position specified by FaceSide from unordered_map hCubelet, two FaceSides specified
         Facelet getFacelet(const FaceSide fside1, const FaceSide fside2) const{ return getFacelet( {fside1, fside2 } ); }
 
-        ///get Facelet from unordered_map hCubelet, where position is specified by FaceletPosition object
-        Facelet getFacelet(const FaceletPosition pos ) const{ return hCubelet.at( pos ).getFacelet( pos )   ; }
-
-        ///create Cubelets and store in map with help of hashFacelet
-        void createCube();
+        ///get Facelet located at FaceletPosition
+        Facelet getFacelet(const FaceletPosition pos ) const{ return Cubelet::aFacelet.at( pos ) ; }
 
         ///get Cubelet from Position
         Cubelet getCubelet(const CubeletPosition pos) const{ return hCubelet.at( pos ); }
