@@ -65,7 +65,7 @@ void Cube::createCube(){
     for( const auto& vfs: vSingleFS ){
         FaceletPosition fp(vfs);
         CubeletPosition cp(vfs);
-        hCubelet[ cp ] = Cubelet( Cubelet::aFacelet[fp] );
+        aCubelet[ cp ] = Cubelet( Cubelet::aFacelet[fp] );
     }
 
 
@@ -80,7 +80,7 @@ void Cube::createCube(){
         FaceletPosition fp1(vfs);
         FaceletPosition fp2(vfs[1], vfs[0]);
         CubeletPosition cp(vfs);
-        hCubelet[ cp ] = Cubelet( Cubelet::aFacelet[fp1], Cubelet::aFacelet[fp2] );
+        aCubelet[ cp ] = Cubelet( Cubelet::aFacelet[fp1], Cubelet::aFacelet[fp2] );
     }
 
     ///Vector of vector of triple FaceSides
@@ -92,7 +92,7 @@ void Cube::createCube(){
         FaceletPosition fp2(vfs[1], vfs[0], vfs[2]);
         FaceletPosition fp3(vfs[2], vfs[0], vfs[1]);
         CubeletPosition cp(vfs);
-        hCubelet[ cp ] = Cubelet( Cubelet::aFacelet[fp1], Cubelet::aFacelet[fp2], Cubelet::aFacelet[fp3] );
+        aCubelet[ cp ] = Cubelet( Cubelet::aFacelet[fp1], Cubelet::aFacelet[fp2], Cubelet::aFacelet[fp3] );
     }
 }
 

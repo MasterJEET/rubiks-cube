@@ -8,6 +8,9 @@
 #ifndef CUBE_H
 #define CUBE_H
 
+//Maximum number of Cubelets in Cube
+#define __MAX_CUB__ 26
+
 #include <iostream>
 #include <vector>
 #include <list>
@@ -16,14 +19,14 @@
 #include "cubelet.h"
 
 
-typedef std::unordered_map<CubeletPosition, Cubelet> hashCubelet;
+typedef std::array<Cubelet, __MAX_CUB__> arrCubelet;
 
 
 class Cube {
     private:
 
         ///Map for storing pointers to Cubelets with Position as key
-        hashCubelet hCubelet;
+        arrCubelet aCubelet;
 
         ///Auxilliary functions only to be used by the class
         ///Given a FaceSide it return all the FaceletPosition that corresponds that FaceSide
@@ -43,17 +46,17 @@ class Cube {
         ///Constructor that takes std::istream and create cubelets
         Cube(std::istream &is);
         
-        ///get Facelet at position specified by FaceSide from unordered_map hCubelet, three FaceSides specified
+        ///get Facelet located at FaceletPosition specified by three given FaceSides
         Facelet getFacelet(const FaceSide fside1, const FaceSide fside2, const FaceSide fside3) const { return getFacelet( {fside1, fside2, fside3} );}
 
-        ///get Facelet at position specified by FaceSide from unordered_map hCubelet, two FaceSides specified
+        ///get Facelet located at FaceletPosition specified by two given FaceSides
         Facelet getFacelet(const FaceSide fside1, const FaceSide fside2) const{ return getFacelet( {fside1, fside2 } ); }
 
         ///get Facelet located at FaceletPosition
         Facelet getFacelet(const FaceletPosition pos ) const{ return Cubelet::aFacelet.at( pos ) ; }
 
-        ///get Cubelet from Position
-        Cubelet getCubelet(const CubeletPosition pos) const{ return hCubelet.at( pos ); }
+        ///get Cubelet from CubeletPosition
+        Cubelet getCubelet(const CubeletPosition pos) const{ return aCubelet.at( pos ); }
 
         ///display a given face (position and color)
         void show(const FaceSide f);

@@ -193,3 +193,66 @@ Cubelet& Cubelet::operator*=(const FaceSide& rhs){
     return *this;
 };
 
+
+
+/*
+ * Here we simply list and assign unique numbers (between 0 to 25) to each Cubelets.
+ * Although there is a return statement with a negative integer, execution should never reach this point.
+ *
+ * */
+
+CubeletPosition::operator std::size_t() const{
+    if(size() == 0)
+        throw std::runtime_error(std::string() + __func__ + ": CubeletPosition must be instantiated with at least one FaceSide." );
+
+    FaceSide fac0 = getSideAt(0);
+    FaceSide fac1 = getSideAt(1);
+    FaceSide fac2 = getSideAt(2);
+
+    if(fac1 == undefside && fac2 == undefside)
+        return fac0;    //This covers all the Center CubeletPositions, assignment from 0 till 5 is covered here
+
+    if(fac0 > fac1)
+        std::swap(fac0, fac1);
+    if(fac1 > fac2)
+        std::swap(fac1, fac2);
+    if(fac0 > fac1)
+        std::swap(fac0, fac1);
+
+    if(fac1 != undefside && fac2 == undefside){
+
+        if(fac0 == front && fac1 == up) return 6;
+        if(fac0 == front && fac1 == down) return 7;
+        if(fac0 == front && fac1 == left) return 8;
+        if(fac0 == front && fac1 == right) return 9;
+
+        if(fac0 == back && fac1 == up) return 10;
+        if(fac0 == back && fac1 == down) return 11;
+        if(fac0 == back && fac1 == left) return 12;
+        if(fac0 == back && fac1 == right) return 13;
+
+        if(fac0 == up && fac1 == left) return 14;
+        if(fac0 == up && fac1 == right) return 15;
+
+        if(fac0 == down && fac1 == left) return 16;
+        if(fac0 == down && fac1 == right) return 17;
+
+    }
+
+    if(fac1 != undefside && fac2 != undefside){
+
+        if(fac0 == front && fac1 == up && fac2 == left) return 18;
+        if(fac0 == front && fac1 == up && fac2 == right) return 19;
+        if(fac0 == front && fac1 == down && fac2 == left) return 20;
+        if(fac0 == front && fac1 == down && fac2 == right) return 21;
+
+        if(fac0 == back && fac1 == up && fac2 == left) return 22;
+        if(fac0 == back && fac1 == up && fac2 == right) return 23;
+        if(fac0 == back && fac1 == down && fac2 == left) return 24;
+        if(fac0 == back && fac1 == down && fac2 == right) return 25;
+
+    }
+
+    //Execution should never reach this point
+    return -1;
+}

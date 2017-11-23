@@ -8,9 +8,6 @@
 #ifndef COMMON_H
 #define COMMON_H
 
-//Maximum number of facelets in 3x3 cube
-#define _MAX_   54
-
 #include <iostream>
 #include <map>
 #include <sstream>

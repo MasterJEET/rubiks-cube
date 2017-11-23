@@ -134,3 +134,37 @@ TEST_F(CubeletTest, multiplication){
     ASSERT_EQ(Cubelet( Facelet( {right,front,up}, green), Facelet( {front,up,right}, orange), Facelet( {up,right,front}, white ) ), cbld*=front);
     ASSERT_EQ(CubeletPosition(front, up, right), cbld.getPosition());
 }
+
+
+TEST(Cubelet, TypeOperator){
+
+    EXPECT_EQ(0, CubeletPosition(front));
+    EXPECT_EQ(1, CubeletPosition(back));
+    EXPECT_EQ(2, CubeletPosition(up));
+    EXPECT_EQ(3, CubeletPosition(down));
+    EXPECT_EQ(4, CubeletPosition(left));
+    EXPECT_EQ(5, CubeletPosition(right));
+
+    EXPECT_EQ(6, CubeletPosition(front,up));
+    EXPECT_EQ(7, CubeletPosition(front,down));
+    EXPECT_EQ(8, CubeletPosition(front,left));
+    EXPECT_EQ(9, CubeletPosition(front,right));
+    EXPECT_EQ(10, CubeletPosition(back,up));
+    EXPECT_EQ(11, CubeletPosition(back,down));
+    EXPECT_EQ(12, CubeletPosition(back,left));
+    EXPECT_EQ(13, CubeletPosition(back,right));
+    EXPECT_EQ(14, CubeletPosition(up,left));
+    EXPECT_EQ(15, CubeletPosition(up,right));
+    EXPECT_EQ(16, CubeletPosition(down,left));
+    EXPECT_EQ(17, CubeletPosition(down,right));
+
+    EXPECT_EQ(18, CubeletPosition(front,up,left));
+    EXPECT_EQ(19, CubeletPosition(front,up,right));
+    EXPECT_EQ(20, CubeletPosition(front,down,left));
+    EXPECT_EQ(21, CubeletPosition(front,down,right));
+    EXPECT_EQ(22, CubeletPosition(back,up,left));
+    EXPECT_EQ(23, CubeletPosition(back,up,right));
+    EXPECT_EQ(24, CubeletPosition(back,down,left));
+    EXPECT_EQ(25, CubeletPosition(back,down,right));
+
+}

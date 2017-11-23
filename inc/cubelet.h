@@ -8,6 +8,9 @@
 #ifndef CUBELET_H
 #define CUBELET_H
 
+//Maximum number of facelets in 3x3 cube
+#define __MAX_FAC__   54
+
 #include "facelet.h"
 #include "position.h"
 #include <unordered_map>
@@ -15,7 +18,7 @@
 #include <array>
 #include <list>
 
-typedef std::array<Facelet, _MAX_> arrFacelet;
+typedef std::array<Facelet, __MAX_FAC__> arrFacelet;
 typedef std::list<Facelet> listFacelet;
 typedef std::list<FaceletPosition> listFaceletPosition;
 
@@ -40,6 +43,9 @@ class CubeletPosition : public Position {
 
         ///Inequality
         friend bool operator!=(const CubeletPosition& lhs, const CubeletPosition& rhs){ return !(lhs == rhs); }
+
+        ///Type operator, converting to size_t to be used as array index later
+        operator std::size_t() const;
 };
 
 
@@ -101,40 +107,6 @@ class Cubelet{
         friend class Cube;
 
 };
-
-
-
-namespace std {
-    template <>
-        struct hash<CubeletPosition> {
-            typedef CubeletPosition argument_type;
-            typedef std::size_t result_type;
-            
-            result_type operator()(const argument_type& p) const{
-                FaceSide f1 = p.getSideAt(0);
-                FaceSide f2 = p.getSideAt(1);
-                FaceSide f3 = p.getSideAt(2);
-
-                /// Arrange in decreasing order
-                /// This is required to make this implementaion
-                /// insensitive to order of FaceSides in Position object i.e.
-                /// (front, up, left) == (up, left, front) == (left, up, front)
-
-                if(f1 > f2)
-                    swap(f1, f2);
-                if(f2 > f3)
-                    swap(f2, f3);
-                if(f1 > f2)
-                    swap(f1, f2);
-
-                result_type i1 = std::hash<int>()(static_cast<result_type>(f1));
-                result_type i2 = std::hash<int>()(static_cast<result_type>(f2));
-                result_type i3 = std::hash<int>()(static_cast<result_type>(f3));
-
-                return ( i1*100 + i2*10 + i3 );
-            }
-        };
-}
 
 
 #endif
