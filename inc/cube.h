@@ -35,7 +35,7 @@ class Cube {
         ///get all Facelets of a face from std::stream
         void createFace(std::istream &is );
 
-        ///create Cubelets and store in map with help of hashFacelet
+        ///create Cubelets and store in array with help of hashFacelet
         void createCube();
 
     public:

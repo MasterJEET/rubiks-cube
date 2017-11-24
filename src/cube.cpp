@@ -159,3 +159,8 @@ std::list<FaceletPosition> Cube::getFaceletPosition(const FaceSide f){
 
     return tlist;
 }
+
+
+//Cube& Cube::operator*=(const FaceSide& rhs){
+//    //
+//}

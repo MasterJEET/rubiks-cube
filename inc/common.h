@@ -1,4 +1,6 @@
-/*
+/*! \file   common.h
+ *  \brief  Contains global functions declarations
+ * 
  * @author: MasterJEET
  * @email : masterjeet9@gmail.com
  * @date  : 14th Apr 2017
@@ -66,6 +68,12 @@ bool areOpposite(const FaceSide first,const FaceSide second);
 
 ///Check if any of the given FaceSides form opposite FaceSides
 bool anyOpposite(const FaceSide first,const FaceSide second,const FaceSide third);
+
+/*! \fn void setEquivalentFaceSide(const FaceSide& f,FaceSide& u,FaceSide& r,FaceSide& d,FaceSide& l)
+ *  \brief  This function assign up, right, down & left equivalence of 'f' to 'u', 'r', 'd' & 'l' respectively.
+ *
+ * */
+void setEquivalentFaceSide(const FaceSide& f,FaceSide& u,FaceSide& r,FaceSide& d,FaceSide& l);
 
 extern void createmapColor();
 extern void createmapFaceSide();
