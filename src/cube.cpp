@@ -130,28 +130,8 @@ std::list<FaceletPosition> Cube::getFaceletPosition(const FaceSide f){
     std::list<FaceletPosition> tlist;
     FaceSide u,r,d,l;
 
-    switch(f){
-        case Front:
-            u = up; r = right; d = down; l = left;
-            break;
-        case Back:
-            u = up; r = left; d = down; l = right;
-            break;
-        case Right:
-            u = up; r = back; d = down; l = front;
-            break;
-        case Left:
-            u = up; r = front; d = down; l = back;
-            break;
-        case Up:
-            u = back; r = right; d = front; l = left;
-            break;
-        case Down:
-            u = front; r = right; d = back; l = left;
-            break;
-        default:
-            break;
-    }
+    setEquivalentFaceSide(f,u,r,d,l);
+
 
     tlist.push_back({ f,l,u }); tlist.push_back({ f,u });   tlist.push_back({ f,r,u });
     tlist.push_back({ f,l });   tlist.push_back(f);         tlist.push_back({ f,r });

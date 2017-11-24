@@ -132,3 +132,16 @@ Position& Position::operator*=(const FaceSide& rhs){
     }    
     return *this;
 }
+
+/**
+ * What are edge equivalent Positions?
+ *
+ * Observe the current orientation of Cube. If a FaceSide 'fs' is in horizontal plane (up or down),
+ * rotate the cube about a horizontal axis parallel to front FaceSide till 'fs' coincide with the front.
+ * Cubelet that's at edge Position (front,up) now was let's say at Position 'p_fu_before'. Then 'p_fu_before'
+ * is 'up edge equivalence of fs' denoted as
+ *
+ *      p_fu_before = e(up,fs)
+ *
+ * */
+void setEdgeEquivalentPosition(const FaceSide& f, Position& u, Position& r, Position& d, Position& l);
