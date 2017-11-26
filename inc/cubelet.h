@@ -30,8 +30,8 @@ class CubeletPosition : public Position {
         CubeletPosition(const FaceSide first, const FaceSide second, const FaceSide third): Position(first, second, third){};
         CubeletPosition(const std::vector<FaceSide> _vecSide): Position(_vecSide){};
         
-        ///New construtor, initialize from  FaceletPosition
-        CubeletPosition(const FaceletPosition fp): Position( *fp.getSide() ){};
+        ///initialize from  FaceletPosition
+        CubeletPosition(const FaceletPosition& fp): Position( fp.getSide() ){};
 
         ///operator<< overloading to write CubeletPosition to ostream
         friend std::ostream& operator<<(std::ostream& os, CubeletPosition P);
@@ -121,107 +121,5 @@ class Cubelet{
         friend class Cube;
 
 };
-
-
-/*! \fn vecCletPos vecEdgeEquPosition(const FaceSide& f)
- *  \brief  This function retuns (vector of) up, right, down & left (in this order)
- *  edge Position equivalence of FaceSide 'f'.
- *
- * What are edge equivalent Positions?
- *
- * Observe the current orientation of Cube. If a FaceSide 'fs' is in horizontal plane (up or down),
- * rotate the cube about a horizontal axis parallel to front FaceSide till 'fs' coincide with the front.
- * Cubelet that's at edge (Cubelet)Position (front,up) now was let's say at Position 'p_fu_before'. Then 'p_fu_before'
- * is 'up edge equivalence of fs'. Let's denote it as
- *
- *      e(up,fs) = p_fu_before
- *
- * Note: For any FaceSide f and x
- *      * e(x,f) = CubeletPosition( x(f), f ) //where x(f) is x FaceSide equivalence of f, defined in common.h
- *      * e(x,front) = CubeletPosition( x(front), front) = Position(x,front) //Since x(front) = x
- *
- * Example: consider listing all edge equivalence of FaceSide f = down
- *      * e(up,f)       =   CubeletPosition(front,f)
- *      * e(right,f)    =   CubeletPosition(right,f)
- *      * e(down,f)     =   CubeletPosition(back,f)
- *      * e(left,f)     =   CubeletPosition(left,f)
- *
- * */
-vecCletPos vecEdgeEquPosition(const FaceSide& f);
-
-
-/*! \fn vecCletPos vecCornerEquPosition(const FaceSide& f)
- *  \brief  This function returns (a vector of) corner Position equivalence of FaceSide 'f'.
- *  Order of equivalence returned: {up,left}, {up,right}, {down,right}, {down,left}
- *
- * What are corner equivalent Positions?
- *
- * Similar to edge equivalent (Cubelet)Positions but here we consider corner Cubelets and their Positions, instead of Edges.
- * Let Position p_ul be "{up,left} corner equivalent position" of FaceSide f. Let's write it as
- *
- *      c(up,left,f) = p_ul
- *
- * Note: For any FaceSide f, x and y we have
- *      * c(x,y,f)  =   CubeletPosition(x(f), y(f), f) //For x(f) & y(f), see setEquivalentFaceSide defined in common.h
- *      * c(x,y,front)  = CubeletPosition(x,y,front)
- *
- * Example: list all corner equivalent Positions of FaceSide f = back
- *      * c(up,left,f)      =   CubeletPosition(up,right,f)
- *      * c(up,right,f)     =   CubeletPosition(up,left,f)
- *      * c(down,left,f)    =   CubeletPosition(down,right,f)
- *      * c(down,right,f)   =   CubeletPosition(down,left,f)
- *
- * */
-vecCletPos vecCornerEquPosition(const FaceSide& f);
-
-
-/** \fn vecCletPos vecCenterEquPosition(const FaceSide& f)
- *  \brief  This function returns a VECtor containing CENTER EQUivalence (Cubelet)POSition of given FaceSide
- *
- * What are center equivalent positions?
- *
- * These are similar to 'edge quivalent position' of a FaceSide except here we consider Center Cubelets
- * present in plane parallel to given FaceSide and passing through central point of Cube.
- * Let p_up be the 'up center equivalent position' of FaceSide f, we write it as
- *
- *      ct(up,f) = p_up
- *
- * Note: For any FaceSide f and x, we have
- *      * ct(x,f)        =   CubeletPosition(x(f))   //For x(f) see setEquivalentFaceSide defined in common.h
- *      * ct(x,front)    =   CubeletPosition(x)
- *
- * Example: List all center equivalent positions of FaceSide f = left
- *      * ct(up,f)       =   CubeletPosition(up)
- *      * ct(left,f)     =   CubeletPosition(back)
- *      * ct(down,f)     =   CubeletPosition(down)
- *      * ct(right,f)    =   CubeletPosition(front)
- *
- */
-vecCletPos vecCenterEquPosition(const FaceSide& f);
-
-
-/** \fn vecCletPos vecMidEdgeEquPos(const FaceSide& f)
- *  /brief  This function returns a VECtor containing MIDdle EDGE EQUivalent (Cubelet)POSitions of given FaceSide
- *
- * What are middle edge equivalent positions?
- *
- * MidEdgeEquPos' are similar to 'edge equivalent position' of a FaceSide except we consider Edge Cubelets
- * present in plane parallel to given FaceSide and passing through central point of Cube.
- * Let p_ul be the '{up,left} middle edge equivalent' of FaceSide f, we write it as
- *
- *      me(up,left,f)   =   p_ul
- *
- * Note: For any FaceSide f, x and y, we have
- *      * me(x,y,f)         =   CubeletPosition(x(f), y(f)) //For x(f) & y(f) see setEquivalentFaceSide defined in common.h
- *      * me(x,y,front)     =   CubeletPosition(x,y)
- *
- * Examlple: List all 'middle edge equivalent positions' of FaceSide f = up
- *      * me(up,left,f)     =   CubeletPosition(back,left)
- *      * me(up,right,f)    =   CubeletPosition(back,right)
- *      * me(down,right,f)  =   CubeletPosition(front,right)
- *      * me(down,left,f)   =   CubeletPosition(front,left)
- *
- */
-vecCletPos vecMidEdgeEquPosition(const FaceSide& f);
 
 #endif

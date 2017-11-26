@@ -272,8 +272,250 @@ TEST_F(CubeTest,rotateMid){
     Cube cube_new(cube_old);
     cube_new.rotateMid(right,false);    //set is_clockwise flag to false, layer will be rotated anti-clockwise
 
-    EXPECT_EQ(cube_old.getCubelet(front)*down, cube.getCubelet(down));
-    EXPECT_EQ(cube_old.getCubelet(down)*down, cube.getCubelet(back));
-    EXPECT_EQ(cube_old.getCubelet(back)*down, cube.getCubelet(up));
-    EXPECT_EQ(cube_old.getCubelet(up)*down, cube.getCubelet(front));
+    EXPECT_EQ(cube_old.getCubelet(front)*left, cube_new.getCubelet(down));
+    EXPECT_EQ(cube_old.getCubelet(down)*left, cube_new.getCubelet(back));
+    EXPECT_EQ(cube_old.getCubelet(back)*left, cube_new.getCubelet(up));
+    EXPECT_EQ(cube_old.getCubelet(up)*left, cube_new.getCubelet(front));
+
+    EXPECT_EQ(cube_old.getCubelet({up,front})*left, cube_new.getCubelet({down,front}));
+    EXPECT_EQ(cube_old.getCubelet({down,front})*left, cube_new.getCubelet({down,back}));
+    EXPECT_EQ(cube_old.getCubelet({down,back})*left, cube_new.getCubelet({up,back}));
+    EXPECT_EQ(cube_old.getCubelet({up,back})*left, cube_new.getCubelet({up,front}));
+
+}
+
+
+TEST_F(CubeTest,rotate){
+
+    Cube cube_old(cube);
+    cube.rotate(up);
+
+    EXPECT_EQ(cube_old.getCubelet(front)*up, cube.getCubelet(left));
+    EXPECT_EQ(cube_old.getCubelet(back,left)*up, cube.getCubelet(back,right));
+    EXPECT_EQ(cube_old.getCubelet(down,right)*up, cube.getCubelet(down,front));
+    EXPECT_EQ(cube_old.getCubelet(down,left,front)*up, cube.getCubelet(down,left,back));
+
+    Cube cube_new(cube_old);
+    cube_new.rotate(front,false);
+
+    EXPECT_EQ(cube_old.getCubelet(down)*back, cube_new.getCubelet(right));
+    EXPECT_EQ(cube_old.getCubelet(up,left)*back, cube_new.getCubelet(down,left));
+    EXPECT_EQ(cube_old.getCubelet(down,back)*back, cube_new.getCubelet(back,right));
+    EXPECT_EQ(cube_old.getCubelet(right,up,front)*back, cube_new.getCubelet(up,left,front));
+
+}
+
+
+TEST(Equivalence,Edge){
+    FaceSide f;
+    CubeletPosition pu,pr,pd,pl;
+
+    f = front;
+    vecCletPos v = vecEdgeEquivalence<CubeletPosition>(f);
+    pu = *v.begin(); pr = *(v.begin()+1); pd = *(v.begin()+2); pl = *(v.begin()+3);
+    EXPECT_EQ(CubeletPosition(up,front), pu);
+    EXPECT_EQ(CubeletPosition(right,front), pr);
+    EXPECT_EQ(CubeletPosition(down,front), pd);
+    EXPECT_EQ(CubeletPosition(left,front), pl);
+
+    f = back;
+    v = vecEdgeEquivalence<CubeletPosition>(f);
+    pu = *v.begin(); pr = *(v.begin()+1); pd = *(v.begin()+2); pl = *(v.begin()+3);
+    EXPECT_EQ(CubeletPosition(up,back), pu);
+    EXPECT_EQ(CubeletPosition(left,back), pr);
+    EXPECT_EQ(CubeletPosition(down,back), pd);
+    EXPECT_EQ(CubeletPosition(right,back), pl);
+
+    f = up;
+    v = vecEdgeEquivalence<CubeletPosition>(f);
+    pu = *v.begin(); pr = *(v.begin()+1); pd = *(v.begin()+2); pl = *(v.begin()+3);
+    EXPECT_EQ(CubeletPosition(back,up), pu);
+    EXPECT_EQ(CubeletPosition(right,up), pr);
+    EXPECT_EQ(CubeletPosition(front,up), pd);
+    EXPECT_EQ(CubeletPosition(left,up), pl);
+
+    f = down;
+    v = vecEdgeEquivalence<CubeletPosition>(f);
+    pu = *v.begin(); pr = *(v.begin()+1); pd = *(v.begin()+2); pl = *(v.begin()+3);
+    EXPECT_EQ(CubeletPosition(front,down), pu);
+    EXPECT_EQ(CubeletPosition(right,down), pr);
+    EXPECT_EQ(CubeletPosition(back,down), pd);
+    EXPECT_EQ(CubeletPosition(left,down), pl);
+
+    f = left;
+    v = vecEdgeEquivalence<CubeletPosition>(f);
+    pu = *v.begin(); pr = *(v.begin()+1); pd = *(v.begin()+2); pl = *(v.begin()+3);
+    EXPECT_EQ(CubeletPosition(up,left), pu);
+    EXPECT_EQ(CubeletPosition(front,left), pr);
+    EXPECT_EQ(CubeletPosition(down,left), pd);
+    EXPECT_EQ(CubeletPosition(back,left), pl);
+
+    f = right;
+    v = vecEdgeEquivalence<CubeletPosition>(f);
+    pu = *v.begin(); pr = *(v.begin()+1); pd = *(v.begin()+2); pl = *(v.begin()+3);
+    EXPECT_EQ(CubeletPosition(up,right), pu);
+    EXPECT_EQ(CubeletPosition(back,right), pr);
+    EXPECT_EQ(CubeletPosition(down,right), pd);
+    EXPECT_EQ(CubeletPosition(front,right), pl);
+}
+
+
+TEST(Equivalence,Corner){
+    FaceSide f;
+    CubeletPosition pul,pur,pdl,pdr;
+
+    f = front;
+    vecCletPos v = vecCornerEquivalence<CubeletPosition>(f);
+    pul = *v.begin(); pur = *(v.begin()+1); pdr = *(v.begin()+2); pdl = *(v.begin()+3);
+    EXPECT_EQ(CubeletPosition(up,left,front), pul);
+    EXPECT_EQ(CubeletPosition(up,right,front), pur);
+    EXPECT_EQ(CubeletPosition(down,left,front), pdl);
+    EXPECT_EQ(CubeletPosition(down,right,front), pdr);
+
+    f = back;
+    v = vecCornerEquivalence<CubeletPosition>(f);
+    pul = *v.begin(); pur = *(v.begin()+1); pdr = *(v.begin()+2); pdl = *(v.begin()+3);
+    EXPECT_EQ(CubeletPosition(up,right,back), pul);
+    EXPECT_EQ(CubeletPosition(up,left,back), pur);
+    EXPECT_EQ(CubeletPosition(down,right,back), pdl);
+    EXPECT_EQ(CubeletPosition(down,left,back), pdr);
+
+    f = up;
+    v = vecCornerEquivalence<CubeletPosition>(f);
+    pul = *v.begin(); pur = *(v.begin()+1); pdr = *(v.begin()+2); pdl = *(v.begin()+3);
+    EXPECT_EQ(CubeletPosition(back,left,up), pul);
+    EXPECT_EQ(CubeletPosition(back,right,up), pur);
+    EXPECT_EQ(CubeletPosition(front,left,up), pdl);
+    EXPECT_EQ(CubeletPosition(front,right,up), pdr);
+
+    f = down;
+    v = vecCornerEquivalence<CubeletPosition>(f);
+    pul = *v.begin(); pur = *(v.begin()+1); pdr = *(v.begin()+2); pdl = *(v.begin()+3);
+    EXPECT_EQ(CubeletPosition(front,left,down), pul);
+    EXPECT_EQ(CubeletPosition(front,right,down), pur);
+    EXPECT_EQ(CubeletPosition(back,left,down), pdl);
+    EXPECT_EQ(CubeletPosition(back,right,down), pdr);
+
+    f = left;
+    v = vecCornerEquivalence<CubeletPosition>(f);
+    pul = *v.begin(); pur = *(v.begin()+1); pdr = *(v.begin()+2); pdl = *(v.begin()+3);
+    EXPECT_EQ(CubeletPosition(up,back,left), pul);
+    EXPECT_EQ(CubeletPosition(up,front,left), pur);
+    EXPECT_EQ(CubeletPosition(down,back,left), pdl);
+    EXPECT_EQ(CubeletPosition(down,front,left), pdr);
+
+    f = right;
+    v = vecCornerEquivalence<CubeletPosition>(f);
+    pul = *v.begin(); pur = *(v.begin()+1); pdr = *(v.begin()+2); pdl = *(v.begin()+3);
+    EXPECT_EQ(CubeletPosition(up,front,right), pul);
+    EXPECT_EQ(CubeletPosition(up,back,right), pur);
+    EXPECT_EQ(CubeletPosition(down,front,right), pdl);
+    EXPECT_EQ(CubeletPosition(down,back,right), pdr);
+}
+
+
+TEST(Equivalence,Center){
+    FaceSide f;
+    CubeletPosition pu,pr,pd,pl;
+
+    f = up;
+    vecCletPos v = vecCenterEquivalence<CubeletPosition>(f);
+    pu = *v.begin(); pr = *(v.begin()+1); pd = *(v.begin()+2); pl = *(v.begin()+3);
+    EXPECT_EQ(CubeletPosition(back), pu);
+    EXPECT_EQ(CubeletPosition(right), pr);
+    EXPECT_EQ(CubeletPosition(front), pd);
+    EXPECT_EQ(CubeletPosition(left), pl);
+
+    f = down;
+    v = vecCenterEquivalence<CubeletPosition>(f);
+    pu = *v.begin(); pr = *(v.begin()+1); pd = *(v.begin()+2); pl = *(v.begin()+3);
+    EXPECT_EQ(CubeletPosition(front), pu);
+    EXPECT_EQ(CubeletPosition(right), pr);
+    EXPECT_EQ(CubeletPosition(back), pd);
+    EXPECT_EQ(CubeletPosition(left), pl);
+
+    f = right;
+    v = vecCenterEquivalence<CubeletPosition>(f);
+    pu = *v.begin(); pr = *(v.begin()+1); pd = *(v.begin()+2); pl = *(v.begin()+3);
+    EXPECT_EQ(CubeletPosition(up), pu);
+    EXPECT_EQ(CubeletPosition(back), pr);
+    EXPECT_EQ(CubeletPosition(down), pd);
+    EXPECT_EQ(CubeletPosition(front), pl);
+
+    f = left;
+    v = vecCenterEquivalence<CubeletPosition>(f);
+    pu = *v.begin(); pr = *(v.begin()+1); pd = *(v.begin()+2); pl = *(v.begin()+3);
+    EXPECT_EQ(CubeletPosition(up), pu);
+    EXPECT_EQ(CubeletPosition(front), pr);
+    EXPECT_EQ(CubeletPosition(down), pd);
+    EXPECT_EQ(CubeletPosition(back), pl);
+
+    f = front;
+    v = vecCenterEquivalence<CubeletPosition>(f);
+    pu = *v.begin(); pr = *(v.begin()+1); pd = *(v.begin()+2); pl = *(v.begin()+3);
+    EXPECT_EQ(CubeletPosition(up), pu);
+    EXPECT_EQ(CubeletPosition(right), pr);
+    EXPECT_EQ(CubeletPosition(down), pd);
+    EXPECT_EQ(CubeletPosition(left), pl);
+
+    f = back;
+    v = vecCenterEquivalence<CubeletPosition>(f);
+    pu = *v.begin(); pr = *(v.begin()+1); pd = *(v.begin()+2); pl = *(v.begin()+3);
+    EXPECT_EQ(CubeletPosition(up), pu);
+    EXPECT_EQ(CubeletPosition(left), pr);
+    EXPECT_EQ(CubeletPosition(down), pd);
+    EXPECT_EQ(CubeletPosition(right), pl);
+}
+
+TEST(Equivalence,MidEdge){
+    FaceSide f;
+    CubeletPosition pul,pur,pdl,pdr;
+
+    f = front;
+    vecCletPos v = vecMidEdgeEquivalence<CubeletPosition>(f);
+    pul = *v.begin(); pur = *(v.begin()+1); pdr = *(v.begin()+2); pdl = *(v.begin()+3);
+    EXPECT_EQ(CubeletPosition(up,left), pul);
+    EXPECT_EQ(CubeletPosition(up,right), pur);
+    EXPECT_EQ(CubeletPosition(down,left), pdl);
+    EXPECT_EQ(CubeletPosition(down,right), pdr);
+
+    f = back;
+    v = vecMidEdgeEquivalence<CubeletPosition>(f);
+    pul = *v.begin(); pur = *(v.begin()+1); pdr = *(v.begin()+2); pdl = *(v.begin()+3);
+    EXPECT_EQ(CubeletPosition(up,right), pul);
+    EXPECT_EQ(CubeletPosition(up,left), pur);
+    EXPECT_EQ(CubeletPosition(down,right), pdl);
+    EXPECT_EQ(CubeletPosition(down,left), pdr);
+
+    f = up;
+    v = vecMidEdgeEquivalence<CubeletPosition>(f);
+    pul = *v.begin(); pur = *(v.begin()+1); pdr = *(v.begin()+2); pdl = *(v.begin()+3);
+    EXPECT_EQ(CubeletPosition(back,left), pul);
+    EXPECT_EQ(CubeletPosition(back,right), pur);
+    EXPECT_EQ(CubeletPosition(front,left), pdl);
+    EXPECT_EQ(CubeletPosition(front,right), pdr);
+
+    f = down;
+    v = vecMidEdgeEquivalence<CubeletPosition>(f);
+    pul = *v.begin(); pur = *(v.begin()+1); pdr = *(v.begin()+2); pdl = *(v.begin()+3);
+    EXPECT_EQ(CubeletPosition(front,left), pul);
+    EXPECT_EQ(CubeletPosition(front,right), pur);
+    EXPECT_EQ(CubeletPosition(back,left), pdl);
+    EXPECT_EQ(CubeletPosition(back,right), pdr);
+
+    f = left;
+    v = vecMidEdgeEquivalence<CubeletPosition>(f);
+    pul = *v.begin(); pur = *(v.begin()+1); pdr = *(v.begin()+2); pdl = *(v.begin()+3);
+    EXPECT_EQ(CubeletPosition(up,back), pul);
+    EXPECT_EQ(CubeletPosition(up,front), pur);
+    EXPECT_EQ(CubeletPosition(down,back), pdl);
+    EXPECT_EQ(CubeletPosition(down,front), pdr);
+
+    f = right;
+    v = vecMidEdgeEquivalence<CubeletPosition>(f);
+    pul = *v.begin(); pur = *(v.begin()+1); pdr = *(v.begin()+2); pdl = *(v.begin()+3);
+    EXPECT_EQ(CubeletPosition(up,front), pul);
+    EXPECT_EQ(CubeletPosition(up,back), pur);
+    EXPECT_EQ(CubeletPosition(down,front), pdl);
+    EXPECT_EQ(CubeletPosition(down,back), pdr);
 }

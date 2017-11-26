@@ -12,22 +12,20 @@ std::ostream& operator<<(std::ostream& os, FaceletPosition FP){
 }
 
 
-///Definition of friend function of class FaceletPosition
 
 bool operator==(const FaceletPosition& lhs, const FaceletPosition& rhs){
-    ///First FaceSides must be equal
+    //First FaceSides must be equal
     if( lhs.getSideAt(0) != rhs.getSideAt(0) )
         return false;
 
-    ///2nd and 3rd FaceSide equal in same order
+    //2nd and 3rd FaceSide equal in same order
     if ( lhs.getSideAt(1) == rhs.getSideAt(1) && lhs.getSideAt(2) == rhs.getSideAt(2) )
         return true;
 
-    ///2nd and 3rd FaceSide equal in rever order, 2.b.ii described above
+    //2nd and 3rd FaceSide equal in rever order, 2.b.ii described above
     if ( lhs.getSideAt(1) == rhs.getSideAt(2) && lhs.getSideAt(2) == rhs.getSideAt(1) )
         return true;
 
-    //If above conditions doesn't satisfy return false
     return false;
     
 }
@@ -42,22 +40,13 @@ FaceletPosition& FaceletPosition::operator*=(const FaceSide& rhs){
     return *this;
 }
 
-/**
- * Conversion is aimed at assigning each Facelet of cube an unique number specific to its position,
- * i.e. assign each position a unique number
- *
- * For this purpose each FaceSide (which have nine Facelets) is thought of an unit and assigned an unique number between 0 to 5 (as there are total of 6 FaceSides).
- * And each Facelet in a FaceSide is assigned a unique number between 0 to 8 (guess why?). Using these two, unique numbers can be assigned to each FaceletPosition as
- * computed in the code.
- *
- */
 FaceletPosition::operator std::size_t() const{
 
     if(size() == 0)
         throw std::runtime_error(std::string() + __func__ + ": FaceletPosition must be instantiated with at least one FaceSide." );
 
 
-    /// FaceSide being an enum, each of its values are basically integer type (with unique value) and thus unique number for each FaceSide is automatically defined
+    // FaceSide being an enum, each of its values are basically integer type (with unique value) and thus unique number for each FaceSide is automatically defined
     std::size_t num_faceside = getSideAt(0);
 
 
@@ -123,7 +112,7 @@ FaceletPosition::operator std::size_t() const{
             num_facelet = 8;
     }
 
-    // Finally assigning an integer between 0 to _MAX_ to FaceletPosition
+    // Finally assigning an integer between 0 to _MAX_-1 to FaceletPosition
     return num_faceside*9 + num_facelet;
 }
 
@@ -132,3 +121,4 @@ Facelet& Facelet::operator*=(const FaceSide& rhs){
     pos *= rhs;
     return *this;
 }
+

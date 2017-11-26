@@ -9,12 +9,12 @@
 
 Cube::Cube(std::istream &is){
 
-    ///Get all Faces
+    //Get all Faces
     for(int i=0; i<6; i++)
         createFace(is);
 
 
-    ///Create Cubelets from arrFacelet and store it in map
+    //Create Cubelets from arrFacelet and store it in Cubelet array
     createCube();
 };
 
@@ -24,15 +24,15 @@ void Cube::createFace(std::istream &is ){
     FaceSide ctrSide, edgeSide, corSide;
     Color col;
 
-    ///Get FaceSide and Color for Center Facelet
+    //Get FaceSide and Color for Center Facelet
     is >> strFaceSide >> strColor;
     ctrSide = FaceSideFromLetter(strFaceSide);
     col = ColorFromLetter(strColor);
 
-    ///Create Center Facelet and add it to map
+    //Create Center Facelet and add it to array
     aFacelet[ FaceletPosition(ctrSide) ] = Facelet(col, ctrSide);
 
-    ///Get FaceSide and Color for Edge Facelets and add them to map
+    //Get FaceSide and Color for Edge Facelets and add them to array
     for(size_t i=0; i<4; i++){
         is >> strFaceSide >> strColor;
         edgeSide = FaceSideFromLetter(strFaceSide);
@@ -41,7 +41,7 @@ void Cube::createFace(std::istream &is ){
         aFacelet[ fp ] = Facelet(col, fp);
     }
 
-    ///Get FaceSide and Color for Corner Facelets and add them to map
+    //Get FaceSide and Color for Corner Facelets and add them to array
     for(size_t i=0; i<4; i++){
         is >> strFaceSide >> strFaceSide2 >> strColor;
         edgeSide = FaceSideFromLetter(strFaceSide);
@@ -56,12 +56,12 @@ void Cube::createFace(std::istream &is ){
 
 void Cube::createCube(){
    
-    ///Vector of all valid FaceSides
+    //Vector of all valid FaceSides
     std::vector<FaceSide> vSingleFS = {
         {front} , {back} , {up} , {down} , {right} , {left}
     };
 
-    ///Create center Cubelets and add to map
+    //Create center Cubelets and add to array
     for( const auto& vfs: vSingleFS ){
         FaceletPosition fp(vfs);
         CubeletPosition cp(vfs);
@@ -69,7 +69,7 @@ void Cube::createCube(){
     }
 
 
-    ///Vector of vector of pair FaceSides
+    //Vector of vector of pair FaceSides
     std::vector< std::vector<FaceSide> > vDoubleFS = { 
                                         { front, up }, { front, right }, { front, down }, { front, left },
                                         { up, right }, { down, right }, { down, left }, { up, left },
@@ -83,7 +83,7 @@ void Cube::createCube(){
         aCubelet[ cp ] = Cubelet( aFacelet[fp1], aFacelet[fp2] );
     }
 
-    ///Vector of vector of triple FaceSides
+    //Vector of vector of triple FaceSides
     std::vector< std::vector<FaceSide> > vTripleFS = { { front, right, up}, { back, right, up }, { back, left, up}, { front, left, up },
                                                        { front, right, down}, { back, right, down }, { back, left, down}, { front, left, down } };
 
@@ -109,51 +109,19 @@ void Cube::show(const FaceSide& f){
 }
 
 
-
-/*! Fetch list of FaceletPositions associated with a given FaceSide
- *
- *                U U U
- *                U U U
- *                U U U
- *          B B B L L L F F F R R R      1 2 3 #
- *          B B B L L L F F F R R R      4 5 6 # This is the sequence
- *          B B B L L L F F F R R R      7 8 9 #
- *                D D D
- *                D D D
- *                D D D
- * Returns above positions for a face,
- * Order of positions in the list is depicted by above diagram
- *
- * */
-
-std::list<FaceletPosition> Cube::getFaceletPosition(const FaceSide f){
-    std::list<FaceletPosition> tlist;
-    FaceSide u,r,d,l;
-
-    setEquivalentFaceSide(f,u,r,d,l);
-
-
-    tlist.push_back({ f,l,u }); tlist.push_back({ f,u });   tlist.push_back({ f,r,u });
-    tlist.push_back({ f,l });   tlist.push_back(f);         tlist.push_back({ f,r });
-    tlist.push_back({ f,l,d }); tlist.push_back({ f,d });   tlist.push_back({ f,r,d });
-
-    return tlist;
-}
-
-
 void Cube::rotateLayer(const FaceSide& f, bool is_clockwise , bool is_mid){
 
-    //edge (or center) positions to operate on
+    //edge ( center if is_mid is true ) positions to operate on
     vecCletPos ve;
-    // corner (or mid edge) positions to operate on
+    //corner ( mid edge if is_mid is true ) positions to operate on
     vecCletPos vc;
 
     if(is_mid){
-        ve = vecCenterEquPosition(f);
-        vc = vecMidEdgeEquPosition(f);
+        ve = vecCenterEquivalence<CubeletPosition>(f);
+        vc = vecMidEdgeEquivalence<CubeletPosition>(f);
     }else{
-        ve = vecEdgeEquPosition(f);
-        vc = vecCornerEquPosition(f);
+        ve = vecEdgeEquivalence<CubeletPosition>(f);
+        vc = vecCornerEquivalence<CubeletPosition>(f);
     };
 
 
@@ -161,7 +129,7 @@ void Cube::rotateLayer(const FaceSide& f, bool is_clockwise , bool is_mid){
         //Updating Cubelets at required position
         for(const auto& p:v)
             aCubelet[p] *= (is_clockwise?f:opposite(f));
-        //Updating indices i.e. relocating Cubelets to updated position
+        //Relocating Cubelets to updated position
         std::size_t u = *v.begin();
         std::size_t r = *(v.begin()+1);
         std::size_t d = *(v.begin()+2);
@@ -187,33 +155,97 @@ void Cube::rotateMid(const FaceSide& f, bool is_clockwise){
 }
 
 
-/**
- * Let 1 & 2 denotes the state of Cube before & after the operation. With usual notation of
- * - F: Front
- * - B: Back
- * - U: Up
- * - D: Down
- * - L: Left
- * - R: Right
- *
- * If operated with FaceSide Up on Cube with clockwise set to true, Up and Down Faces remain at their place.
- * Front FaceSide turns to Left, Left turns to Back and so on.
- * - 1U -> 2U
- * - 1D -> 2D
- * - 1F -> 2L
- * - 1R -> 2F
- * - 1B -> 2R
- * - 1L -> 2B
- *
- */
 void Cube::rotate(const FaceSide& f,bool is_clockwise){
-    FaceSide u, r, d, l;
+    FaceSide b = opposite(f);
+
+    //rotate front  equivalent (i.e. given ) Face
+    rotateSide(f,is_clockwise);
+    //rotate back equivalent (i.e. opposite of given) Face in the same absolute sense as in case of 'up equivalence'
+    rotateSide(b,!is_clockwise);
+    //rotate mid equivalent layer
+    rotateMid(f,is_clockwise);
+}
+
+
+
+listFletPos getFaceletPosition(const FaceSide f){
+    listFletPos tlist;
+    FaceSide u,r,d,l;
+
     setEquivalentFaceSide(f,u,r,d,l);
 
-    //rotate up equivalent FaceSide
-    rotateSide(u,is_clockwise);
-    //rotate down equivalent FaceSide in the same absolute sense as in case of 'up equivalence'
-    rotateSide(d,!is_clockwise);
-    //rotate mid equivalent layer
-    rotateMid(u,is_clockwise);
-};
+
+    tlist.push_back({ f,l,u }); tlist.push_back({ f,u });   tlist.push_back({ f,r,u });
+    tlist.push_back({ f,l });   tlist.push_back(f);         tlist.push_back({ f,r });
+    tlist.push_back({ f,l,d }); tlist.push_back({ f,d });   tlist.push_back({ f,r,d });
+
+    return tlist;
+}
+
+
+template <typename P>
+std::vector<P> vecEdgeEquivalence(const FaceSide& f){
+
+    FaceSide u,r,d,l;
+    setEquivalentFaceSide(f,u,r,d,l);
+
+    std::vector<P>   vpos;
+    vpos.push_back( P(f,u) );
+    vpos.push_back( P(f,r) );
+    vpos.push_back( P(f,d) );
+    vpos.push_back( P(f,l) );
+
+    return vpos;
+}
+
+template std::vector<CubeletPosition> vecEdgeEquivalence<CubeletPosition>(const FaceSide& f);
+template std::vector<FaceletPosition> vecEdgeEquivalence<FaceletPosition>(const FaceSide& f);
+
+
+template <typename P>
+std::vector<P> vecCornerEquivalence(const FaceSide& f){
+    FaceSide u,r,d,l;
+    setEquivalentFaceSide(f,u,r,d,l);
+
+    std::vector<P>    vpos;
+    vpos.push_back( P(f,u,l) );
+    vpos.push_back( P(f,u,r) );
+    vpos.push_back( P(f,d,r) );
+    vpos.push_back( P(f,d,l) );
+
+    return vpos;
+}
+
+template std::vector<CubeletPosition> vecCornerEquivalence<CubeletPosition>(const FaceSide& f);
+template std::vector<FaceletPosition> vecCornerEquivalence<FaceletPosition>(const FaceSide& f);
+
+
+template <typename P>
+std::vector<P> vecCenterEquivalence(const FaceSide& f){
+    FaceSide u,r,d,l;
+    setEquivalentFaceSide(f,u,r,d,l);
+
+    std::vector<P>    vpos;
+    vpos.push_back( P(u) );
+    vpos.push_back( P(r) );
+    vpos.push_back( P(d) );
+    vpos.push_back( P(l) );
+
+    return vpos;
+
+}
+
+
+template <typename P>
+std::vector<P> vecMidEdgeEquivalence(const FaceSide& f){
+    FaceSide u,r,d,l;
+    setEquivalentFaceSide(f,u,r,d,l);
+
+    std::vector<P>    vpos;
+    vpos.push_back( P(u,l) );
+    vpos.push_back( P(u,r) );
+    vpos.push_back( P(d,r) );
+    vpos.push_back( P(d,l) );
+
+    return vpos;
+}

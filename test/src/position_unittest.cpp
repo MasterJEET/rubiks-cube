@@ -47,8 +47,8 @@ TEST_F(PositionTest, minions) {
     ///getSideAt(), index out of range
     EXPECT_EQ(undefside, pbl.getSideAt(2));
     ///getVecSide()
-    const std::vector<FaceSide> *pvecSide = pf.getSide();
-    EXPECT_EQ(front, pvecSide->at(0));
+    const std::vector<FaceSide> pvecSide = pf.getSide();
+    EXPECT_EQ(front, pvecSide.at(0));
 }
 
 TEST_F(PositionTest, equality) {

@@ -1,4 +1,6 @@
-/*
+/*! \file   facelet.h
+ *  \brief  Contains 'class Facelet', 'class FaceletPosition' & related global functions
+ *
  * @author: MasterJEET
  * @email : masterjeet9@gmail.com
  * @date  : 13th Apr 2017
@@ -35,10 +37,24 @@ class FaceletPosition: public Position  {
         ///Multiplication, return object copy
         friend FaceletPosition operator*(FaceletPosition lhs, const FaceSide& rhs){ lhs *= rhs; return lhs; }
 
-        ///Type operator, converting to size_t to be used as array index later
+        /*! Type operator, converting to size_t to be used as array index later
+         *
+         * Conversion is aimed at assigning each Facelet of cube an unique number specific to its position,
+         * i.e. assign each FaceletPosition a unique number
+         *
+         * For this purpose each FaceSide (which have nine Facelets) is thought of an unit and
+         * assigned an unique number between 0 to 5 (as there are total of 6 FaceSides).
+         * And each Facelet in a FaceSide is assigned a unique number between 0 to 8 (guess why?).
+         * Using these two, unique numbers can be assigned to each FaceletPosition as computed in the code.
+         *
+         */
         operator std::size_t() const;
 
 };
+
+
+typedef std::vector<FaceletPosition> vecFletPos;
+
 
 class Facelet {
     private:
@@ -92,5 +108,22 @@ class Facelet {
         friend bool anyOpposite(const Facelet& first, const Facelet& second, const Facelet& third){ return anyOpposite(first.side(), second.side(), third.side()); }
 };
 
+
+/*! \fn vecFletPos vecEdgeEquFletPos(const FaceSide& f)
+ *  \brief  This function retuns (vector of) up, right, down & left (in this order)
+ *  edge (Facelet)Position equivalence of FaceSide 'f'.
+ *
+ * This exactly same as vecEdgeEquCletPos (defined in cubelet.h) except we return
+ * vector of FaceletPositon instead of CubeletPosition. FaceletPosition fp_u be 'up' edge
+ * equivalent of FaceSide f = left. Then we write
+ *
+ *      fe(up,f) = fp_u
+ *
+ * Note: For any FaceSie f and x, we have
+ *      * fe(x,f) = FaceletPosition(f,x(f)) //here f must be first parameter
+ *      * fe(x,front) = FaceletPosition(f,x)    //see common.h for definition of x(f)
+ *
+ * */
+vecFletPos vecEdgeEquFletPos(const FaceSide& f);
 
 #endif
