@@ -140,3 +140,5 @@ TEST_F(PositionTest, multiplication) {
     Position p3 = pdrf*right;
     ASSERT_EQ( p3, Position(back, left, up) );
 }
+
+

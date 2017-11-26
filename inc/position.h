@@ -1,4 +1,6 @@
-/*
+/*! \file   position.h
+ *  \brief  Contains Position class declarations
+ *
  * @author: MasterJEET
  * @email : masterjeet9@gmail.com
  * @date  : 10th Apr 2017
@@ -61,13 +63,8 @@ class Position {
         friend Position operator*(Position lhs, const FaceSide& rhs){ lhs *= rhs; return lhs; }
 
         ///Type operator, converting to size_t to be used as array index later
-        operator std::size_t() const;
+        //operator std::size_t() const;
 
 };
-
-
-///This function assign up, right, down & left Position equivalence of FaceSide 'f' to
-///Position 'u', 'r', 'd' & 'l' respectively.
-void setEquivalentFaceletPosition(const FaceSide& f, Position& u, Position& r, Position& d, Position& l);
 
 #endif

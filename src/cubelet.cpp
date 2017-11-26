@@ -8,8 +8,6 @@
 #include "cubelet.h"
 
 
-arrFacelet Cubelet::aFacelet; 
-
 std::ostream& operator<<(std::ostream& os, CubeletPosition CP){
     return os << Position(CP.vecSide);
 }
@@ -47,73 +45,30 @@ bool operator==(const CubeletPosition& lhs, const CubeletPosition& rhs){
 };
 
 
-Cubelet::Cubelet(Facelet fac1): pos( fac1.side() ) {
-    FaceletPosition fp1 = fac1.getPosition();
-    aFacelet[ fp1 ] = fac1;
-}
-
-Cubelet::Cubelet(Facelet fac1, Facelet fac2): pos( fac1.side(), fac2.side() ) {
-    
-    FaceletPosition fp1 = fac1.getPosition();
-    FaceletPosition fp2 = fac2.getPosition();
-    CubeletPosition cp1(fp1);
-    CubeletPosition cp2(fp2);
-    if(cp1 != cp2)
-        throw std::runtime_error(std::string() + __func__ + ": Two Facelets provided doesnot belong to same Cubelet");
-    aFacelet[ fp1 ] = fac1;
-    aFacelet[ fp2 ] = fac2;
-}
-
-Cubelet::Cubelet(Facelet fac1, Facelet fac2, Facelet fac3): pos( fac1.side(), fac2.side(), fac3.side() ) {
-    
-    FaceletPosition fp1 = fac1.getPosition();
-    FaceletPosition fp2 = fac2.getPosition();
-    FaceletPosition fp3 = fac3.getPosition();
-    CubeletPosition cp1(fp1);
-    CubeletPosition cp2(fp2);
-    CubeletPosition cp3(fp3);
-    if(cp1 != cp2 || cp1 != cp3 || cp2 != cp3)
-        throw std::runtime_error(std::string() + __func__ + ": Three Facelets provided doesnot belong to same Cubelet");
-    aFacelet[ fp1 ] = fac1;
-    aFacelet[ fp2 ] = fac2;
-    aFacelet[ fp3 ] = fac3;
-}
-
-Cubelet::Cubelet(std::vector<Facelet> _vecFac) {
+Cubelet::Cubelet(std::vector<Facelet> _vecFac): vFacelet(_vecFac) {
     switch( _vecFac.size() ){
         case 1:
             {
-            FaceletPosition fp1 = _vecFac[0].getPosition();
-            pos = CubeletPosition( fp1 );
-            aFacelet[ fp1 ] = _vecFac[0];
+            pos = CubeletPosition( _vecFac[0].getPosition() );
             break;
             }
         case 2:
             {
-            FaceletPosition fp1 = _vecFac[0].getPosition();
-            FaceletPosition fp2 = _vecFac[1].getPosition();
-            CubeletPosition cp1(fp1);
-            CubeletPosition cp2(fp2);
+            CubeletPosition cp1(_vecFac[0].getPosition());
+            CubeletPosition cp2(_vecFac[1].getPosition());
             if(cp1 != cp2)
                 throw std::runtime_error(std::string() + __func__ + ": Two Facelets provided doesnot belong to same Cubelet");
             pos = cp1 ;
-            aFacelet[ fp1 ] = _vecFac[0];
-            aFacelet[ fp2 ] = _vecFac[1];
             break;
             }
         case 3:
             {
-            FaceletPosition fp1 = _vecFac[0].getPosition();
-            FaceletPosition fp2 = _vecFac[1].getPosition();
-            FaceletPosition fp3 = _vecFac[2].getPosition();
-            CubeletPosition cp1(fp1);
-            CubeletPosition cp2(fp2);
-            CubeletPosition cp3(fp3);
+            CubeletPosition cp1(_vecFac[0].getPosition());
+            CubeletPosition cp2(_vecFac[1].getPosition());
+            CubeletPosition cp3(_vecFac[2].getPosition());
             if(cp1 != cp2 || cp1 != cp3 || cp2 != cp3)
                 throw std::runtime_error(std::string() + __func__ + ": Three Facelets provided doesnot belong to same Cubelet");
-            aFacelet[ fp1 ] = _vecFac[0];
-            aFacelet[ fp2 ] = _vecFac[1];
-            aFacelet[ fp3 ] = _vecFac[2];
+            pos = cp1;
             break;
             }
         default:
@@ -142,17 +97,29 @@ listFaceletPosition Cubelet::getFaceletPositionList() const{
     return lFaceletPosition;
 };
 
-listFacelet Cubelet::getFaceletList() const{
-    listFacelet lFacelet;
-    for(const auto& fp: getFaceletPositionList())
-        lFacelet.push_back( aFacelet[fp] );
-    return lFacelet;
+vecFacelet Cubelet::getFacelet() const{
+    return vFacelet;
+}
+
+Facelet Cubelet::getFacelet(const FaceletPosition& fp) const{
+    CubeletPosition cp(fp);
+    if(cp != pos)
+        throw std::out_of_range(std::string() + __func__ + ": Requested Facelet is not in this Cubelet. Check your FaceletPosition.");
+
+    Facelet f_ret;
+    for(const auto& f_tmp : vFacelet){
+        if(f_tmp.getPosition() == fp){
+            f_ret = f_tmp;
+            break;
+        }
+    }
+    return f_ret;
 }
 
 std::ostream& operator<<(std::ostream& os, Cubelet C){
     os << "Facelet(s): {";
 
-    for(const auto& flet: C.getFaceletList())
+    for(const auto& flet: C.vFacelet)
         os << " (" << flet.side() << ", " << flet.getColor() << ") ";
 
     os << "}";
@@ -172,21 +139,11 @@ bool operator==(const Cubelet& lhs, const Cubelet& rhs){
 }
 
 
-/*
- * Suppose we multiply Cubelet on Position p1(up,right,front) with FaceSide Up,
- * It will update Cubelet parameters as if it has been relocated to Position p2(up,front,left).
- * FaceSide components of Positions will be multiplied with given FaceSide. New CubeletPosition is attained as if
- * Cube was rotated about axis perpendicular to 'given FaceSide (rhs)' in a clockwise fashion as viewed from 'given FaceSide'.
- * Note that its index is not updated in array as simultaneous update of other Cubelets is required
- *
- * p1*Up = Position(up,right,front)*Up = Position(up*Up,right*Up,front*Up) = Position(up,front,left) = p2
- *
- * */
 Cubelet& Cubelet::operator*=(const FaceSide& rhs){
     if(rhs == undefside)
         throw std::runtime_error(__func__ + std::string(": Cubelet multiplication with undefside is not allowed."));
 
-    for(auto& fl: getFaceletList())
+    for(auto& fl: vFacelet)
         fl *= rhs;
 
     pos *= rhs;
@@ -194,12 +151,6 @@ Cubelet& Cubelet::operator*=(const FaceSide& rhs){
 };
 
 
-
-/*
- * Here we simply list and assign unique numbers (between 0 to 25) to each Cubelets.
- * Although there is a return statement with a negative integer, execution should never reach this point.
- *
- * */
 
 CubeletPosition::operator std::size_t() const{
     if(size() == 0)
@@ -256,3 +207,57 @@ CubeletPosition::operator std::size_t() const{
     //Execution should never reach this point
     return -1;
 }
+
+
+vecCletPos vecEdgeEquPosition(const FaceSide& f){
+    FaceSide u,r,d,l;
+    setEquivalentFaceSide(f,u,r,d,l);
+
+    vecCletPos   vpos;
+    vpos.push_back( CubeletPosition(u,f) );
+    vpos.push_back( CubeletPosition(r,f) );
+    vpos.push_back( CubeletPosition(d,f) );
+    vpos.push_back( CubeletPosition(l,f) );
+
+    return vpos;
+};
+
+
+vecCletPos vecCornerEquPosition(const FaceSide& f){
+    FaceSide u,r,d,l;
+    setEquivalentFaceSide(f,u,r,d,l);
+
+    vecCletPos    vpos;
+    vpos.push_back( CubeletPosition(u,l,f) );
+    vpos.push_back( CubeletPosition(u,r,f) );
+    vpos.push_back( CubeletPosition(d,r,f) );
+    vpos.push_back( CubeletPosition(d,l,f) );
+
+    return vpos;
+};
+
+vecCletPos vecCenterEquPosition(const FaceSide& f){
+    FaceSide u,r,d,l;
+    setEquivalentFaceSide(f,u,r,d,l);
+
+    vecCletPos    vpos;
+    vpos.push_back( CubeletPosition(u) );
+    vpos.push_back( CubeletPosition(r) );
+    vpos.push_back( CubeletPosition(d) );
+    vpos.push_back( CubeletPosition(l) );
+
+    return vpos;
+};
+
+vecCletPos vecMidEdgeEquPosition(const FaceSide& f){
+    FaceSide u,r,d,l;
+    setEquivalentFaceSide(f,u,r,d,l);
+
+    vecCletPos    vpos;
+    vpos.push_back( CubeletPosition(u,l) );
+    vpos.push_back( CubeletPosition(u,r) );
+    vpos.push_back( CubeletPosition(d,r) );
+    vpos.push_back( CubeletPosition(d,l) );
+
+    return vpos;
+};

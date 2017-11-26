@@ -118,26 +118,28 @@ bool anyOpposite(const FaceSide first,const FaceSide second,const FaceSide third
     return (areOpposite(first, second) || areOpposite(first, third) || areOpposite(second, third));
 }
 
-/**
- * What are equivalent FaceSides?
- *
- * Observe the current orientation of Cube. If a FaceSide 'fs' is in horizontal plane (up or down),
- * rotate the cube about a horizontal axis parallel to front FaceSide till 'fs' align with the front.
- * Face i.e. at FaceSide up now was let's say at FaceSide 'up_before'. Then 'up_before' is up equivalent
- * of 'fs'.
- *
- * For vertical Faces (front,back,right,left) rotate the Cube about a vertical axis till 'fs' align
- * with font FaceSide. Use above analogy to derive FaceSide equivalence.
- *
- * Examples: FaceSide equivalence of right
- *      *  up equivalence of right = up(right) = up
- *      *  down(right) = down
- *      *  right(right) = back
- *      *  left(right) = front
- *
- * Note: for any FaceSide f, f(front) = f
- *
- * */
+FaceSide opposite(const FaceSide& fs){
+    switch(fs){
+        case front:
+            return back;
+        case back:
+            return front;
+        case up:
+            return down;
+        case down:
+            return up;
+        case left:
+            return right;
+        case right:
+            return left;
+        default:
+            return undefside;
+    }
+
+    //Execution will never reach here
+    return undefside;
+}
+
 void setEquivalentFaceSide(const FaceSide& f,FaceSide& u,FaceSide& r,FaceSide& d,FaceSide& l){
 
     switch(f){

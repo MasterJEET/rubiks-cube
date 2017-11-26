@@ -1,5 +1,5 @@
 /*! \file   common.h
- *  \brief  Contains global functions declarations
+ *  \brief  Contains most global functions declarations
  * 
  * @author: MasterJEET
  * @email : masterjeet9@gmail.com
@@ -25,7 +25,7 @@
 #    endif
 #   endif
 
-///============ Define enum start ===========
+//============ Define enum start ===========
 #   define X(a,b) a,
 enum Color {
 #   include "Color.def"
@@ -42,7 +42,7 @@ enum PositionType {
     P_UNDEFINED
 };
 #   undef X
-///=========== Define enum end =============
+//=========== Define enum end =============
 
 extern const char *Color_str[];
 
@@ -69,8 +69,29 @@ bool areOpposite(const FaceSide first,const FaceSide second);
 ///Check if any of the given FaceSides form opposite FaceSides
 bool anyOpposite(const FaceSide first,const FaceSide second,const FaceSide third);
 
+///Return opposite FaceSide
+FaceSide opposite(const FaceSide& fs);
+
 /*! \fn void setEquivalentFaceSide(const FaceSide& f,FaceSide& u,FaceSide& r,FaceSide& d,FaceSide& l)
  *  \brief  This function assign up, right, down & left equivalence of 'f' to 'u', 'r', 'd' & 'l' respectively.
+ *
+ * What are equivalent FaceSides?
+ *
+ * Observe the current orientation of Cube. If a FaceSide 'fs' is in horizontal plane (up or down),
+ * rotate the cube about a horizontal axis parallel to front FaceSide till 'fs' align with the front.
+ * Face i.e. at FaceSide up now was let's say at FaceSide 'up_before'. Then 'up_before' is up equivalent
+ * of 'fs'.
+ *
+ * For vertical Faces (front,back,right,left) rotate the Cube about a vertical axis till 'fs' align
+ * with font FaceSide. Use above analogy to derive FaceSide equivalence.
+ *
+ * Note: for any FaceSide f, f(front) = f
+ *
+ * Examples: FaceSide equivalence of right
+ *      *  up equivalence of right = up(right) = up
+ *      *  down(right) = down
+ *      *  right(right) = back
+ *      *  left(right) = front
  *
  * */
 void setEquivalentFaceSide(const FaceSide& f,FaceSide& u,FaceSide& r,FaceSide& d,FaceSide& l);
@@ -99,8 +120,8 @@ void printAllFaceSide();
 std::string getHome();
 
 
-/// ======== Global Constants Definition ========
-///All facesides
+// ======== Global Constants Definition ========
+//All facesides
 const FaceSide front = Front;
 const FaceSide back = Back;
 const FaceSide left = Left;
@@ -109,7 +130,7 @@ const FaceSide up = Up;
 const FaceSide down = Down;
 const FaceSide undefside = F_UNDEFINED;
 
-///All colors
+//All colors
 const Color white = White;
 const Color yellow = Yellow;
 const Color orange = Orange;
@@ -118,15 +139,15 @@ const Color green = Green;
 const Color blue = Blue;
 const Color undefcol = C_UNDEFINED;
 
-///All Position types
+//All Position types
 const PositionType center = Center;
 const PositionType edge = Edge;
 const PositionType corner = Corner;
 const PositionType undeftype = P_UNDEFINED;
 
-///Path where all of rubkis-cube's civilization is present
+//Path where all of rubkis-cube's civilization is present
 extern const std::string CUBE_HOME;
 
-/// =============================================
+// =============================================
 
 #endif

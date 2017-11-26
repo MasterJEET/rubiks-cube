@@ -12,29 +12,29 @@
 
 Position::Position(const std::vector<FaceSide> _vecSide):vecSide(_vecSide){
         
-    if(vecSide.size() > 3){
+    if(_vecSide.size() > 3){
         throw std::runtime_error(__func__ + std::string(": Number of FaceSides should be at most three for a Position specification"));
     }
 
 
-    if(vecSide[0] == undefside)
+    if(_vecSide[0] == undefside)
         throw std::runtime_error(__func__ + std::string(": First FaceSide cannot be undefside."));
 
     //Keeping undefside to last
-    if(vecSide[1] == undefside && vecSide[2] != undefside)
+    if(_vecSide[1] == undefside && _vecSide[2] != undefside)
         std::iter_swap(vecSide.begin()+1, vecSide.begin()+2);
 
-    if(vecSide[1] == undefside && vecSide[2] == undefside)
+    if(_vecSide[1] == undefside && _vecSide[2] == undefside)
         ptype = center;
 
-    if(vecSide[1] != undefside && vecSide[2] == undefside){
-        if(areOpposite(vecSide[1], vecSide[2]))
+    if(_vecSide[1] != undefside && _vecSide[2] == undefside){
+        if(areOpposite(_vecSide[1], _vecSide[2]))
             throw std::runtime_error(__func__ + std::string(": Pair of FaceSides contain opposite faces."));
         ptype = edge;
     }
 
-    if(vecSide[1] != undefside && vecSide[2] != undefside){
-        if(anyOpposite(vecSide[0], vecSide[1], vecSide[2]))
+    if(_vecSide[1] != undefside && _vecSide[2] != undefside){
+        if(anyOpposite(_vecSide[0], _vecSide[1], _vecSide[2]))
             throw std::runtime_error(__func__ + std::string(": Triplet of FaceSides contain opposite faces."));
         ptype = corner;
     }
@@ -132,16 +132,3 @@ Position& Position::operator*=(const FaceSide& rhs){
     }    
     return *this;
 }
-
-/**
- * What are edge equivalent Positions?
- *
- * Observe the current orientation of Cube. If a FaceSide 'fs' is in horizontal plane (up or down),
- * rotate the cube about a horizontal axis parallel to front FaceSide till 'fs' coincide with the front.
- * Cubelet that's at edge Position (front,up) now was let's say at Position 'p_fu_before'. Then 'p_fu_before'
- * is 'up edge equivalence of fs' denoted as
- *
- *      p_fu_before = e(up,fs)
- *
- * */
-void setEdgeEquivalentPosition(const FaceSide& f, Position& u, Position& r, Position& d, Position& l);

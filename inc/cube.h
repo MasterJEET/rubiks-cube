@@ -8,8 +8,10 @@
 #ifndef CUBE_H
 #define CUBE_H
 
-//Maximum number of Cubelets in Cube
+//Maximum number of visible Cubelets in Cube
 #define __MAX_CUB__ 26
+//Maximum number of facelets in 3x3 cube
+#define __MAX_FAC__ 54
 
 #include <iostream>
 #include <vector>
@@ -20,13 +22,17 @@
 
 
 typedef std::array<Cubelet, __MAX_CUB__> arrCubelet;
+typedef std::array<Facelet, __MAX_FAC__> arrFacelet;
 
 
 class Cube {
     private:
 
-        ///Map for storing pointers to Cubelets with Position as key
+        ///Array for storing Cubelets with CubeletPosition as key
         arrCubelet aCubelet;
+
+        ///Array for storing Facelets with FaceletPosition as key
+        arrFacelet aFacelet;
 
         ///Auxilliary functions only to be used by the class
         ///Given a FaceSide it return all the FaceletPosition that corresponds that FaceSide
@@ -53,34 +59,27 @@ class Cube {
         Facelet getFacelet(const FaceSide fside1, const FaceSide fside2) const{ return getFacelet( {fside1, fside2 } ); }
 
         ///get Facelet located at FaceletPosition
-        Facelet getFacelet(const FaceletPosition pos ) const{ return Cubelet::aFacelet.at( pos ) ; }
+        Facelet getFacelet(const FaceletPosition pos ) const{ return aFacelet.at( pos ) ; }
 
         ///get Cubelet from CubeletPosition
         Cubelet getCubelet(const CubeletPosition pos) const{ return aCubelet.at( pos ); }
 
         ///display a given face (position and color)
-        void show(const FaceSide f);
+        void show(const FaceSide& f);
 
-        /** Turn the Cube anti-clockwise w.r.t axis (& sense of rotation) specified by FaceSide
-         *
-         * Let 1 & 2 denotes the state of Cube before & after the operation. With usual notation of
-         * - F: Front
-         * - B: Back
-         * - U: Up
-         * - D: Down
-         * - L: Left
-         * - R: Right
-         *
-         * If operated with FaceSide Up on Cube, turn the Cube so that Up and Down Faces remain at their place. Front FaceSide turns to Right, Right turns to Back and so on.
-         * - 1U -> 2U
-         * - 1D -> 2D
-         * - 1F -> 2R
-         * - 1R -> 2B
-         * - 1B -> 2L
-         * - 1L -> 2F
-         *
-         */
-        Cube& operator*=(const FaceSide& rhs);
+        void rotateLayer(const FaceSide& f, bool is_clockwise = true, bool is_mid = false);
+
+        ///Rotate the given Face of the Cube in clockwise [default] or anticlockwise
+        ///fashion as viewed from that (given FaceSide) side
+        void rotateSide(const FaceSide& f, bool is_clockwise = true);
+
+        ///Rotate Layer of Cube parallel to given FaceSide and passing through central
+        ///point of Cube in clockwise [default] or anti-clockwise fashion as viewed from
+        ///given FaceSide.
+        void rotateMid(const FaceSide& f, bool is_clockwise = true);
+
+        /// Rotate the Cube clockwise as viewd from specified FaceSide
+        void rotate(const FaceSide& f,bool is_clockwise = true);
 };
 
 #endif

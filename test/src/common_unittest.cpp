@@ -121,6 +121,52 @@ TEST(cubemetabolism, mapping) {
 
 }
 
+TEST(faceside,equivalence){
+    FaceSide f,u,r,d,l;
+
+    f = front;
+    setEquivalentFaceSide(f,u,r,d,l);
+    EXPECT_EQ(up,u);
+    EXPECT_EQ(right,r);
+    EXPECT_EQ(down,d);
+    EXPECT_EQ(left,l);
+
+    f = back;
+    setEquivalentFaceSide(f,u,r,d,l);
+    EXPECT_EQ(up,u);
+    EXPECT_EQ(left,r);
+    EXPECT_EQ(down,d);
+    EXPECT_EQ(right,l);
+
+    f = up;
+    setEquivalentFaceSide(f,u,r,d,l);
+    EXPECT_EQ(back,u);
+    EXPECT_EQ(right,r);
+    EXPECT_EQ(front,d);
+    EXPECT_EQ(left,l);
+
+    f = down;
+    setEquivalentFaceSide(f,u,r,d,l);
+    EXPECT_EQ(front,u);
+    EXPECT_EQ(right,r);
+    EXPECT_EQ(back,d);
+    EXPECT_EQ(left,l);
+
+    f = left;
+    setEquivalentFaceSide(f,u,r,d,l);
+    EXPECT_EQ(up,u);
+    EXPECT_EQ(front,r);
+    EXPECT_EQ(down,d);
+    EXPECT_EQ(back,l);
+
+    f = right;
+    setEquivalentFaceSide(f,u,r,d,l);
+    EXPECT_EQ(up,u);
+    EXPECT_EQ(back,r);
+    EXPECT_EQ(down,d);
+    EXPECT_EQ(front,l);
+}
+
 TEST_F(OverloadingTest, basics) {
     /* === Testing overloaded 'operator*' ===
      * Call to operator* makes call to 'operator*='

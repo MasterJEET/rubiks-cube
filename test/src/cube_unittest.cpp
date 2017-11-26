@@ -217,3 +217,63 @@ TEST_F(CubeTest, show){
     cube.show(up);
     cube.show(down);
 }
+
+
+TEST_F(CubeTest, rotateSide){
+    Cube cube_old(cube);
+    cube.rotateSide(back);
+    
+    EXPECT_EQ(cube_old.getCubelet(back), cube.getCubelet(back));
+    
+    EXPECT_EQ(cube_old.getCubelet({up,back})*back, cube.getCubelet({back,left}));
+    EXPECT_EQ(cube_old.getCubelet({right,back})*back, cube.getCubelet({back,up}));
+    EXPECT_EQ(cube_old.getCubelet({down,back})*back, cube.getCubelet({back,right}));
+    EXPECT_EQ(cube_old.getCubelet({left,back})*back, cube.getCubelet({back,down}));
+    
+    EXPECT_EQ(cube_old.getCubelet({up,back,right})*back, cube.getCubelet({up,back,left}));
+    EXPECT_EQ(cube_old.getCubelet({up,back,left})*back, cube.getCubelet({down,back,left}));
+    EXPECT_EQ(cube_old.getCubelet({down,back,left})*back, cube.getCubelet({down,back,right}));
+    EXPECT_EQ(cube_old.getCubelet({down,back,right})*back, cube.getCubelet({up,back,right}));
+    
+    
+    Cube cube_new(cube_old);
+    cube_new.rotateSide(left,false);    //set is_clockwise flag to false, face will be rotated anti-clockwise
+    
+    EXPECT_EQ(cube_old.getCubelet(left), cube_new.getCubelet(left));
+    
+    EXPECT_EQ(cube_old.getCubelet({up,left})*right, cube_new.getCubelet({back,left}));
+    EXPECT_EQ(cube_old.getCubelet({back,left})*right, cube_new.getCubelet({down,left}));
+    EXPECT_EQ(cube_old.getCubelet({down,left})*right, cube_new.getCubelet({front,left}));
+    EXPECT_EQ(cube_old.getCubelet({front,left})*right, cube_new.getCubelet({up,left}));
+    
+    EXPECT_EQ(cube_old.getCubelet({up,back,left})*right, cube_new.getCubelet({down,back,left}));
+    EXPECT_EQ(cube_old.getCubelet({down,back,left})*right, cube_new.getCubelet({down,front,left}));
+    EXPECT_EQ(cube_old.getCubelet({down,front,left})*right, cube_new.getCubelet({up,front,left}));
+    EXPECT_EQ(cube_old.getCubelet({up,front,left})*right, cube_new.getCubelet({up,back,left}));
+}
+
+
+TEST_F(CubeTest,rotateMid){
+
+    Cube cube_old(cube);
+    cube.rotateMid(down);
+    
+    EXPECT_EQ(cube_old.getCubelet(front)*down, cube.getCubelet(right));
+    EXPECT_EQ(cube_old.getCubelet(right)*down, cube.getCubelet(back));
+    EXPECT_EQ(cube_old.getCubelet(back)*down, cube.getCubelet(left));
+    EXPECT_EQ(cube_old.getCubelet(left)*down, cube.getCubelet(front));
+    
+    EXPECT_EQ(cube_old.getCubelet({front,right})*down, cube.getCubelet({back,right}));
+    EXPECT_EQ(cube_old.getCubelet({back,right})*down, cube.getCubelet({back,left}));
+    EXPECT_EQ(cube_old.getCubelet({back,left})*down, cube.getCubelet({front,left}));
+    EXPECT_EQ(cube_old.getCubelet({front,left})*down, cube.getCubelet({front,right}));
+
+
+    Cube cube_new(cube_old);
+    cube_new.rotateMid(right,false);    //set is_clockwise flag to false, layer will be rotated anti-clockwise
+
+    EXPECT_EQ(cube_old.getCubelet(front)*down, cube.getCubelet(down));
+    EXPECT_EQ(cube_old.getCubelet(down)*down, cube.getCubelet(back));
+    EXPECT_EQ(cube_old.getCubelet(back)*down, cube.getCubelet(up));
+    EXPECT_EQ(cube_old.getCubelet(up)*down, cube.getCubelet(front));
+}
