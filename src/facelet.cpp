@@ -22,7 +22,7 @@ bool operator==(const FaceletPosition& lhs, const FaceletPosition& rhs){
     if ( lhs.getSideAt(1) == rhs.getSideAt(1) && lhs.getSideAt(2) == rhs.getSideAt(2) )
         return true;
 
-    //2nd and 3rd FaceSide equal in rever order, 2.b.ii described above
+    //2nd and 3rd FaceSide equal in rever order
     if ( lhs.getSideAt(1) == rhs.getSideAt(2) && lhs.getSideAt(2) == rhs.getSideAt(1) )
         return true;
 

@@ -16,7 +16,7 @@
 class FaceletPosition: public Position  {
     public:
         ///All constructor similar to those in base class Position
-        FaceletPosition(){};
+        FaceletPosition(): Position(){};
         FaceletPosition(const FaceSide first): Position(first){};
         FaceletPosition(const FaceSide first, const FaceSide second): Position(first, second){};
         FaceletPosition(const FaceSide first, const FaceSide second, const FaceSide third): Position(first, second, third){};
@@ -107,23 +107,5 @@ class Facelet {
         ///Check if any of given three Facelets contain opposite faces
         friend bool anyOpposite(const Facelet& first, const Facelet& second, const Facelet& third){ return anyOpposite(first.side(), second.side(), third.side()); }
 };
-
-
-/*! \fn vecFletPos vecEdgeEquFletPos(const FaceSide& f)
- *  \brief  This function retuns (vector of) up, right, down & left (in this order)
- *  edge (Facelet)Position equivalence of FaceSide 'f'.
- *
- * This exactly same as vecEdgeEquCletPos (defined in cubelet.h) except we return
- * vector of FaceletPositon instead of CubeletPosition. FaceletPosition fp_u be 'up' edge
- * equivalent of FaceSide f = left. Then we write
- *
- *      fe(up,f) = fp_u
- *
- * Note: For any FaceSie f and x, we have
- *      * fe(x,f) = FaceletPosition(f,x(f)) //here f must be first parameter
- *      * fe(x,front) = FaceletPosition(f,x)    //see common.h for definition of x(f)
- *
- * */
-vecFletPos vecEdgeEquFletPos(const FaceSide& f);
 
 #endif

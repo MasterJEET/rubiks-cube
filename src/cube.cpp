@@ -9,16 +9,19 @@
 
 Cube::Cube(std::istream &is){
 
+    //Array for storing Facelets with FaceletPosition as key
+    arrFacelet aFacelet;
+
     //Get all Faces
     for(int i=0; i<6; i++)
-        createFace(is);
+        createFace(is,aFacelet);
 
 
     //Create Cubelets from arrFacelet and store it in Cubelet array
-    createCube();
+    createCube(aFacelet);
 };
 
-void Cube::createFace(std::istream &is ){
+void Cube::createFace(std::istream &is, arrFacelet& aFacelet ){
 
     std::string strFaceSide, strFaceSide2, strColor;
     FaceSide ctrSide, edgeSide, corSide;
@@ -54,7 +57,7 @@ void Cube::createFace(std::istream &is ){
 
 };
 
-void Cube::createCube(){
+void Cube::createCube(arrFacelet& aFacelet){
    
     //Vector of all valid FaceSides
     std::vector<FaceSide> vSingleFS = {
@@ -96,6 +99,7 @@ void Cube::createCube(){
     }
 }
 
+
 void Cube::show(const FaceSide& f){
     auto tlist = getFaceletPosition(f);
     auto it = tlist.begin();
@@ -109,7 +113,7 @@ void Cube::show(const FaceSide& f){
 }
 
 
-void Cube::rotateLayer(const FaceSide& f, bool is_clockwise , bool is_mid){
+void Cube::rotateLayer(const FaceSide& f, bool is_clockwise, std::size_t no_of_turns , bool is_mid){
 
     //edge ( center if is_mid is true ) positions to operate on
     vecCletPos ve;
@@ -124,46 +128,96 @@ void Cube::rotateLayer(const FaceSide& f, bool is_clockwise , bool is_mid){
         vc = vecCornerEquivalence<CubeletPosition>(f);
     };
 
+    no_of_turns %= 4;
 
     for(const auto& v:{ve,vc}){
+
         //Updating Cubelets at required position
-        for(const auto& p:v)
-            aCubelet[p] *= (is_clockwise?f:opposite(f));
+        for(const auto& p:v){
+            switch(no_of_turns){
+                case 1:
+                    aCubelet[p] *= (is_clockwise?f:opposite(f));
+                    break;
+                case 2:
+                    aCubelet[p] *= (is_clockwise?f:opposite(f));
+                    aCubelet[p] *= (is_clockwise?f:opposite(f));
+                    break;
+                case 3:
+                    aCubelet[p] *= (!is_clockwise?f:opposite(f));
+                    break;
+                default:
+                    break;
+            }
+        }
+
         //Relocating Cubelets to updated position
         std::size_t u = *v.begin();
         std::size_t r = *(v.begin()+1);
         std::size_t d = *(v.begin()+2);
         std::size_t l = *(v.begin()+3);
-        std::swap(aCubelet[u], aCubelet[r]);
-        if(is_clockwise){
-            std::swap(aCubelet[l], aCubelet[u]);
-            std::swap(aCubelet[d], aCubelet[l]);
-        }else{
-            std::swap(aCubelet[d], aCubelet[r]);
-            std::swap(aCubelet[l], aCubelet[d]);
+
+        switch(no_of_turns){
+            case 1:
+                std::swap(aCubelet[u], aCubelet[r]);
+                if(is_clockwise){
+                    std::swap(aCubelet[l], aCubelet[u]);
+                    std::swap(aCubelet[d], aCubelet[l]);
+                }else{
+                    std::swap(aCubelet[d], aCubelet[r]);
+                    std::swap(aCubelet[l], aCubelet[d]);
+                }
+                break;
+            case 2:
+                std::swap(aCubelet[u], aCubelet[d]);
+                std::swap(aCubelet[d], aCubelet[u]);
+                break;
+            case 3:
+                std::swap(aCubelet[u], aCubelet[r]);
+                if(!is_clockwise){
+                    std::swap(aCubelet[l], aCubelet[u]);
+                    std::swap(aCubelet[d], aCubelet[l]);
+                }else{
+                    std::swap(aCubelet[d], aCubelet[r]);
+                    std::swap(aCubelet[l], aCubelet[d]);
+                }
+                break;
+            default:
+                break;
         }
+
     }
 
 }
 
-void Cube::rotateSide(const FaceSide& f, bool is_clockwise ){
-    rotateLayer(f,is_clockwise);
+
+void Cube::rotateSide(const FaceSide& f, bool is_clockwise, std::size_t no_of_turns){
+    rotateLayer(f,is_clockwise,no_of_turns);
+}
+void Cube::rotateSide(const FaceSide& f, std::size_t no_of_turns, bool is_clockwise ){
+    rotateLayer(f,is_clockwise,no_of_turns);
 }
 
-void Cube::rotateMid(const FaceSide& f, bool is_clockwise){
-    rotateLayer(f,is_clockwise,true);
+
+void Cube::rotateMid(const FaceSide& f, bool is_clockwise,std::size_t no_of_turns){
+    rotateLayer(f,is_clockwise,no_of_turns,true);
+}
+void Cube::rotateMid(const FaceSide& f,std::size_t no_of_turns, bool is_clockwise){
+    rotateLayer(f,is_clockwise,no_of_turns,true);
 }
 
 
-void Cube::rotate(const FaceSide& f,bool is_clockwise){
+void Cube::rotate(const FaceSide& f,bool is_clockwise,std::size_t no_of_turns){
+    rotate(f,no_of_turns,is_clockwise);
+}
+void Cube::rotate(const FaceSide& f,std::size_t no_of_turns,bool is_clockwise){
     FaceSide b = opposite(f);
 
     //rotate front  equivalent (i.e. given ) Face
-    rotateSide(f,is_clockwise);
+    rotateSide(f,is_clockwise,no_of_turns);
     //rotate back equivalent (i.e. opposite of given) Face in the same absolute sense as in case of 'up equivalence'
-    rotateSide(b,!is_clockwise);
+    rotateSide(b,!is_clockwise,no_of_turns);
     //rotate mid equivalent layer
-    rotateMid(f,is_clockwise);
+    rotateMid(f,no_of_turns,is_clockwise);
 }
 
 

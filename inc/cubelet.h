@@ -24,7 +24,7 @@ typedef std::list<FaceletPosition> listFaceletPosition;
 class CubeletPosition : public Position {
     public:
         ///Constructors same as those of Position
-        CubeletPosition(){};
+        CubeletPosition(): Position(){};
         CubeletPosition(const FaceSide first): Position(first){};
         CubeletPosition(const FaceSide first, const FaceSide second): Position(first, second){};
         CubeletPosition(const FaceSide first, const FaceSide second, const FaceSide third): Position(first, second, third){};
@@ -117,8 +117,6 @@ class Cubelet{
 
         /// Rotate about axis defined by FaceSide, return the object
         friend Cubelet operator*(Cubelet lhs, const FaceSide& rhs){ lhs *= rhs; return lhs; }
-        
-        friend class Cube;
 
 };
 

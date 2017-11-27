@@ -33,14 +33,11 @@ class Cube {
         ///Array for storing Cubelets with CubeletPosition as key
         arrCubelet aCubelet;
 
-        ///Array for storing Facelets with FaceletPosition as key
-        arrFacelet aFacelet;
-
         ///get all Facelets of a face from std::stream
-        void createFace(std::istream &is );
+        void createFace(std::istream &is,   arrFacelet& aFacelet );
 
         ///create Cubelets and store in array with help of hashFacelet
-        void createCube();
+        void createCube(arrFacelet& aFacelet);
 
         /*! Rotate any specified layer of Cube
          *
@@ -49,7 +46,7 @@ class Cube {
          * fashion as viewd from specified FaceSide
          *
          * */
-        void rotateLayer(const FaceSide& f, bool is_clockwise = true, bool is_mid = false);
+        void rotateLayer(const FaceSide& f, bool is_clockwise = true, std::size_t no_of_turns = 1, bool is_mid = false);
 
     public:
 
@@ -66,7 +63,7 @@ class Cube {
         Facelet getFacelet(const FaceSide fside1, const FaceSide fside2) const{ return getFacelet( {fside1, fside2 } ); }
 
         ///get Facelet located at FaceletPosition
-        Facelet getFacelet(const FaceletPosition pos ) const{ return aFacelet.at( pos ) ; }
+        Facelet getFacelet(const FaceletPosition pos ) const { return aCubelet.at( CubeletPosition (pos) ).getFacelet(pos) ; }
 
         ///get corner Cubelet
         Cubelet getCubelet(const FaceSide& f1, const FaceSide& f2, const FaceSide& f3) const{ return getCubelet({f1,f2,f3}); }
@@ -80,13 +77,16 @@ class Cube {
         ///display a given face (position and color)
         void show(const FaceSide& f);
 
+
         /*! Rotate any specified side of Cube
          *
          * Rotate the given Face of the Cube in clockwise [default] or anticlockwise
          * fashion as viewed from that (given FaceSide) side
          *
          */
-        void rotateSide(const FaceSide& f, bool is_clockwise = true);
+        void rotateSide(const FaceSide& f, bool is_clockwise, std::size_t no_of_turns = 1);
+        void rotateSide(const FaceSide& f, std::size_t no_of_turns = 1, bool is_clockwise = true);
+
 
         /*! Rotate any specified middle layer of Cube
          *
@@ -95,7 +95,9 @@ class Cube {
          * given FaceSide.
          *
          */
-        void rotateMid(const FaceSide& f, bool is_clockwise = true);
+        void rotateMid(const FaceSide& f, bool is_clockwise, std::size_t no_of_turns = 1);
+        void rotateMid(const FaceSide& f, std::size_t no_of_turns = 1, bool is_clockwise = true);
+
 
         /*! Rotate the Cube 
          *
@@ -118,7 +120,8 @@ class Cube {
          * - 1L -> 2B
          *
          */
-        void rotate(const FaceSide& f,bool is_clockwise = true);
+        void rotate(const FaceSide& f, bool is_clockwise, std::size_t no_of_turns = 1);
+        void rotate(const FaceSide& f, std::size_t no_of_turns = 1, bool is_clockwise = true);
 };
 
 
