@@ -50,26 +50,46 @@ extern const char *FaceSide_str[];
 
 extern const char *PositionType_str[];
 
-extern std::ostream& operator <<(std::ostream& os, Color);
+std::ostream& operator <<(std::ostream& os, Color);
 
-extern std::ostream& operator <<(std::ostream& os, FaceSide);
+std::ostream& operator <<(std::ostream& os, FaceSide);
 
-extern std::ostream& operator <<(std::ostream& os, PositionType);
+std::ostream& operator <<(std::ostream& os, PositionType);
 
-///Overloding to implement cross multiplication similar to those for
-///Cartesian coordinates (Right hand system), compund assignment
+
+/*! \fn FaceSide& operator*=(FaceSide& lhs, const FaceSide& rhs)
+ *  \brief  Overloding to implement cross multiplication similar to those for
+ *  Cartesian coordinates (Right hand system), compund assignment
+ *
+ * */
 FaceSide& operator*=(FaceSide& lhs, const FaceSide& rhs);
 
-///Overloading multiplication
+
+
+/*! \fn FaceSide operator*(FaceSide lhs, const FaceSide& rhs)
+ *  \brief  Overloading multiplication
+ *
+ * */
 FaceSide operator*(FaceSide lhs, const FaceSide& rhs);
 
-///Check if given pair of FaceSides are opposite of each other
+
+/*! \fn bool areOpposite(const FaceSide first,const FaceSide second)
+ *  \brief  Check if given pair of FaceSides are opposite of each other
+ *
+ * */
 bool areOpposite(const FaceSide first,const FaceSide second);
 
-///Check if any of the given FaceSides form opposite FaceSides
+
+/*! \fn bool anyOpposite(const FaceSide first,const FaceSide second,const FaceSide third)
+ *  \brief  Check if any of the given FaceSides form opposite FaceSides
+ * */
 bool anyOpposite(const FaceSide first,const FaceSide second,const FaceSide third);
 
-///Return opposite FaceSide
+
+/*! \fn Return opposite FaceSide
+ *  \brief  FaceSide opposite(const FaceSide& fs)
+ *
+ * */
 FaceSide opposite(const FaceSide& fs);
 
 /*! \fn void setEquivalentFaceSide(const FaceSide& f,FaceSide& u,FaceSide& r,FaceSide& d,FaceSide& l)
@@ -96,27 +116,47 @@ FaceSide opposite(const FaceSide& fs);
  * */
 void setEquivalentFaceSide(const FaceSide& f,FaceSide& u,FaceSide& r,FaceSide& d,FaceSide& l);
 
-extern void createmapColor();
-extern void createmapFaceSide();
+void createmapColor();
+void createmapFaceSide();
 
-extern Color ColorFromLetter(char col);
-extern Color ColorFromLetter(std::string col);
-extern FaceSide FaceSideFromLetter(char fs);
-extern FaceSide FaceSideFromLetter(std::string fs);
+Color ColorFromLetter(char col);
+Color ColorFromLetter(std::string col);
+FaceSide FaceSideFromLetter(char fs);
+FaceSide FaceSideFromLetter(std::string fs);
 
-///SIGTERM handler
+
+/*! \fn void handler(int sig)
+ *  \brief  SIGTERM handler
+ *
+ * */
 void handler(int sig);
 
-///Colored output format for Color
+
+/*! \fn std::string colorFormat(const Color col)
+ *  \brief  Colored output format for Color
+ *
+ * */
 std::string colorFormat(const Color col);
 
-///Print all elements of toColor map
+
+/*! \fn void printAllColor()
+ *  \brief  Print all elements of toColor map
+ *
+ * */
 void printAllColor();
 
-///Print all elemensts of toFaceSide map
+
+/*! \fn void printAllFaceSide()
+ *  \brief  Print all elemensts of toFaceSide map
+ *
+ * */
 void printAllFaceSide();
 
-/// Basic checks and setting before program starts
+
+/*! \fn std::string getHome()
+ *  \brief  Basic checks and setting before program starts
+ *
+ * */
 std::string getHome();
 
 

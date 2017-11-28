@@ -39,9 +39,9 @@ class CubeTest: public ::testing::Test {
 
 /* ================== createFace =================
  * Cube() constructor uses Cube::createFace() function
- * read data from input stream and store into map.
- * createFace() is already run on 'cube_f' Cube object
- * Map map value will be checked here to confirm
+ * read data from input stream and store into array.
+ * createFace() is already run on 'cube_f' Cube object.
+ * Array value will be checked here to confirm
  * createFace() worked fine
  *
  * 1. Cubelet::createFace(std::istream&)
@@ -303,6 +303,16 @@ TEST_F(CubeTest,rotate){
     EXPECT_EQ(cube_old.getCubelet(down,back)*back, cube_new.getCubelet(back,right));
     EXPECT_EQ(cube_old.getCubelet(right,up,front)*back, cube_new.getCubelet(up,left,front));
 
+
+    cube_new = cube_old;
+    cube_new.rotate(right,2,true);
+    EXPECT_EQ((cube_old.getFacelet(right,back)*left)*left, cube_new.getFacelet(right,front));
+    EXPECT_EQ(cube_old.getFacelet(left), cube_new.getFacelet(left));
+    EXPECT_EQ((cube_old.getFacelet(front,left,down)*left)*left, cube_new.getFacelet(back,up,left));
+
+    cube_new = cube_old;
+    cube_new.rotate(down,false,7);
+    EXPECT_EQ(cube_old.getFacelet(back,up,right)*down, cube_new.getFacelet(left,back,up));
 }
 
 

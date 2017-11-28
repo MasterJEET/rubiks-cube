@@ -169,7 +169,7 @@ void Cube::rotateLayer(const FaceSide& f, bool is_clockwise, std::size_t no_of_t
                 break;
             case 2:
                 std::swap(aCubelet[u], aCubelet[d]);
-                std::swap(aCubelet[d], aCubelet[u]);
+                std::swap(aCubelet[r], aCubelet[l]);
                 break;
             case 3:
                 std::swap(aCubelet[u], aCubelet[r]);
