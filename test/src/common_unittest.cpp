@@ -9,6 +9,7 @@
 #include "gtest/gtest.h"
 #include "common.h"
 #include "testcommon.h"
+#include <sstream>
 
 class OverloadingTest : public ::testing::Test{
     protected:
@@ -105,19 +106,33 @@ TEST(cubemetabolism, mapping) {
      * ==================================================
      */
 
-    /// Color from std::string with single letter
-    EXPECT_EQ(blue, ColorFromLetter(std::string("B")));
-    /// Color from string literal of single character
-    EXPECT_EQ(white, ColorFromLetter("W"));
-    /// Color from a single character literal
-    EXPECT_EQ(green, ColorFromLetter('G'));
+    Color col;
+    // Color from std::string with single letter
+    ColorFromLetter(std::string("B"), col);
+    EXPECT_EQ(blue, col);
+    // Color from string literal of single character
+    ColorFromLetter("W", col);
+    EXPECT_EQ(white, col);
+    // Color from a single character literal
+    ColorFromLetter('G', col);
+    EXPECT_EQ(green, col);
+    // When letter does not represent any Color
+    EXPECT_FALSE(ColorFromLetter('X',col));
 
-    /// FaceSide from std::string with single letter
-    EXPECT_EQ(down, FaceSideFromLetter(std::string("D")));
-    /// FaceSide from string literal of single character
-    EXPECT_EQ(left, FaceSideFromLetter("L"));
-    /// FaceSide from a single character literal
-    EXPECT_EQ(back, FaceSideFromLetter('B'));
+
+    FaceSide fs;
+    // FaceSide from std::string with single letter
+    FaceSideFromLetter(std::string("D"), fs);
+    EXPECT_EQ(down, fs);
+    // FaceSide from string literal of single character
+    FaceSideFromLetter("L", fs);
+    EXPECT_EQ(left, fs);
+    // FaceSide from a single character literal
+    FaceSideFromLetter('B', fs);
+    EXPECT_EQ(back, fs);
+    // When letter doesn't represent any FaceSide
+    EXPECT_FALSE(FaceSideFromLetter('X',fs));
+
 
 }
 
@@ -166,6 +181,75 @@ TEST(faceside,equivalence){
     EXPECT_EQ(down,d);
     EXPECT_EQ(front,l);
 }
+
+
+TEST(input, next){
+    std::string str = "\
+                       #Following is an example of sample Face specification\n\
+                       \
+                       Front Red        #Here we spcify which side and color for center Facelet\n\
+                       right Blue       # Color for edge Facelet at front\n\
+                       Left orange      #Hey you reached last point\n";
+    std::string letter;
+    std::stringstream ss(str);
+
+    next(ss,letter);
+    EXPECT_EQ("F",letter);
+
+    next(ss,letter);
+    EXPECT_EQ("R",letter);
+
+    next(ss,letter);
+    EXPECT_EQ("R",letter);
+
+    next(ss,letter);
+    EXPECT_EQ("B",letter);
+
+    next(ss,letter);
+    EXPECT_EQ("L",letter);
+
+    next(ss,letter);
+    EXPECT_EQ("O",letter);
+
+    EXPECT_FALSE(next(ss,letter));
+
+}
+
+TEST(input,assertColor){
+    std::string str = "\
+                       #Following is an example of sample Face specification\n\
+                       \
+                       Front Red    #Here we spcify which side and color for center Facelet\n\
+                       Left         #Hey you reached last point\n";
+    std::string letter;
+    std::stringstream ss(str);
+    next(ss,letter);
+
+    Color col;
+    assertColor(ss,col);
+    EXPECT_EQ(Red,  col);
+
+    EXPECT_THROW(assertColor(ss,col), std::runtime_error);  //Due to finding a letter that doesn't specify a Color i.e. 'L' (in Left)
+    EXPECT_THROW(assertColor(ss,col), std::runtime_error);  //Due to stream exhaustion
+}
+
+
+TEST(input, assertFaceSide){
+    std::string str = "\
+                       #Following is an example of sample Face specification\n\
+                       \
+                       Left white   #Hey you reached last point\n";
+    std::string letter;
+    std::stringstream ss(str);
+    
+    FaceSide fs;
+    assertFaceSide(ss, fs);
+    EXPECT_EQ(Left, fs);
+
+    EXPECT_THROW(assertFaceSide(ss, fs), std::runtime_error); //Due to finding a letter that doesn't specify a FaceSide i.e. 'w' (in white
+    EXPECT_THROW(assertFaceSide(ss, fs), std::runtime_error); //Due to stream exhaustion
+}
+
 
 TEST_F(OverloadingTest, basics) {
     /* === Testing overloaded 'operator*' ===

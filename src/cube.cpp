@@ -14,48 +14,62 @@ Cube::Cube(std::istream &is){
 
     //Get all Faces
     for(int i=0; i<6; i++)
-        createFace(is,aFacelet);
+        createFaceFromLinearInput(is,aFacelet);
 
 
     //Create Cubelets from arrFacelet and store it in Cubelet array
     createCube(aFacelet);
 };
 
-void Cube::createFace(std::istream &is, arrFacelet& aFacelet ){
+void Cube::createFaceFromStepInput(std::istream &is, arrFacelet& aFacelet ){
 
-    std::string strFaceSide, strFaceSide2, strColor;
     FaceSide ctrSide, edgeSide, corSide;
     Color col;
 
     //Get FaceSide and Color for Center Facelet
-    is >> strFaceSide >> strColor;
-    ctrSide = FaceSideFromLetter(strFaceSide);
-    col = ColorFromLetter(strColor);
+    assertFaceSide(is, ctrSide );
+    assertColor(is, col );
 
     //Create Center Facelet and add it to array
     aFacelet[ FaceletPosition(ctrSide) ] = Facelet(col, ctrSide);
 
     //Get FaceSide and Color for Edge Facelets and add them to array
     for(size_t i=0; i<4; i++){
-        is >> strFaceSide >> strColor;
-        edgeSide = FaceSideFromLetter(strFaceSide);
-        col = ColorFromLetter(strColor);
+        assertFaceSide(is, edgeSide );
+        assertColor(is, col);
         FaceletPosition fp(ctrSide, edgeSide);
         aFacelet[ fp ] = Facelet(col, fp);
     }
 
     //Get FaceSide and Color for Corner Facelets and add them to array
     for(size_t i=0; i<4; i++){
-        is >> strFaceSide >> strFaceSide2 >> strColor;
-        edgeSide = FaceSideFromLetter(strFaceSide);
-        corSide = FaceSideFromLetter(strFaceSide2);
-        col = ColorFromLetter(strColor);
+        assertFaceSide(is, edgeSide );
+        assertFaceSide(is, corSide );
+        assertColor(is, col );
         FaceletPosition fp(ctrSide, edgeSide, corSide);
         aFacelet[ fp ] = Facelet(col, fp);
     }
 
+};
+
+void Cube::createFaceFromLinearInput(std::istream &is, arrFacelet& aFacelet ){
+    FaceSide f;
+
+    //Get front equivalent FaceSide
+    assertFaceSide(is, f);
+
+    //Get equivalent FaceletPositions
+    listFletPos lfp = getFaceletPosition(f);
+
+    //Creating Facelets and adding it to array
+    for(const auto& fp: lfp){
+        Color col;
+        assertColor(is,col);
+        aFacelet[ fp ] = Facelet(col, fp);
+    }
 
 };
+
 
 void Cube::createCube(arrFacelet& aFacelet){
    
@@ -105,8 +119,7 @@ void Cube::show(const FaceSide& f){
     auto it = tlist.begin();
     while( it != tlist.end()){
         for(int i=0;i<3;i++,it++){
-            Color c = getFacelet(*it).getColor();
-            std::cout << colorFormat(c) << " " ;
+            std::cout << getFacelet(*it).colorFormat() << " " ;
         }
         std::cout << std::endl;
     }
@@ -214,7 +227,7 @@ void Cube::rotate(const FaceSide& f,std::size_t no_of_turns,bool is_clockwise){
 
     //rotate front  equivalent (i.e. given ) Face
     rotateSide(f,is_clockwise,no_of_turns);
-    //rotate back equivalent (i.e. opposite of given) Face in the same absolute sense as in case of 'up equivalence'
+    //rotate back equivalent (i.e. opposite of given) Face in the same absolute sense as in case of 'front equivalence'
     rotateSide(b,!is_clockwise,no_of_turns);
     //rotate mid equivalent layer
     rotateMid(f,no_of_turns,is_clockwise);

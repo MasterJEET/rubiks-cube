@@ -26,7 +26,7 @@ class CubeTest: public ::testing::Test {
         CubeTest(): pf(front), pfd(front, down), pfur(front, up, right),
                     pd(down), pdl(down, left), pdfr(down, front, right)
          {
-            std::string filepath = std::string() + CUBE_HOME + "/test/dat/cube.dat";
+            std::string filepath = std::string() + CUBE_HOME + "/test/dat/cube_linear.dat";
             is_cube.open( filepath  );
             if(!is_cube)
                 throw std::runtime_error("Couldn't open file: \"" + filepath + "\"");
@@ -38,13 +38,13 @@ class CubeTest: public ::testing::Test {
 
 
 /* ================== createFace =================
- * Cube() constructor uses Cube::createFace() function
+ * Cube() constructor uses Cube::createFaceFromStepInput() function
  * read data from input stream and store into array.
- * createFace() is already run on 'cube_f' Cube object.
+ * createFaceFromStepInput() is already run on 'cube_f' Cube object.
  * Array value will be checked here to confirm
- * createFace() worked fine
+ * createFaceFromStepInput() worked fine
  *
- * 1. Cubelet::createFace(std::istream&)
+ * 1. Cubelet::createFaceFromStepInput(std::istream&)
  * 2. Cubelet::getFacelet(FaceSide);
  * 3. Cubelet::getFacelet(FaceSide, FaceSide);
  * 4. Cubelet::getFacelet(FaceSide, FaceSide, FaceSide);

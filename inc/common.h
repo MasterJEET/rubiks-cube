@@ -16,6 +16,7 @@
 #include <execinfo.h>
 #include <signal.h>
 #include <unistd.h>
+#include <limits>
 
 #   if __STDC_VERSION__ < 199901L
 #    if __GNUC__ >= 2
@@ -57,6 +58,36 @@ std::ostream& operator <<(std::ostream& os, FaceSide);
 std::ostream& operator <<(std::ostream& os, PositionType);
 
 
+
+/*! \fn bool next(std::istream& is, std::string& word)
+ *  \brief  Fetch next word from input stream
+ *
+ *  This will skip any comments (#this is comment) presnt at start of or in the line.
+ *  Set next word in stream to word argumnet.
+ *
+ *  Return:
+ *      *   true    : if parameter 'word' was set successfully
+ *      *   false   : otherwise i.e. stream exausted (or only comments left)
+ *
+ * */
+bool next(std::istream& is, std::string& letter);
+
+
+/*! \fn void assertColor(std::istream& is, Color& col)
+ *  \brief  get next word representing a Color, if failed throw runtime error
+ *
+ * */
+void assertColor(std::istream& is, Color& col);
+
+
+/*! \fn void assertFaceSide(std::istream& is, FaceSide& fs)
+ *  \brief  get next word representing a FaceSide, if failed throw runtime error
+ *
+ * */
+void assertFaceSide(std::istream& is, FaceSide& fs);
+
+
+
 /*! \fn FaceSide& operator*=(FaceSide& lhs, const FaceSide& rhs)
  *  \brief  Overloding to implement cross multiplication similar to those for
  *  Cartesian coordinates (Right hand system), compund assignment
@@ -82,6 +113,7 @@ bool areOpposite(const FaceSide first,const FaceSide second);
 
 /*! \fn bool anyOpposite(const FaceSide first,const FaceSide second,const FaceSide third)
  *  \brief  Check if any of the given FaceSides form opposite FaceSides
+ *
  * */
 bool anyOpposite(const FaceSide first,const FaceSide second,const FaceSide third);
 
@@ -91,6 +123,24 @@ bool anyOpposite(const FaceSide first,const FaceSide second,const FaceSide third
  *
  * */
 FaceSide opposite(const FaceSide& fs);
+
+
+/*! \fn bool isValidFaceSide(const std::string& f)
+ *  \brief  Returns true if the string (one letter) corresponds to a Valid FaceSide enum
+ *
+ *  List of string that corresponds to a valid FaceSide:
+ *          One letter string   ->  FaceSide
+ *          F   ->  Front
+ *          B   ->  Back
+ *          U   ->  Up
+ *          D   ->  Down
+ *          L   ->  Left
+ *          R   ->  Right
+ *
+ * */
+bool isValidFaceSide(const std::string& f);
+
+
 
 /*! \fn void setEquivalentFaceSide(const FaceSide& f,FaceSide& u,FaceSide& r,FaceSide& d,FaceSide& l)
  *  \brief  This function assign up, right, down & left equivalence of 'f' to 'u', 'r', 'd' & 'l' respectively.
@@ -119,10 +169,10 @@ void setEquivalentFaceSide(const FaceSide& f,FaceSide& u,FaceSide& r,FaceSide& d
 void createmapColor();
 void createmapFaceSide();
 
-Color ColorFromLetter(char col);
-Color ColorFromLetter(std::string col);
-FaceSide FaceSideFromLetter(char fs);
-FaceSide FaceSideFromLetter(std::string fs);
+bool ColorFromLetter(const char c, Color& col);
+bool ColorFromLetter(const std::string& s, Color& col);
+bool FaceSideFromLetter(const char c, FaceSide& fs);
+bool FaceSideFromLetter(const std::string& s, FaceSide& fs);
 
 
 /*! \fn void handler(int sig)
@@ -130,13 +180,6 @@ FaceSide FaceSideFromLetter(std::string fs);
  *
  * */
 void handler(int sig);
-
-
-/*! \fn std::string colorFormat(const Color col)
- *  \brief  Colored output format for Color
- *
- * */
-std::string colorFormat(const Color col);
 
 
 /*! \fn void printAllColor()

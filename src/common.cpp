@@ -45,6 +45,67 @@ std::ostream& operator <<(std::ostream& os, PositionType ptype){
     return os << PositionType_str[ptype];
 };
 
+
+
+bool next(std::istream& is, std::string& letter){
+
+    while(is){
+
+        //Skipping whitespace if any
+        is >> std::ws;
+        if(is.peek() == '#'){
+            is.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
+            continue;
+        }
+
+        if(is >> letter){
+
+            //Making it case insensitive , one can provide "red" or "Red"
+            //instead of "R" to indicate Color red 
+            letter = toupper(letter[0]);
+
+            return true;
+        }
+    }
+
+    //Execution reached here means the letter/word could NOT be extracted
+    return false;
+};
+
+
+
+void assertColor(std::istream& is, Color& col){
+
+    std::string l;
+    if(!next(is, l))
+        throw std::runtime_error("Cannot read Color from input. Please make sure to\
+                provide all required information to construct a Cube.\
+                Refer \"Cube.dat\" and \"<to be added>\" for sample input.");
+
+    if(!ColorFromLetter(l, col))
+        throw std::runtime_error("Invalid Color specification found:\
+                check b in X(a,b) of \"Color.def\" for allowed valid arguments.\
+                Refer \"Cube.dat\" and \"<to be added>\" for sample input.");
+};
+
+
+
+void assertFaceSide(std::istream& is, FaceSide& fs){
+
+    std::string l;
+    if(!next(is, l))
+        throw std::runtime_error("Cannot read FaceSide from input. Please make sure to\
+                provide all required information to construct a Cube.\
+                Refer \"Cube.dat\" and \"<to be added>\" for sample input.");
+
+    if(!FaceSideFromLetter(l, fs))
+        throw std::runtime_error("Invalid FaceSide specification found:\
+                check b in X(a,b) of \"Color.def\" for allowed valid arguments.\
+                Refer \"Cube.dat\" and \"<to be added>\" for sample input.");
+};
+
+
+
 FaceSide& operator*=(FaceSide& lhs, const FaceSide& rhs){
 
     //Handling undefside
@@ -182,31 +243,34 @@ void createmapFaceSide(){
 
 
 
-Color ColorFromLetter(char col) {
-    std::string s_col = &col;
-    return ColorFromLetter(s_col);
+bool ColorFromLetter(const char c, Color& col){
+    std::string s = &c;
+    return ColorFromLetter(s,col);
 };
 
 
-Color ColorFromLetter(std::string col){
+bool ColorFromLetter(const std::string& s, Color& col){
     createmapColor();
-    auto it = toColor.find(col);
+    auto it = toColor.find(s);
     if(it == toColor.end())
-        throw std::invalid_argument("Invalid Argument: check b in X(a,b) of \"Color.def\" for allowed valid arguments");
-    return it->second;
+        return false;
+    col = it->second;
+    return true;
 };
 
-FaceSide FaceSideFromLetter(char fac) {
-    std::string s_fac = &fac;
-    return FaceSideFromLetter(s_fac);
+bool FaceSideFromLetter(const char c, FaceSide& fs){
+    std::string s = &c;
+    return FaceSideFromLetter(s,fs);
 };
 
-FaceSide FaceSideFromLetter(std::string fac){
+bool FaceSideFromLetter(const std::string& s, FaceSide& fs){
     createmapFaceSide();
-    auto it = toFaceSide.find(fac);
+    auto it = toFaceSide.find(s);
     if(it == toFaceSide.end())
-        throw std::invalid_argument("Invalid Argument: check b in X(a,b) of \"FaceSide.def\" for allowed arguments");
-    return it->second;
+        return false;
+    fs = it->second;
+    return true;
+        //throw std::invalid_argument("Invalid Argument: check b in X(a,b) of \"FaceSide.def\" for allowed arguments");
 };
 
 //Handler for signal SIGABRT
@@ -221,37 +285,6 @@ void handler(int sig) {
           fprintf(stderr, "Error: signal %d:\n", sig);
           backtrace_symbols_fd(array, size, STDERR_FILENO);
           exit(1);
-};
-
-std::string colorFormat(const Color col){
-    std::string setcolor, reset;
-    reset = "\033[0m";
-
-    switch(col){
-        case White:
-            setcolor = "\033[37m";
-            break;
-        case Orange:
-            setcolor = "\033[35m";
-            break;
-        case Red:
-            setcolor = "\033[31m";
-            break;
-        case Yellow:
-            setcolor = "\033[33m";
-            break;
-        case Green:
-            setcolor = "\033[32m";
-            break;
-        case Blue:
-            setcolor = "\033[34m";
-            break;
-        default:
-            break;
-    }
-
-    return setcolor + Color_str[col] + reset;
-
 };
 
 void printAllColor(){

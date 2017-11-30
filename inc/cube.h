@@ -33,8 +33,11 @@ class Cube {
         ///Array for storing Cubelets with CubeletPosition as key
         arrCubelet aCubelet;
 
-        ///get all Facelets of a face from std::stream
-        void createFace(std::istream &is,   arrFacelet& aFacelet );
+        ///get all Facelets of a face from std::stream of step input
+        void createFaceFromStepInput(std::istream &is,   arrFacelet& aFacelet );
+
+        ///get all Facelets of a face from std::stream of linear input
+        void createFaceFromLinearInput(std::istream &is,   arrFacelet& aFacelet );
 
         ///create Cubelets and store in array with help of hashFacelet
         void createCube(arrFacelet& aFacelet);
