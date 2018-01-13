@@ -10,21 +10,27 @@
 #ifndef CUBE_H
 #define CUBE_H
 
-//Maximum number of visible Cubelets in 3x3 Cube
-#define __MAX_CUB__ 26
-//Maximum number of facelets in 3x3 cube
-#define __MAX_FAC__ 54
+//Number of visible Cubelets in 3x3 Cube
+#define __NUM_CUBELET__ 26
+//Number of facelets in 3x3 cube
+#define __NUM_FACELET__ 54
+//Number of faces in 3x3 cube
+#define __NUM_FACE__ 6
 
 #include <iostream>
 #include <vector>
 #include <list>
 #include <utility>
+#include <algorithm>    //std::find
+#include <iterator>     //std::begin, std::end
 #include "cubelet.h"
 
 
-typedef std::array<Cubelet, __MAX_CUB__> arrCubelet;
-typedef std::array<Facelet, __MAX_FAC__> arrFacelet;
-typedef std::list<FaceletPosition> listFletPos;
+typedef std::array<Cubelet, __NUM_CUBELET__> arrCubelet;
+typedef std::array<Facelet, __NUM_FACELET__> arrFacelet;
+typedef std::array<std::size_t, __NUM_FACE__> arrNumber;
+typedef std::array<bool, __NUM_FACE__> arrBool;
+typedef std::array<Color, __NUM_FACE__> arrColor;
 
 
 class Cube {
@@ -34,12 +40,19 @@ class Cube {
         arrCubelet aCubelet;
 
         ///get all Facelets of a face from std::stream of step input
-        void createFaceFromStepInput(std::istream &is,   arrFacelet& aFacelet );
+        void createFaceFromStepInput(std::istream &is,   arrFacelet& aFacelet, arrNumber& aNumOfCol, arrBool& aIsSet );
 
         ///get all Facelets of a face from std::stream of linear input
-        void createFaceFromLinearInput(std::istream &is,   arrFacelet& aFacelet );
+        void createFaceFromLinearInput(std::istream &is,   arrFacelet& aFacelet, arrNumber& aNumOfCol, arrBool& aIsSet );
 
-        ///create Cubelets and store in array with help of hashFacelet
+        ///Set figure out opposite Color for each Color i.e. let's say we have a Color red
+        ///in Center Cubelet of Front side, what is the color on Back (opposite of Front) side
+        void setOppColor(arrFacelet& aFacelet, arrColor& aOppColor);
+
+        ///Check if two Colors are opposite Color (two Colors found on Center Cubelet located on mutually opposite FaceSide)
+        bool areOppColor(arrColor& aOppColor, const Color& first, const Color& second);
+
+        ///create Cubelets and store in array with help of arrFacelet
         void createCube(arrFacelet& aFacelet);
 
         /*! Rotate any specified layer of Cube
@@ -129,7 +142,8 @@ class Cube {
 
 
 
-/*! Fetch list of FaceletPositions associated with a given FaceSide
+/*! \fn std::list<FaceletPosition> getEquivalentFletPos(const FaceSide f)
+ *  \brief  Fetch list of FaceletPositions associated with a given FaceSide
  *
  *                U U U
  *                U U U
@@ -144,7 +158,7 @@ class Cube {
  * Order of positions in the list is depicted by above diagram
  *
  * */
-std::list<FaceletPosition> getFaceletPosition(const FaceSide f);
+listFletPos getEquivalentFletPos(const FaceSide f);
 
 
 

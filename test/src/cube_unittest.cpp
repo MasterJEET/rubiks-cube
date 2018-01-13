@@ -26,12 +26,13 @@ class CubeTest: public ::testing::Test {
         CubeTest(): pf(front), pfd(front, down), pfur(front, up, right),
                     pd(down), pdl(down, left), pdfr(down, front, right)
          {
-            std::string filepath = std::string() + CUBE_HOME + "/test/dat/cube_linear.dat";
-            is_cube.open( filepath  );
+            std::string linearpath = std::string() + CUBE_HOME + "/test/dat/cube_linear.dat";
+            is_cube.open( linearpath  );
             if(!is_cube)
-                throw std::runtime_error("Couldn't open file: \"" + filepath + "\"");
+                throw std::runtime_error("Couldn't open file: \"" + linearpath + "\"");
             else
                 cube = Cube(is_cube);
+
 
         }
 };
@@ -314,6 +315,51 @@ TEST_F(CubeTest,rotate){
     cube_new.rotate(down,false,7);
     EXPECT_EQ(cube_old.getFacelet(back,up,right)*down, cube_new.getFacelet(left,back,up));
 }
+
+//check for duplicate entries in 
+TEST(input, duplicate){
+    std::ifstream is_cube_error;
+    std::string errorpath = std::string() + CUBE_HOME + "/test/dat/cube_duplicate.dat";
+    is_cube_error.open( errorpath );
+
+    EXPECT_THROW(Cube C(is_cube_error), std::runtime_error);
+}
+
+//Checking count of Facelets with given Color
+TEST(input, count){
+    std::ifstream is_cube_color;
+    std::string errorpath = std::string() + CUBE_HOME + "/test/dat/cube_col.dat";
+    is_cube_color.open( errorpath );
+
+    EXPECT_THROW(Cube C(is_cube_color), std::runtime_error);
+}
+
+//Checking each Center Cubelet has unique Color
+TEST(input, center){
+    std::ifstream is_cube_center;
+    std::string errorpath = std::string() + CUBE_HOME + "/test/dat/cube_center.dat";
+    is_cube_center.open( errorpath );
+
+    EXPECT_THROW(Cube C(is_cube_center), std::runtime_error);
+}
+
+//Checking no edge Cubelet has same Color
+TEST(input, edgesame){
+    std::ifstream is_cube;
+    std::string errorpath = std::string() + CUBE_HOME + "/test/dat/cube_edge.dat";
+    is_cube.open( errorpath );
+
+    EXPECT_THROW( Cube C(is_cube), std::runtime_error );
+}
+
+////Checking no edge Cubelet has opposite Color
+//TEST(input, edgeopp){
+//    std::ifstream is_cube;
+//    std::string errorpath = std::string() + CUBE_HOME + "/test/dat/cube_opp.dat";
+//    is_cube.open( errorpath );
+//
+//    Cube C(is_cube);
+//}
 
 
 TEST(Equivalence,Edge){

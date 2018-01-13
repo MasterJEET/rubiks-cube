@@ -6,6 +6,7 @@
  * */
 
 #include "cubelet.h"
+#include <iterator>     //std::begin, std::end
 
 
 std::ostream& operator<<(std::ostream& os, CubeletPosition CP){
@@ -77,8 +78,8 @@ Cubelet::Cubelet(std::vector<Facelet> _vecFac): vFacelet(_vecFac) {
     }
 }
 
-listFaceletPosition Cubelet::getFaceletPositionList() const{
-    listFaceletPosition lFaceletPosition;
+listFletPos Cubelet::getEquivalentFletPosList() const{
+    listFletPos lFaceletPosition;
 
     if(pos.size() == 1)
         lFaceletPosition.push_back( pos.getSideAt(0) );
@@ -130,7 +131,7 @@ bool operator==(const Cubelet& lhs, const Cubelet& rhs){
     if( lhs.pos != rhs.pos)
         return false;
 
-    for(const auto& fp: lhs.getFaceletPositionList()){
+    for(const auto& fp: lhs.getEquivalentFletPosList()){
         if(lhs.getFacelet(fp) != rhs.getFacelet(fp))
             return false;
     }

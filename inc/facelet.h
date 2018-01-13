@@ -64,7 +64,7 @@ class Facelet {
         FaceletPosition pos;
     public:
         ///Default constructor
-        Facelet(){};
+        Facelet():col(undefcol){};
 
         ///Initialization from Color and FaceSice
         Facelet(const Color _col, const FaceletPosition _pos):col(_col), pos(_pos) {}

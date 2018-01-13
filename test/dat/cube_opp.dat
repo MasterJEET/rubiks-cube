@@ -1,0 +1,15 @@
+# The input is for detecting opposite colors on same Cubelet
+
+F: G R R G W O O B W
+
+B: B O B O Y R G G B    //Second "B O" is "O B" in actual configuration, this should cause (throw of) runtime error due to opposite Color on Same edge Cubelet
+
+L: Y W W Y O O R B G
+
+R: Y W O Y R O O Y Y
+
+U: G W Y G B R R G B
+
+D: W W B R G B W Y R
+
+

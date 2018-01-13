@@ -9,19 +9,57 @@
 
 Cube::Cube(std::istream &is){
 
-    //Array for storing Facelets with FaceletPosition as key
-    arrFacelet aFacelet;
+    arrFacelet aFacelet;    //Array for storing Facelets with FaceletPosition as key
+    arrNumber aNumOfCol{0,0,0,0,0,0};    //Keep tack of number of each valid (not undefside) Colors encountered
+    arrBool aIsSet{false,false,false,false,false,false};    //Use to check if any Center Facelets with given Color has been set
+    arrColor aOppColor{undefcol,undefcol,undefcol,undefcol,undefcol,undefcol};  //Contain opposite Color
 
     //Get all Faces
     for(int i=0; i<6; i++)
-        createFaceFromLinearInput(is,aFacelet);
+        createFaceFromLinearInput(is, aFacelet, aNumOfCol, aIsSet);
 
+    //Check if all required Facelets are created
+    bool initialized = std::find( std::begin(aFacelet), std::end(aFacelet), Facelet() ) == std::end(aFacelet);
+    if(!initialized)
+        throw std::runtime_error("All Facelet Couldn't be initialized. There must be some duplicate entries.");
+
+    //Number of All six Colors must be exactly 9
+    for(std::size_t x: aNumOfCol)
+    {
+        if(x != 9)
+            throw std::runtime_error("All Colors can be assigned to exactly 9 Facelets. No more no less.");
+    }
+
+    //Check Colors on Center pieces are unique
+    bool are_ctr_col_unique = std::find(std::begin(aIsSet), std::end(aIsSet), false)  == std::end(aIsSet);
+    if(!are_ctr_col_unique)
+        throw std::runtime_error("Color on each Center Facelet (= Cubelet) must be unique.");
+
+    //Finding opposite of each Color
+    setOppColor(aFacelet, aOppColor);
+
+    ///Check that No edge Cubelet have
+    ///     1. same Color on more than one of its Facelets
+    ///     2. Facelets with opposite Color (Color of Centerpiece located on opposite FaceSide)
+    for(const auto& vfs: getEdgeFaceSide())
+    {
+        FaceletPosition fp1(vfs);
+        FaceletPosition fp2( vfs[1], vfs[0] );
+        Facelet f1( aFacelet[fp1] );
+        Facelet f2( aFacelet[fp2] );
+
+        bool are_same = f1.getColor() == f2.getColor();
+        if(are_same)
+            throw std::runtime_error("Colors on two Facelets of same Cubelet are same.");
+
+        //bool are_opp = aOppColor[ f1.getColor() ] == f2.getColor();
+    }
 
     //Create Cubelets from arrFacelet and store it in Cubelet array
     createCube(aFacelet);
 };
 
-void Cube::createFaceFromStepInput(std::istream &is, arrFacelet& aFacelet ){
+void Cube::createFaceFromStepInput(std::istream &is, arrFacelet& aFacelet, arrNumber& aNumOfCol, arrBool& aIsSet){
 
     FaceSide ctrSide, edgeSide, corSide;
     Color col;
@@ -30,6 +68,9 @@ void Cube::createFaceFromStepInput(std::istream &is, arrFacelet& aFacelet ){
     assertFaceSide(is, ctrSide );
     assertColor(is, col );
 
+    aNumOfCol[col] ++;
+    aIsSet[col] = true;
+
     //Create Center Facelet and add it to array
     aFacelet[ FaceletPosition(ctrSide) ] = Facelet(col, ctrSide);
 
@@ -37,6 +78,7 @@ void Cube::createFaceFromStepInput(std::istream &is, arrFacelet& aFacelet ){
     for(size_t i=0; i<4; i++){
         assertFaceSide(is, edgeSide );
         assertColor(is, col);
+        aNumOfCol[col] ++;
         FaceletPosition fp(ctrSide, edgeSide);
         aFacelet[ fp ] = Facelet(col, fp);
     }
@@ -46,65 +88,78 @@ void Cube::createFaceFromStepInput(std::istream &is, arrFacelet& aFacelet ){
         assertFaceSide(is, edgeSide );
         assertFaceSide(is, corSide );
         assertColor(is, col );
+        aNumOfCol[col] ++;
         FaceletPosition fp(ctrSide, edgeSide, corSide);
         aFacelet[ fp ] = Facelet(col, fp);
     }
 
 };
 
-void Cube::createFaceFromLinearInput(std::istream &is, arrFacelet& aFacelet ){
+void Cube::createFaceFromLinearInput(std::istream &is, arrFacelet& aFacelet, arrNumber& aNumOfCol, arrBool& aIsSet ){
     FaceSide f;
 
     //Get front equivalent FaceSide
     assertFaceSide(is, f);
 
-    //Get equivalent FaceletPositions
-    listFletPos lfp = getFaceletPosition(f);
+    //Get all equivalent FaceletPositions associated with given FaceSide
+    listFletPos lfp = getEquivalentFletPos(f);
 
     //Creating Facelets and adding it to array
     for(const auto& fp: lfp){
         Color col;
         assertColor(is,col);
+
+        aNumOfCol[col] ++;
+        if(fp.getPositionType() == center)
+            aIsSet[col] = true;
+
         aFacelet[ fp ] = Facelet(col, fp);
     }
 
 };
 
 
+void Cube::setOppColor(arrFacelet& aFacelet, arrColor& aOppColor){
+
+    Facelet flF( aFacelet.at(FaceletPosition(front)) );
+    Facelet flB( aFacelet.at(FaceletPosition(back)) );
+    aOppColor[ flF.getColor() ] = flB.getColor();
+    aOppColor[ flB.getColor() ] = flF.getColor();
+
+    Facelet flU( aFacelet.at(FaceletPosition(up)) );
+    Facelet flD( aFacelet.at(FaceletPosition(down)) );
+    aOppColor[ flU.getColor() ] = flD.getColor();
+    aOppColor[ flD.getColor() ] = flU.getColor();
+
+    Facelet flL( aFacelet.at(FaceletPosition(left)) );
+    Facelet flR( aFacelet.at(FaceletPosition(right)) );
+    aOppColor[ flL.getColor() ] = flR.getColor();
+    aOppColor[ flR.getColor() ] = flL.getColor();
+
+}
+
+
 void Cube::createCube(arrFacelet& aFacelet){
    
-    //Vector of all valid FaceSides
-    std::vector<FaceSide> vSingleFS = {
-        {front} , {back} , {up} , {down} , {right} , {left}
-    };
-
     //Create center Cubelets and add to array
-    for( const auto& vfs: vSingleFS ){
-        FaceletPosition fp(vfs);
-        CubeletPosition cp(vfs);
+    for( const auto& fs: {front, back, up, down, right, left} ){
+        FaceletPosition fp(fs);
+        CubeletPosition cp(fs);
         aCubelet[ cp ] = Cubelet( aFacelet[fp] );
     }
 
 
-    //Vector of vector of pair FaceSides
-    std::vector< std::vector<FaceSide> > vDoubleFS = { 
-                                        { front, up }, { front, right }, { front, down }, { front, left },
-                                        { up, right }, { down, right }, { down, left }, { up, left },
-                                        { back, up }, { back, right }, { back, down }, { back, left }
-                                      };
-
-    for( const auto& vfs: vDoubleFS ){
+    //Create Edge Cubelets and add to array
+    for( const auto& vfs: getEdgeFaceSide()){
         FaceletPosition fp1(vfs);
         FaceletPosition fp2(vfs[1], vfs[0]);
         CubeletPosition cp(vfs);
         aCubelet[ cp ] = Cubelet( aFacelet[fp1], aFacelet[fp2] );
     }
 
-    //Vector of vector of triple FaceSides
-    std::vector< std::vector<FaceSide> > vTripleFS = { { front, right, up}, { back, right, up }, { back, left, up}, { front, left, up },
-                                                       { front, right, down}, { back, right, down }, { back, left, down}, { front, left, down } };
 
-    for( const auto& vfs: vTripleFS ){
+    //Create Corner Cubelets and add to array
+    for( const auto& vfs: getCornerFaceSide()){
         FaceletPosition fp1(vfs);
         FaceletPosition fp2(vfs[1], vfs[0], vfs[2]);
         FaceletPosition fp3(vfs[2], vfs[0], vfs[1]);
@@ -115,7 +170,7 @@ void Cube::createCube(arrFacelet& aFacelet){
 
 
 void Cube::show(const FaceSide& f){
-    auto tlist = getFaceletPosition(f);
+    auto tlist = getEquivalentFletPos(f);
     auto it = tlist.begin();
     while( it != tlist.end()){
         for(int i=0;i<3;i++,it++){
@@ -235,7 +290,7 @@ void Cube::rotate(const FaceSide& f,std::size_t no_of_turns,bool is_clockwise){
 
 
 
-listFletPos getFaceletPosition(const FaceSide f){
+listFletPos getEquivalentFletPos(const FaceSide f){
     listFletPos tlist;
     FaceSide u,r,d,l;
 

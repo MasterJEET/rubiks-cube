@@ -1,0 +1,15 @@
+
+# The input format depicted here is referred to as 'linear input' in the rest of the code, here we are creating a duplicate entry
+
+F: G R R G W O O B W
+
+B: B O O B Y R G G B
+
+L: Y W W Y O O R B G
+
+R: Y W O Y R O O Y Y    //Original entery
+
+R: Y W O Y R O O Y Y    //Duplicate entry, this should cause runtime error later
+
+D: W W B R G B W Y R
+

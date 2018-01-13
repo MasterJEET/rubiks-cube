@@ -18,7 +18,7 @@
 #include <list>
 
 typedef std::vector<Facelet> vecFacelet;
-typedef std::list<FaceletPosition> listFaceletPosition;
+typedef std::list<FaceletPosition> listFletPos;
 
 
 class CubeletPosition : public Position {
@@ -79,7 +79,7 @@ class Cubelet{
         Cubelet( vecFacelet _vecFac );
        
         ///Return list of FaceletPostions associated with this Cubelet
-        listFaceletPosition getFaceletPositionList() const;
+        listFletPos getEquivalentFletPosList() const;
 
         ///Fetch all of Facelets in this Cubelet
         vecFacelet getFacelet() const;

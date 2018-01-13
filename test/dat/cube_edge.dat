@@ -1,0 +1,15 @@
+# The input is for testing edge color check
+
+F: G R R G W O O B W
+
+B: B O O B Y R G G B
+
+L: Y W W Y O O R B G
+
+R: Y W O Y R O O Y Y
+
+U: G W Y G B R G R B    //The "G R" to the last in  correct input is "R G", this is should cause same Color at {up,front} Cubelet
+
+D: W W B R G B W Y R
+
+

@@ -1,0 +1,19 @@
+# This is for number of color assignment check
+
+
+
+
+F: G R R G W O O B W
+
+B: B O O B Y R G G B
+
+L: Y W W Y O O R B G
+
+R: Y W O Y R O O Y Y
+
+U: G W Y G B R R G G    //Last Color here should be B instead of G, this results in Green being assigned
+                        //to 10 Facelets and Blue 8 Facelets instead of usual 9.
+                        //This will cause runtime error later
+
+D: W W B R G B W Y R
+
