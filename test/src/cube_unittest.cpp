@@ -9,6 +9,7 @@
 #include "cube.h"
 #include "gtest/gtest.h"
 #include "testcommon.h"
+#include "cuceptions.h" //NumOfFaceletsException
 
 class CubeTest: public ::testing::Test {
     protected:
@@ -210,14 +211,14 @@ TEST_F(CubeTest, cubelet){
 }
 
 
-TEST_F(CubeTest, show){
-    cube.show(front);
-    cube.show(back);
-    cube.show(left);
-    cube.show(right);
-    cube.show(up);
-    cube.show(down);
-}
+//TEST_F(CubeTest, show){
+//    cube.show(front);
+//    cube.show(back);
+//    cube.show(left);
+//    cube.show(right);
+//    cube.show(up);
+//    cube.show(down);
+//}
 
 
 TEST_F(CubeTest, rotateSide){
@@ -316,13 +317,63 @@ TEST_F(CubeTest,rotate){
     EXPECT_EQ(cube_old.getFacelet(back,up,right)*down, cube_new.getFacelet(left,back,up));
 }
 
+TEST(Cube, getCubeletPosition){
+
+    //Out of range 
+    EXPECT_THROW(Cube::getCubeletPosition(30),std::out_of_range);
+
+    //Center Positions
+    EXPECT_EQ(Cube::getCubeletPosition(2), CubeletPosition(up));
+    EXPECT_EQ(Cube::getCubeletPosition(5), CubeletPosition(right));
+
+    //Edge Positions
+    EXPECT_EQ(Cube::getCubeletPosition(8), CubeletPosition(left, front));
+    EXPECT_EQ(Cube::getCubeletPosition(11), CubeletPosition(back, down));
+    EXPECT_EQ(Cube::getCubeletPosition(16), CubeletPosition(left, down));
+
+    //Corener Postions
+    EXPECT_EQ(Cube::getCubeletPosition(21), CubeletPosition(front, right, down));
+    EXPECT_EQ(Cube::getCubeletPosition(23), CubeletPosition(up, right, back));
+
+
+}
+
+TEST(Cube, getFaceletPosition){
+    //Out of range
+    EXPECT_THROW(Cube::getFaceletPosition(54), std::out_of_range);
+
+    //Center Positions
+    EXPECT_EQ(Cube::getFaceletPosition(45), FaceletPosition(right));
+
+    //Edge Positions
+    EXPECT_EQ(Cube::getFaceletPosition(22), FaceletPosition(up, left));
+    EXPECT_EQ(Cube::getFaceletPosition(12), FaceletPosition(back, down));
+    EXPECT_EQ(Cube::getFaceletPosition(47), FaceletPosition(right, back));
+    EXPECT_EQ(Cube::getFaceletPosition(28), FaceletPosition(down, front));
+
+    //Corner Positions
+    EXPECT_EQ(Cube::getFaceletPosition(41), FaceletPosition(left,up,front));
+    EXPECT_EQ(Cube::getFaceletPosition(17), FaceletPosition(back,up,right));
+    EXPECT_EQ(Cube::getFaceletPosition(32), FaceletPosition(down,front,right));
+    EXPECT_EQ(Cube::getFaceletPosition(43), FaceletPosition(left,down,back));
+
+}
+
+TEST(Cube, getColorFromInt){
+    //Out of range
+    EXPECT_THROW(Cube::getColorFromInt(6), std::out_of_range);
+
+    EXPECT_EQ(Cube::getColorFromInt(1), yellow);
+    EXPECT_EQ(Cube::getColorFromInt(4), green);
+}
+
 //check for duplicate entries in 
 TEST(input, duplicate){
     std::ifstream is_cube_error;
     std::string errorpath = std::string() + CUBE_HOME + "/test/dat/cube_duplicate.dat";
     is_cube_error.open( errorpath );
 
-    EXPECT_THROW(Cube C(is_cube_error), std::runtime_error);
+    EXPECT_THROW(Cube C(is_cube_error), NumOfFaceletsException);
 }
 
 //Checking count of Facelets with given Color
@@ -331,7 +382,7 @@ TEST(input, count){
     std::string errorpath = std::string() + CUBE_HOME + "/test/dat/cube_col.dat";
     is_cube_color.open( errorpath );
 
-    EXPECT_THROW(Cube C(is_cube_color), std::runtime_error);
+    EXPECT_THROW(Cube C(is_cube_color), NumOfColorsException);
 }
 
 //Checking each Center Cubelet has unique Color
@@ -339,7 +390,7 @@ TEST(input, center){
     std::ifstream is_cube_center;
     std::string errorpath = std::string() + CUBE_HOME + "/test/dat/cube_center.dat";
     is_cube_center.open( errorpath );
-
+    //Cube C(is_cube_center);
     EXPECT_THROW(Cube C(is_cube_center), std::runtime_error);
 }
 

@@ -1,5 +1,5 @@
 /*! \file   cube.h
- *  \brief  Contains 'class Cube', this can serve as API for cube solving algorithm
+T*  \brief  Contains 'class Cube', this can serve as API for cube solving algorithm
  * 
  * @author: MasterJEET
  * @email : masterjeet9@gmail.com
@@ -39,21 +39,63 @@ class Cube {
         ///Array for storing Cubelets with CubeletPosition as key
         arrCubelet aCubelet;
 
+        ///vector for mapping of NUMBER -> CBUELET POSITION,
+        ///Given an integer it stores which CubeletPostion int refers to
+        static vecCletPos vCletPos;
+
+        ///vector for mapping of NUMBER -> FACELET POSITION,
+        ///Given an integer it stores which FaceletPostion int refers to
+        static vecFletPos vFletPos;
+
+        ///vector for mapping of NUMBER -> COLOR,
+        ///Given an integer it stores which Color int refers to
+        static std::vector<Color> vCol;
+
+        ///Number of instances of Cube created
+        static std::size_t num_of_instances;
+
+        /*! Make inverse mapping for CubeletPositions.
+         *
+         * All CubeletPositions are associated with an integer (key) by
+         * operator(). This function takes that integer and use it as index
+         * for inserting CubeletPosition to a vector
+         *
+         * */
+        void mapIntToCubeletPosition();
+
+        /*! Make inverse mapping for FaceletPositions.
+         *
+         * All FaceletPositions are associated with an integer (key) by
+         * operator(). This function takes that integer and use it as index
+         * for inserting FaceletPosition to a vector
+         *
+         * */
+        void mapIntToFaceletPosition();
+
+        /*! Make inverse mapping for Color.
+         *
+         * All Colors are associated with an integer (key) as they
+         * are elements of an Enum. This function takes that integer and use it as index
+         * for inserting Color to a vector
+         *
+         * */
+        void mapIntToColor();
+
         ///get all Facelets of a face from std::stream of step input
-        void createFaceFromStepInput(std::istream &is,   arrFacelet& aFacelet, arrNumber& aNumOfCol, arrBool& aIsSet );
+        void createFaceFromStepInput(std::istream &is,   vecFacelet& vFacelet, arrNumber& aNumOfCol, arrBool& aIsSet );
 
         ///get all Facelets of a face from std::stream of linear input
-        void createFaceFromLinearInput(std::istream &is,   arrFacelet& aFacelet, arrNumber& aNumOfCol, arrBool& aIsSet );
+        void createFaceFromLinearInput(std::istream &is,   vecFacelet& vFacelet, arrNumber& aNumOfCol, arrBool& aIsSet );
 
         ///Set figure out opposite Color for each Color i.e. let's say we have a Color red
         ///in Center Cubelet of Front side, what is the color on Back (opposite of Front) side
-        void setOppColor(arrFacelet& aFacelet, arrColor& aOppColor);
+        void setOppColor(vecFacelet& vFacelet, arrColor& aOppColor);
 
         ///Check if two Colors are opposite Color (two Colors found on Center Cubelet located on mutually opposite FaceSide)
         bool areOppColor(arrColor& aOppColor, const Color& first, const Color& second);
 
-        ///create Cubelets and store in array with help of arrFacelet
-        void createCube(arrFacelet& aFacelet);
+        ///create Cubelets and store in array with help of vecFacelet
+        void createCube(vecFacelet& vFacelet);
 
         /*! Rotate any specified layer of Cube
          *
@@ -67,7 +109,7 @@ class Cube {
     public:
 
         ///Default constructor
-        Cube(){};
+        Cube();
 
         ///Constructor that takes std::istream and create cubelets
         Cube(std::istream &is);
@@ -89,6 +131,15 @@ class Cube {
 
         ///get Cubelet from CubeletPosition
         Cubelet getCubelet(const CubeletPosition pos) const{ return aCubelet.at( pos ); }
+
+        ///Given an interger between 0 - 25, return corresponding CubeletPosition
+        static CubeletPosition getCubeletPosition(std::size_t index);
+
+        ///Given an interger between 0 - 53, return corresponding FaceletPosition
+        static FaceletPosition getFaceletPosition(std::size_t index);
+
+        ///Given an integer between 0 - 5, return associated Color
+        static Color getColorFromInt(std::size_t index);
 
         ///display a given face (position and color)
         void show(const FaceSide& f);
