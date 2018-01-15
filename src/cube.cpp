@@ -30,7 +30,7 @@ Cube::Cube(std::istream &is): Cube(){
 
     vecFacelet vFacelet(__NUM_FACELET__);                                       //Array for storing Facelets with FaceletPosition as key
     arrNumber aNumOfCol{0,0,0,0,0,0};                                           //Keep tack of number of each valid (not undefside) Colors encountered
-    arrBool aIsSet{false,false,false,false,false,false};                        //Use to check if any Center Facelets with given Color has been set
+    arrNumber aIsSet{0,0,0,0,0,0};                        //Use to check if any Center Facelets with given Color has been set
     arrColor aOppColor{undefcol,undefcol,undefcol,undefcol,undefcol,undefcol};  //Contain opposite Color
 
     //Get all Faces
@@ -51,10 +51,12 @@ Cube::Cube(std::istream &is): Cube(){
         }
     }
 
-    //Check Colors on Center pieces are unique
-    bool are_ctr_col_unique = std::find(std::begin(aIsSet), std::end(aIsSet), false)  == std::end(aIsSet);
-    if(!are_ctr_col_unique)
-        throw std::runtime_error("Color on each Center Facelet (= Cubelet) must be unique.");
+    //Check Colors on Center pieces are set
+    for(std::size_t i=0;i < aIsSet.size(); i++){
+        std::size_t count = aIsSet[i];
+        if(count != 1)
+            throw NumOfCenterColorException(i, count);
+    }
 
     //Finding opposite of each Color
     setOppColor(vFacelet, aOppColor);
@@ -119,7 +121,7 @@ void Cube::mapIntToColor(){
 }
 
 
-void Cube::createFaceFromStepInput(std::istream &is, vecFacelet& vFacelet, arrNumber& aNumOfCol, arrBool& aIsSet){
+void Cube::createFaceFromStepInput(std::istream &is, vecFacelet& vFacelet, arrNumber& aNumOfCol, arrNumber& aIsSet){
 
     FaceSide ctrSide, edgeSide, corSide;
     Color col;
@@ -129,7 +131,7 @@ void Cube::createFaceFromStepInput(std::istream &is, vecFacelet& vFacelet, arrNu
     assertColor(is, col );
 
     aNumOfCol[col] ++;
-    aIsSet[col] = true;
+    aIsSet[col] ++;
 
     //Create Center Facelet and add it to array
     vFacelet[ FaceletPosition(ctrSide) ] = Facelet(col, ctrSide);
@@ -155,7 +157,7 @@ void Cube::createFaceFromStepInput(std::istream &is, vecFacelet& vFacelet, arrNu
 
 };
 
-void Cube::createFaceFromLinearInput(std::istream &is, vecFacelet& vFacelet, arrNumber& aNumOfCol, arrBool& aIsSet ){
+void Cube::createFaceFromLinearInput(std::istream &is, vecFacelet& vFacelet, arrNumber& aNumOfCol, arrNumber& aIsSet ){
     FaceSide f;
 
     //Get front equivalent FaceSide
@@ -171,7 +173,7 @@ void Cube::createFaceFromLinearInput(std::istream &is, vecFacelet& vFacelet, arr
 
         aNumOfCol[col] ++;
         if(fp.getPositionType() == center)
-            aIsSet[col] = true;
+            aIsSet[col] ++;
 
         vFacelet[ fp ] = Facelet(col, fp);
     }

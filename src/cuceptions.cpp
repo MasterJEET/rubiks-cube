@@ -35,3 +35,19 @@ const char* NumOfColorsException::what() const throw()
     msg << runtime_error::what() << " " << Cube::getColorFromInt(index) << " occured " << count << " time(s).";
     return msg.str().c_str();
 }
+
+
+
+
+std::ostringstream NumOfCenterColorException::msg;
+
+NumOfCenterColorException::NumOfCenterColorException(std::size_t _index, std::size_t _count)
+    : runtime_error("Eace Color can be assigned to exactly 1 centerpiece."), index(_index), count(_count)
+{}
+
+const char* NumOfCenterColorException::what() const throw()
+{
+    msg.str("");
+    msg << runtime_error::what() << " " << Cube::getColorFromInt(index) << " assigned to " << count << " centerpiece(s).";
+    return msg.str().c_str();
+}

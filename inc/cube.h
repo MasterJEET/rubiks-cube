@@ -82,10 +82,10 @@ class Cube {
         void mapIntToColor();
 
         ///get all Facelets of a face from std::stream of step input
-        void createFaceFromStepInput(std::istream &is,   vecFacelet& vFacelet, arrNumber& aNumOfCol, arrBool& aIsSet );
+        void createFaceFromStepInput(std::istream &is,   vecFacelet& vFacelet, arrNumber& aNumOfCol, arrNumber& aIsSet );
 
         ///get all Facelets of a face from std::stream of linear input
-        void createFaceFromLinearInput(std::istream &is,   vecFacelet& vFacelet, arrNumber& aNumOfCol, arrBool& aIsSet );
+        void createFaceFromLinearInput(std::istream &is,   vecFacelet& vFacelet, arrNumber& aNumOfCol, arrNumber& aIsSet );
 
         ///Set figure out opposite Color for each Color i.e. let's say we have a Color red
         ///in Center Cubelet of Front side, what is the color on Back (opposite of Front) side
@@ -195,6 +195,7 @@ class Cube {
 
 /*! \fn std::list<FaceletPosition> getEquivalentFletPos(const FaceSide f)
  *  \brief  Fetch list of FaceletPositions associated with a given FaceSide
+ *  <pre>
  *
  *                U U U
  *                U U U
@@ -205,6 +206,7 @@ class Cube {
  *                D D D
  *                D D D
  *                D D D
+ *                </pre>
  * Returns above positions for a face,
  * Order of positions in the list is depicted by above diagram
  *
@@ -295,7 +297,7 @@ template <typename P> std::vector<P> vecCenterEquivalence(const FaceSide& f);
 
 
 /** \fn template <typename P> std::vector<P> vecMidEdgeEquivalence(const FaceSide& f)
- *  /brief  This function returns a VECtor containing MIDdle EDGE EQUivalent (Cubelet)POSitions of given FaceSide
+ *  \brief  This function returns a VECtor containing MIDdle EDGE EQUivalent (Cubelet)POSitions of given FaceSide
  *
  * What are middle edge equivalent positions?
  *

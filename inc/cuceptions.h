@@ -41,7 +41,7 @@ class NumOfColorsException : public std::runtime_error {
         ///Message to be printed when exception occurs
         static std::ostringstream msg;
 
-        ///Color which occurred more or less than 9 times
+        ///Index of Color which occurred more or less than 9 times
         std::size_t index;
 
         ///Number of occurence of this Color
@@ -53,6 +53,25 @@ class NumOfColorsException : public std::runtime_error {
 
         virtual const char* what() const throw();
 
+};
+
+
+class NumOfCenterColorException : public std::runtime_error {
+    private:
+        ///Message to be printed when exceptions occurs
+        static std::ostringstream msg;
+
+        ///Index of Centerpiece Color which occured more or less than once
+        std::size_t index;
+
+        ///Number of occurences fo this Color
+        std::size_t count;
+
+    public:
+
+        NumOfCenterColorException(std::size_t _index, std::size_t _count);
+
+        virtual const char* what() const throw();
 };
 
 

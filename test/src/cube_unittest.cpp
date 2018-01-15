@@ -390,8 +390,8 @@ TEST(input, center){
     std::ifstream is_cube_center;
     std::string errorpath = std::string() + CUBE_HOME + "/test/dat/cube_center.dat";
     is_cube_center.open( errorpath );
-    //Cube C(is_cube_center);
-    EXPECT_THROW(Cube C(is_cube_center), std::runtime_error);
+
+    EXPECT_THROW(Cube C(is_cube_center), NumOfCenterColorException);
 }
 
 //Checking no edge Cubelet has same Color
