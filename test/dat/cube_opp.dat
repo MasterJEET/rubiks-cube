@@ -2,9 +2,9 @@
 
 F: G R R G W O O B W
 
-B: B O B O Y R G G B    //Second "B O" is "O B" in actual configuration, this should cause (throw of) runtime error due to opposite Color on Same edge Cubelet
+B: B O O B Y R G G B
 
-L: Y W W Y O O R B G
+L: Y W W Y O B R O G    //B was O and last O was B, with this edge {front, left} will have opposite Color
 
 R: Y W O Y R O O Y Y
 

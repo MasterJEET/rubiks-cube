@@ -1,0 +1,9 @@
+# Here We can Keep a Simple list ToDo
+
+
+
+
+Exception:
+* Add more exception classes
+* Add default constructor to exception classes
+* xxxEdgeColorException, change input parameter for constructor from vector of FaceSide to FaceletPosition

@@ -33,16 +33,16 @@ Cube::Cube(std::istream &is): Cube(){
     arrNumber aIsSet{0,0,0,0,0,0};                        //Use to check if any Center Facelets with given Color has been set
     arrColor aOppColor{undefcol,undefcol,undefcol,undefcol,undefcol,undefcol};  //Contain opposite Color
 
-    //Get all Faces
+    ///Get all Faces
     for(int i=0; i<6; i++)
         createFaceFromLinearInput(is, vFacelet, aNumOfCol, aIsSet);
 
-    //Check if all required Facelets are created
+    ///Check if all required Facelets are created
     vecFacelet::const_iterator iter = std::find( std::begin(vFacelet), std::end(vFacelet), Facelet() );
     if( iter != std::end(vFacelet) )
         throw NumOfFaceletsException(  iter - vFacelet.begin() );
 
-    //Number of All six Colors must be exactly 9
+    ///Check if number of all six Colors is exactly 9
     for(std::size_t i=0; i < aNumOfCol.size(); i++ )
     {
         std::size_t count = aNumOfCol[i];
@@ -51,7 +51,7 @@ Cube::Cube(std::istream &is): Cube(){
         }
     }
 
-    //Check Colors on Center pieces are set
+    ///Check Colors on Center pieces are set
     for(std::size_t i=0;i < aIsSet.size(); i++){
         std::size_t count = aIsSet[i];
         if(count != 1)
@@ -61,24 +61,55 @@ Cube::Cube(std::istream &is): Cube(){
     //Finding opposite of each Color
     setOppColor(vFacelet, aOppColor);
 
-    ///Check that No edge Cubelet have
+
+
+    ///Check that No edge or corner Cubelet have
     ///     1. same Color on more than one of its Facelets
-    ///     2. Facelets with opposite Color (Color of Centerpiece located on opposite FaceSide)
+    ///     2. Facelets with opposite Color (see cuceptions.h for definition of opposite Color)
+
+    //Check for edge
     for(const auto& vfs: getEdgeFaceSide())
     {
         FaceletPosition fp1(vfs);
         FaceletPosition fp2( vfs[1], vfs[0] );
+
         Facelet f1( vFacelet[fp1] );
         Facelet f2( vFacelet[fp2] );
 
         bool are_same = f1.getColor() == f2.getColor();
         if(are_same)
-            throw std::runtime_error("Colors on two Facelets of same Cubelet are same.");
+            throw SameEdgeColorException(vfs);
 
-        //bool are_opp = aOppColor[ f1.getColor() ] == f2.getColor();
+        bool are_opp = aOppColor[ f1.getColor() ] == f2.getColor();
+        if(are_opp)
+            throw OppositeEdgeColorException(vfs);
     }
 
-    //Create Cubelets from vecFacelet and store it in Cubelet array
+    //Check for corner
+    for(const auto& vfs: getCornerFaceSide())
+    {
+        FaceletPosition fp1(vfs);
+        FaceletPosition fp2( vfs[1], vfs[0], vfs[2] );
+        FaceletPosition fp3( vfs[2], vfs[0], vfs[1] );
+
+        Facelet f1( vFacelet[fp1] );
+        Facelet f2( vFacelet[fp2] );
+        Facelet f3( vFacelet[fp3] );
+
+        bool are_same = f1.getColor() == f2.getColor();
+        are_same = are_same || (f2.getColor() == f3.getColor());
+        are_same = are_same || (f3.getColor() == f1.getColor());
+        if(are_same)
+            throw SameCornerColorException( CubeletPosition(vfs) );
+
+        bool are_opp = aOppColor[ f1.getColor() ] == f2.getColor();
+        are_opp = are_opp || ( aOppColor[ f2.getColor() ] == f3.getColor() );
+        are_opp = are_opp || ( aOppColor[ f3.getColor() ] == f1.getColor() );
+        if(are_opp)
+            throw OppositeCornerColorException( vfs );
+    }
+
+    ///Create Cubelets from vecFacelet and store it in Cubelet array
     createCube(vFacelet);
 };
 
