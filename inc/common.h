@@ -102,7 +102,7 @@ void assertFaceSide(std::istream& is, FaceSide& fs);
  *
  *  Edge Cubelet position can be specified with two FaceSides.
  *  Such as {front, right} , {up, left} and so on. This function returns list of all
- *  such combinatons.
+ *  such permutations.
  *
  * */
 listVecFaceSide getEdgeFaceSide();
@@ -113,7 +113,7 @@ listVecFaceSide getEdgeFaceSide();
  *
  *  Corner Cubelet position can be specified with three FaceSides.
  *  Such as {front, right, up} , {up, left, front} and so on. This function returns list of all
- *  such combinatons.
+ *  such combinations.
  *
  * */
 listVecFaceSide getCornerFaceSide();
@@ -179,8 +179,10 @@ bool isValidFaceSide(const std::string& f);
  *
  * Observe the current orientation of Cube. If a FaceSide 'fs' is in horizontal plane (up or down),
  * rotate the cube about a horizontal axis parallel to front FaceSide till 'fs' align with the front.
- * Face i.e. at FaceSide up now was let's say at FaceSide 'up_before'. Then 'up_before' is up equivalent
- * of 'fs'.
+ * Face i.e. at FaceSide up now was let's say at FaceSide 'up_before'. Then 'up_before' is <i>up</i> equivalent
+ * of 'fs'. We write it as:
+ *
+ *      up( fs ) = up_before
  *
  * For vertical Faces (front,back,right,left) rotate the Cube about a vertical axis till 'fs' align
  * with font FaceSide. Use above analogy to derive FaceSide equivalence.
