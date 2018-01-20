@@ -9,14 +9,12 @@
  * For most of the checks, exceptions declared in this file are thrown.
  *
  *  1. A Total of six listed Colors are allowed.
- *  2. Each Color can occur exactly 9 times i.e. a Color can be assigned to
- *     exactly 9 Facelets (Cubelets).
- *  3. Each Color must be assigned to single center Facelet, eqauivalently
+ *  2. Each Color must be assigned to single center Facelet, eqauivalently
  *     all centerpiece must have unique Color.
- *  4. Each Color can be assigned to exactly 4 edge pieces.
- *  5. Each Color can be assigned to exactly 4 corner pieces.
- *  6. No two Colors on any edge Cubelet should have same or opposite Color.
- *  7. No two Colors of any corner Cubelet should have same or opposite Color.
+ *  3. Each Color can be assigned to exactly 4 edge pieces.
+ *  4. Each Color can be assigned to exactly 4 corner pieces.
+ *  5. No two Colors on any edge Cubelet should have same or opposite Color.
+ *  6. No two Colors of any corner Cubelet should have same or opposite Color.
  *
  *
  * Opposite Color
@@ -37,18 +35,27 @@
 
 typedef std::vector<Facelet> vecFacelet;
 
-class NumOfFaceletsException : public std::runtime_error {
-    private:
 
-        ///Message to be printed when exception occurs
-        static std::ostringstream msg;  
+class Cuception : public std::runtime_error {
+    protected:
+        ///Custom message holder
+        static std::ostringstream msg;
+        static std::string message;
+    public:
+        Cuception();
+        Cuception(std::string str);
+};
+
+
+class NumOfFaceletException : public Cuception {
+    protected:
 
         ///Index of vFacelet where Facelet is not initialized using input
         std::size_t index;
 
     public:
 
-        NumOfFaceletsException(std::size_t index);
+        NumOfFaceletException(std::size_t index);
 
         ///returns custom message to be printed when exception is invoked
         virtual const char* what() const throw();
@@ -56,63 +63,55 @@ class NumOfFaceletsException : public std::runtime_error {
 };
 
 
-class NumOfColorsException : public std::runtime_error {
-    private:
-        ///Message to be printed when exception occurs
-        static std::ostringstream msg;
+///Count of each Color
+///Check number 2,3 & 4
+class NumOfColorException : public Cuception {
+    protected:
 
         ///Index of Color which occurred more or less than 9 times
         std::size_t index;
 
-        ///Number of occurence of this Color
-        std::size_t count;
+        ///Number of occurence of this Color at center piece
+        std::size_t num_ctr;
+
+        ///Number of occurence of this Color at edge piece
+        std::size_t num_edg;
+
+        ///Number of occurence of this Color at corner piece
+        std::size_t num_cnr;
+
 
     public:
 
-        NumOfColorsException(std::size_t _index, std::size_t _count);
+        NumOfColorException(
+                std::size_t _index,
+                std::size_t _num_ctr,
+                std::size_t _num_edg,
+                std::size_t _num_cnr
+                );
 
         virtual const char* what() const throw();
 
 };
 
-
-class NumOfCenterColorException : public std::runtime_error {
-    private:
-        ///Message to be printed when exceptions occurs
-        static std::ostringstream msg;
-
-        ///Index of Centerpiece Color which occured more or less than once
-        std::size_t index;
-
-        ///Number of occurences fo this Color
-        std::size_t count;
-
-    public:
-
-        NumOfCenterColorException(std::size_t _index, std::size_t _count);
-
-        virtual const char* what() const throw();
-};
 
 
 ///To be thrown when Colors on an edge piece are same i.e.
-///when check number 6 fails.
-class SameEdgeColorException : public std::runtime_error {
+///when check number 5 fails.
+class SameEdgeColorException : public Cuception {
     private:
-        static std::ostringstream msg;
-        std::vector<FaceSide> vFS;
+        FaceletPosition fp;
 
     public:
-        SameEdgeColorException(std::vector<FaceSide> _vFS);
+        SameEdgeColorException(FaceletPosition _fp);
         virtual const char* what() const throw();
 };
 
 
 ///To be thrown when Colors on an edge piece are opposite i.e.
-///when check number 6 fails.
-class OppositeEdgeColorException : public std::runtime_error {
+///when check number 5 fails.
+class OppositeEdgeColorException : public Cuception {
     private:
-        static std::ostringstream msg;
         std::vector<FaceSide> vFS;
 
     public:
@@ -122,10 +121,9 @@ class OppositeEdgeColorException : public std::runtime_error {
 
 
 ///To be thrown when Colors on an corner piece are same i.e.
-///when check number 7 fails.
-class SameCornerColorException : public std::runtime_error {
+///when check number 6 fails.
+class SameCornerColorException : public Cuception {
     private:
-        static std::ostringstream msg;
         CubeletPosition cp;
 
     public:
@@ -135,10 +133,9 @@ class SameCornerColorException : public std::runtime_error {
 
 
 ///To be thrown when Colors on an corner piece are opposite i.e.
-///when check number 7 fails.
-class OppositeCornerColorException : public std::runtime_error {
+///when check number 6 fails.
+class OppositeCornerColorException : public Cuception {
     private:
-        static std::ostringstream msg;
         CubeletPosition cp;
 
     public:

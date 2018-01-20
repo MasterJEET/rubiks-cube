@@ -27,47 +27,38 @@ Cube::Cube(){
 }
 
 Cube::Cube(std::istream &is): Cube(){
+    
+    //Array for storing Facelets with FaceletPosition as key
+    vecFacelet vFacelet(__NUM_FACELET__);
+    
+    //Keep track of number of each valid (not undefside) Colors encountered
+    arrNumber aNumOfCenterCol{0,0,0,0,0,0};
+    
+    //Keep track of number of each valid (not undefside) Colors encountered on edge Facelets
+    arrNumber aNumOfEdgeCol{0,0,0,0,0,0};
 
-    vecFacelet vFacelet(__NUM_FACELET__);                                       //Array for storing Facelets with FaceletPosition as key
-    arrNumber aNumOfCol{0,0,0,0,0,0};                                           //Keep tack of number of each valid (not undefside) Colors encountered
-    arrNumber aIsSet{0,0,0,0,0,0};                        //Use to check if any Center Facelets with given Color has been set
-    arrColor aOppColor{undefcol,undefcol,undefcol,undefcol,undefcol,undefcol};  //Contain opposite Color
+    //Keep track of number of each valid (not undefside) Colors encountered on corner Facelets
+    arrNumber aNumOfCornerCol{0,0,0,0,0,0};
+
+    //Contain opposite Color
+    arrColor aOppColor{undefcol,undefcol,undefcol,undefcol,undefcol,undefcol};  
 
     ///Get all Faces
     for(int i=0; i<6; i++)
-        createFaceFromLinearInput(is, vFacelet, aNumOfCol, aIsSet);
+        createFaceFromLinearInput(is, vFacelet, aNumOfCenterCol, aNumOfEdgeCol, aNumOfCornerCol);
 
     ///Check if all required Facelets are created
     vecFacelet::const_iterator iter = std::find( std::begin(vFacelet), std::end(vFacelet), Facelet() );
     if( iter != std::end(vFacelet) )
-        throw NumOfFaceletsException(  iter - vFacelet.begin() );
-
-    ///Check if number of all six Colors is exactly 9
-    for(std::size_t i=0; i < aNumOfCol.size(); i++ )
-    {
-        std::size_t count = aNumOfCol[i];
-        if(count != 9){
-            throw NumOfColorsException(i, count);
-        }
-    }
-
-    ///Check Colors on Center pieces are set
-    for(std::size_t i=0;i < aIsSet.size(); i++){
-        std::size_t count = aIsSet[i];
-        if(count != 1)
-            throw NumOfCenterColorException(i, count);
-    }
+        throw NumOfFaceletException(  iter - vFacelet.begin() );
 
     //Finding opposite of each Color
     setOppColor(vFacelet, aOppColor);
 
 
 
-    ///Check that No edge or corner Cubelet have
-    ///     1. same Color on more than one of its Facelets
-    ///     2. Facelets with opposite Color (see cuceptions.h for definition of opposite Color)
-
-    //Check for edge
+    ///Check that no Facelets of any edge Cubelet have same or oppsite Color
+    ///(see cuceptions.h for definition of opposite Color)
     for(const auto& vfs: getEdgeFaceSide())
     {
         FaceletPosition fp1(vfs);
@@ -85,7 +76,7 @@ Cube::Cube(std::istream &is): Cube(){
             throw OppositeEdgeColorException(vfs);
     }
 
-    //Check for corner
+    ///Check that no two Facelets of any corner Cubelet have same or oppsite Color
     for(const auto& vfs: getCornerFaceSide())
     {
         FaceletPosition fp1(vfs);
@@ -107,6 +98,17 @@ Cube::Cube(std::istream &is): Cube(){
         are_opp = are_opp || ( aOppColor[ f3.getColor() ] == f1.getColor() );
         if(are_opp)
             throw OppositeCornerColorException( vfs );
+    }
+
+    ///Check number of Colors are assigned to different position types correct number of times
+    for(std::size_t i=0; i < __NUM_FACE__; i++ )
+    {
+        std::size_t num_ctr = aNumOfCenterCol[i];
+        std::size_t num_edg = aNumOfEdgeCol[i];
+        std::size_t num_cnr = aNumOfCornerCol[i];
+        if(num_ctr != 1 || num_edg != 4 || num_cnr != 4){
+            throw NumOfColorException(i, num_ctr, num_edg, num_cnr);
+        }
     }
 
     ///Create Cubelets from vecFacelet and store it in Cubelet array
@@ -152,7 +154,13 @@ void Cube::mapIntToColor(){
 }
 
 
-void Cube::createFaceFromStepInput(std::istream &is, vecFacelet& vFacelet, arrNumber& aNumOfCol, arrNumber& aIsSet){
+void Cube::createFaceFromStepInput(
+        std::istream &is,
+        vecFacelet& vFacelet,
+        arrNumber& aNumOfCenterCol,
+        arrNumber& aNumOfEdgeCol,
+        arrNumber& aNumOfCornerCol
+){
 
     FaceSide ctrSide, edgeSide, corSide;
     Color col;
@@ -161,8 +169,7 @@ void Cube::createFaceFromStepInput(std::istream &is, vecFacelet& vFacelet, arrNu
     assertFaceSide(is, ctrSide );
     assertColor(is, col );
 
-    aNumOfCol[col] ++;
-    aIsSet[col] ++;
+    aNumOfCenterCol[col] ++;
 
     //Create Center Facelet and add it to array
     vFacelet[ FaceletPosition(ctrSide) ] = Facelet(col, ctrSide);
@@ -171,7 +178,7 @@ void Cube::createFaceFromStepInput(std::istream &is, vecFacelet& vFacelet, arrNu
     for(size_t i=0; i<4; i++){
         assertFaceSide(is, edgeSide );
         assertColor(is, col);
-        aNumOfCol[col] ++;
+        aNumOfEdgeCol[col] ++;
         FaceletPosition fp(ctrSide, edgeSide);
         vFacelet[ fp ] = Facelet(col, fp);
     }
@@ -181,14 +188,20 @@ void Cube::createFaceFromStepInput(std::istream &is, vecFacelet& vFacelet, arrNu
         assertFaceSide(is, edgeSide );
         assertFaceSide(is, corSide );
         assertColor(is, col );
-        aNumOfCol[col] ++;
+        aNumOfCornerCol[col] ++;
         FaceletPosition fp(ctrSide, edgeSide, corSide);
         vFacelet[ fp ] = Facelet(col, fp);
     }
 
 };
 
-void Cube::createFaceFromLinearInput(std::istream &is, vecFacelet& vFacelet, arrNumber& aNumOfCol, arrNumber& aIsSet ){
+void Cube::createFaceFromLinearInput(
+        std::istream &is,
+        vecFacelet& vFacelet,
+        arrNumber& aNumOfCenterCol,
+        arrNumber& aNumOfEdgeCol,
+        arrNumber& aNumOfCornerCol
+){
     FaceSide f;
 
     //Get front equivalent FaceSide
@@ -202,9 +215,19 @@ void Cube::createFaceFromLinearInput(std::istream &is, vecFacelet& vFacelet, arr
         Color col;
         assertColor(is,col);
 
-        aNumOfCol[col] ++;
-        if(fp.getPositionType() == center)
-            aIsSet[col] ++;
+        switch(fp.getPositionType()){
+            case center:
+                aNumOfCenterCol[col] ++;
+                break;
+            case edge:
+                aNumOfEdgeCol[col] ++;
+                break;
+            case corner:
+                aNumOfCornerCol[col] ++;
+                break;
+            case undeftype:
+                break;
+        }
 
         vFacelet[ fp ] = Facelet(col, fp);
     }

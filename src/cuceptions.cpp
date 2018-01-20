@@ -7,74 +7,76 @@
 
 #include <cuceptions.h>
 
-std::ostringstream NumOfFaceletsException::msg;
 
-NumOfFaceletsException::NumOfFaceletsException(std::size_t _index)
-    : runtime_error(":\\ ."), index(_index)
+std::ostringstream Cuception::msg;
+std::string Cuception::message;
+
+Cuception::Cuception()
+    : runtime_error("")
 {}
 
-const char* NumOfFaceletsException::what() const throw()
+Cuception::Cuception(std::string str)
+    : runtime_error(str)
+{}
+
+
+
+NumOfFaceletException::NumOfFaceletException(std::size_t _index)
+    : Cuception(":\\ ."), index(_index)
+{}
+
+const char* NumOfFaceletException::what() const throw()
 {
-    msg.str("");
-    msg << "Facelet at Facelet" << Cube::getFaceletPosition(index) << " is not initialized " << runtime_error::what();
-    return msg.str().c_str();
+    msg.str("\n");
+    msg << "Facelet at Facelet" << Cube::getFaceletPosition(index) << " is not initialized " << runtime_error::what() << std::endl;
+    message = msg.str();
+    return message.c_str();
 }
 
 
 
 
-std::ostringstream NumOfColorsException::msg;
-
-NumOfColorsException::NumOfColorsException(std::size_t _index, std::size_t _count)
-    : runtime_error("Each Color can be assigned to exactly 9 Facelets."), index(_index), count(_count)
+NumOfColorException::NumOfColorException(
+        std::size_t _index,
+        std::size_t _num_ctr,
+        std::size_t _num_edg,
+        std::size_t _num_cnr
+):
+    Cuception("Each Color can be assigned to exactly 9 Facelets."),
+    index(_index), num_ctr(_num_ctr), num_edg(_num_edg), num_cnr(_num_cnr)
 {}
 
-const char* NumOfColorsException::what() const throw()
+const char* NumOfColorException::what() const throw()
 {
-    msg.str("");
-    msg << runtime_error::what() << " " << Cube::getColorFromInt(index) << " occured " << count << " time(s).";
-    return msg.str().c_str();
+    message = "\n";
+    message = message + runtime_error::what() + " Color " + Color_str[index] + " occured \n" +\
+          std::to_string(num_ctr) + " time(s) at center,\n" +
+          std::to_string(num_edg) + " time(s) at edge,\n" +
+          std::to_string(num_cnr) + " time(s) at corner.\n";
+    return message.c_str();
 }
 
 
 
 
-std::ostringstream NumOfCenterColorException::msg;
-
-NumOfCenterColorException::NumOfCenterColorException(std::size_t _index, std::size_t _count)
-    : runtime_error("Eace Color can be assigned to exactly 1 centerpiece."), index(_index), count(_count)
-{}
-
-const char* NumOfCenterColorException::what() const throw()
-{
-    msg.str("");
-    msg << runtime_error::what() << " " << Cube::getColorFromInt(index) << " assigned to " << count << " centerpiece(s).";
-    return msg.str().c_str();
-}
-
-
-
-
-std::ostringstream SameEdgeColorException::msg;
-
-SameEdgeColorException::SameEdgeColorException(std::vector<FaceSide> _vFS)
-    : runtime_error("Edge piece Colors must not be same."), vFS(_vFS)
+SameEdgeColorException::SameEdgeColorException(FaceletPosition _fp)
+    : Cuception("Edge piece Colors must not be same."), fp(_fp)
 {}
 
 const char* SameEdgeColorException::what() const throw()
 {
-    msg.str("");
-    msg << "Colors on edge {" << vFS[0] << ", " << vFS[1] << "} are same. " << runtime_error::what();
-    return msg.str().c_str();
+    msg.str("\n");
+    msg << "Color on Facelets at " << CubeletPosition(fp) << " are same: " << runtime_error::what() << std::endl;
+    message = msg.str();
+    return message.c_str();
 }
 
 
 
 
-std::ostringstream OppositeEdgeColorException::msg;
 
 OppositeEdgeColorException::OppositeEdgeColorException(std::vector<FaceSide> _vFS)
-    : runtime_error("Edge piece Colors must not be opposite."), vFS(_vFS)
+    : Cuception("Edge piece Colors must not be opposite."), vFS(_vFS)
 {}
 
 const char* OppositeEdgeColorException::what() const throw()
@@ -87,10 +89,9 @@ const char* OppositeEdgeColorException::what() const throw()
 
 
 
-std::ostringstream SameCornerColorException::msg;
 
 SameCornerColorException::SameCornerColorException(CubeletPosition _cp)
-    : runtime_error("Colors can't be same."), cp(_cp)
+    : Cuception("Colors can't be same."), cp(_cp)
 {}
 
 const char* SameCornerColorException::what() const throw()
@@ -103,10 +104,9 @@ const char* SameCornerColorException::what() const throw()
 
 
 
-std::ostringstream OppositeCornerColorException::msg;
 
 OppositeCornerColorException::OppositeCornerColorException(CubeletPosition _cp)
-    : runtime_error("Colors can't be opposite."), cp(_cp)
+    : Cuception("Colors can't be opposite."), cp(_cp)
 {}
 
 const char* OppositeCornerColorException::what() const throw()

@@ -4,6 +4,8 @@
 
 
 Exception:
-* Add more exception classes
 * Add default constructor to exception classes
 * xxxEdgeColorException, change input parameter for constructor from vector of FaceSide to FaceletPosition
+* modify num of color check: center, edge, corner col in one exception
+* make the exception more explicit and descriptive as such center Color,
+edge Color, corner Color count in NumOfColorException

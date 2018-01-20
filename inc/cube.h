@@ -82,10 +82,22 @@ class Cube {
         void mapIntToColor();
 
         ///get all Facelets of a face from std::stream of step input
-        void createFaceFromStepInput(std::istream &is,   vecFacelet& vFacelet, arrNumber& aNumOfCol, arrNumber& aIsSet );
+        void createFaceFromStepInput(
+                std::istream &is,
+                vecFacelet& vFacelet,
+                arrNumber& aNumOfCenterCol,
+                arrNumber& aNumOfEdgeCol,
+                arrNumber& aNumOfCornerCol
+                );
 
         ///get all Facelets of a face from std::stream of linear input
-        void createFaceFromLinearInput(std::istream &is,   vecFacelet& vFacelet, arrNumber& aNumOfCol, arrNumber& aIsSet );
+        void createFaceFromLinearInput(
+                std::istream &is,
+                vecFacelet& vFacelet,
+                arrNumber& aNumOfCenterCol,
+                arrNumber& aNumOfEdgeCol,
+                arrNumber& aNumOfCornerCol
+                );
 
         ///Set figure out opposite Color for each Color i.e. let's say we have a Color red
         ///in Center Cubelet of Front side, what is the color on Back (opposite of Front) side
@@ -115,10 +127,10 @@ class Cube {
         Cube(std::istream &is);
         
         ///get Facelet located at FaceletPosition specified by three given FaceSides
-        Facelet getFacelet(const FaceSide fside1, const FaceSide fside2, const FaceSide fside3) const { return getFacelet( {fside1, fside2, fside3} );}
+        Facelet getFacelet(const FaceSide fs1, const FaceSide fs2, const FaceSide fs3) const { return getFacelet( {fs1, fs2, fs3} );}
 
         ///get Facelet located at FaceletPosition specified by two given FaceSides
-        Facelet getFacelet(const FaceSide fside1, const FaceSide fside2) const{ return getFacelet( {fside1, fside2 } ); }
+        Facelet getFacelet(const FaceSide fs1, const FaceSide fs2) const{ return getFacelet( {fs1, fs2 } ); }
 
         ///get Facelet located at FaceletPosition
         Facelet getFacelet(const FaceletPosition pos ) const { return aCubelet.at( CubeletPosition (pos) ).getFacelet(pos) ; }
@@ -196,7 +208,6 @@ class Cube {
 /*! \fn std::list<FaceletPosition> getEquivalentFletPos(const FaceSide f)
  *  \brief  Fetch list of FaceletPositions associated with a given FaceSide
  *  <pre>
- *
  *                U U U
  *                U U U
  *                U U U
