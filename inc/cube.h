@@ -18,6 +18,7 @@ T*  \brief  Contains 'class Cube', this can serve as API for cube solving algori
 #define __NUM_FACE__ 6
 
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <list>
 #include <utility>
@@ -33,11 +34,24 @@ typedef std::array<bool, __NUM_FACE__> arrBool;
 typedef std::array<Color, __NUM_FACE__> arrColor;
 
 
+/*! \brief For listing out different input format for Cube
+ *
+ * */
+enum enInputFormat {
+    LINEAR_FORMAT,
+    STEP_FORMAT
+};
+
+
+
 class Cube {
     private:
 
         ///Array for storing Cubelets with CubeletPosition as key
         arrCubelet aCubelet;
+
+        ///Array for storing opposite Color
+        arrColor aOppColor;
 
         ///vector for mapping of NUMBER -> CBUELET POSITION,
         ///Given an integer it stores which CubeletPostion int refers to
@@ -81,6 +95,35 @@ class Cube {
          * */
         void mapIntToColor();
 
+        ///Initialize the cube, constructors will call this init method
+        void _init_(std::istream &is, enInputFormat eifX);
+
+        /*! Validate Color on edge Cubelets
+         *
+         * Check that no Facelets of any edge Cubelet have same or oppsite Color
+         * (see cuceptions.h for definition of opposite Color)
+         *
+         * */
+        void validateEdgeColor(vecFacelet& vFacelet);
+
+
+        /*! Validate Color on corner Cubelets
+         *
+         * Check that no two Facelets of any corner Cubelet have same or oppsite Color
+         *
+         * */
+        void validateCornerColor(vecFacelet& vFacelet);
+
+
+        /*! Check if number of Colors are assigned to different position types, correct number of times
+         *
+         * */
+        void validateNumOfColor(
+                arrNumber& aNumOfCenterCol,
+                arrNumber& aNumOfEdgeCol,
+                arrNumber& aNumOfCornerCol
+                );
+
         ///get all Facelets of a face from std::stream of step input
         void createFaceFromStepInput(
                 std::istream &is,
@@ -99,12 +142,21 @@ class Cube {
                 arrNumber& aNumOfCornerCol
                 );
 
-        ///Set figure out opposite Color for each Color i.e. let's say we have a Color red
-        ///in Center Cubelet of Front side, what is the color on Back (opposite of Front) side
-        void setOppColor(vecFacelet& vFacelet, arrColor& aOppColor);
+        /*! Find opposite Color
+         *
+         * Set figure out opposite Color for each Color i.e. let's say we have a Color red
+         * in Center Cubelet of Front side, what is the color on Back (opposite of Front) side
+         *
+         * */
+        void setOppColor(vecFacelet& vFacelet);
 
-        ///Check if two Colors are opposite Color (two Colors found on Center Cubelet located on mutually opposite FaceSide)
-        bool areOppColor(arrColor& aOppColor, const Color& first, const Color& second);
+        /*! Check if two Colors are opposite
+         *
+         * Retuns true if Colors are opposite, else false.
+         * See cuception.h for definition of opposite Color.
+         *
+         * */
+        bool areOppColor(const Color& first, const Color& second);
 
         ///create Cubelets and store in array with help of vecFacelet
         void createCube(vecFacelet& vFacelet);
@@ -124,7 +176,10 @@ class Cube {
         Cube();
 
         ///Constructor that takes std::istream and create cubelets
-        Cube(std::istream &is);
+        Cube(std::istream &is, enInputFormat eifX = LINEAR_FORMAT);
+
+        ///Construct cube from file (filepath provided)
+        Cube(std::string file_path, enInputFormat eifX = LINEAR_FORMAT);
         
         ///get Facelet located at FaceletPosition specified by three given FaceSides
         Facelet getFacelet(const FaceSide fs1, const FaceSide fs2, const FaceSide fs3) const { return getFacelet( {fs1, fs2, fs3} );}

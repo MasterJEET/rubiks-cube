@@ -9,3 +9,7 @@ Exception:
 * modify num of color check: center, edge, corner col in one exception
 * make the exception more explicit and descriptive as such center Color,
 edge Color, corner Color count in NumOfColorException
+
+
+Next:
+* Add anyOppColor and test for are/anyOppColor

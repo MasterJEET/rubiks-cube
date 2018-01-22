@@ -1,4 +1,4 @@
-/*! \file   cuceptions.h
+/*! \file   cuception.h
  *  \brief  Contains custom exceptions to be used in 'class Cube' (CUbe exCEPTIONS)
  * 
  * @author: MasterJEET
@@ -39,7 +39,6 @@ typedef std::vector<Facelet> vecFacelet;
 class Cuception : public std::runtime_error {
     protected:
         ///Custom message holder
-        static std::ostringstream msg;
         static std::string message;
     public:
         Cuception();
@@ -96,50 +95,28 @@ class NumOfColorException : public Cuception {
 
 
 
-///To be thrown when Colors on an edge piece are same i.e.
+///To be thrown when Colors on an edge piece are same or opposite i.e.
 ///when check number 5 fails.
-class SameEdgeColorException : public Cuception {
+class EdgeColorException : public Cuception {
     private:
         FaceletPosition fp;
+        Color c1;
+        Color c2;
 
     public:
-        SameEdgeColorException(FaceletPosition _fp);
+        EdgeColorException(FaceletPosition _fp, std::string str);
         virtual const char* what() const throw();
 };
 
 
-///To be thrown when Colors on an edge piece are opposite i.e.
-///when check number 5 fails.
-class OppositeEdgeColorException : public Cuception {
-    private:
-        std::vector<FaceSide> vFS;
-
-    public:
-        OppositeEdgeColorException(std::vector<FaceSide> _vFS);
-        virtual const char* what() const throw();
-};
-
-
-///To be thrown when Colors on an corner piece are same i.e.
+///To be thrown when Colors on an corner piece are same or opposite i.e.
 ///when check number 6 fails.
-class SameCornerColorException : public Cuception {
+class CornerColorException : public Cuception {
     private:
         CubeletPosition cp;
 
     public:
-        SameCornerColorException(CubeletPosition _cp);
-        virtual const char* what() const throw();
-};
-
-
-///To be thrown when Colors on an corner piece are opposite i.e.
-///when check number 6 fails.
-class OppositeCornerColorException : public Cuception {
-    private:
-        CubeletPosition cp;
-
-    public:
-        OppositeCornerColorException(CubeletPosition _cp);
+        CornerColorException(CubeletPosition _cp, std::string str);
         virtual const char* what() const throw();
 };
 

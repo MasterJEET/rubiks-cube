@@ -9,7 +9,7 @@
 #include "cube.h"
 #include "gtest/gtest.h"
 #include "testcommon.h"
-#include "cuceptions.h"
+#include "cuception.h"
 
 class CubeTest: public ::testing::Test {
     protected:
@@ -367,13 +367,15 @@ TEST(Cube, getColorFromInt){
     EXPECT_EQ(Cube::getColorFromInt(4), green);
 }
 
+TEST(Cube, Cube){
+    EXPECT_THROW(Cube C1("/home/masterjeet/cube.dat"), std::runtime_error);
+}
+
 //check for duplicate entries in 
 TEST(input, duplicate){
-    std::ifstream is_cube_error;
     std::string errorpath = std::string() + CUBE_HOME + "/test/dat/cube_duplicate.dat";
-    is_cube_error.open( errorpath );
 
-    EXPECT_THROW(Cube C(is_cube_error), NumOfFaceletException);
+    EXPECT_THROW(Cube C(errorpath), NumOfFaceletException);
 }
 
 //Checking count of Facelets with given Color
@@ -385,22 +387,13 @@ TEST(input, count){
     EXPECT_THROW(Cube C(is_cube_color), NumOfColorException);
 }
 
-////Checking each Center Cubelet has unique Color
-//TEST(input, center){
-//    std::ifstream is_cube_center;
-//    std::string errorpath = std::string() + CUBE_HOME + "/test/dat/cube_center.dat";
-//    is_cube_center.open( errorpath );
-//
-//    EXPECT_THROW(Cube C(is_cube_center), NumOfCenterColorException);
-//}
-
 //Checking no edge Cubelet has same Color
 TEST(input, edgesame){
     std::ifstream is_cube;
     std::string errorpath = std::string() + CUBE_HOME + "/test/dat/cube_edge.dat";
     is_cube.open( errorpath );
 
-    EXPECT_THROW( Cube C(is_cube), SameEdgeColorException);
+    EXPECT_THROW( Cube C(is_cube), EdgeColorException);
 }
 
 //Checking no edge Cubelet has opposite Color
@@ -409,7 +402,7 @@ TEST(input, edgeopp){
     std::string errorpath = std::string() + CUBE_HOME + "/test/dat/cube_opp.dat";
     is_cube.open( errorpath );
 
-    EXPECT_THROW( Cube C(is_cube), OppositeEdgeColorException);
+    EXPECT_THROW( Cube C(is_cube), EdgeColorException);
 }
 
 //Checking Colors on a given corner Cubelet are different
@@ -418,7 +411,7 @@ TEST(input, cornersame){
     std::string errorpath = std::string() + CUBE_HOME + "/test/dat/cube_corner_same.dat";
     is_cube.open( errorpath );
 
-    EXPECT_THROW(Cube C(is_cube), SameCornerColorException);
+    EXPECT_THROW(Cube C(is_cube), CornerColorException);
 }
 
 //Checking given corner Cubelet doesn't contain opposite Color
@@ -427,7 +420,7 @@ TEST(input, corneropp){
     std::string errorpath = std::string() + CUBE_HOME + "/test/dat/cube_corner_opp.dat";
     is_cube.open( errorpath );
 
-    EXPECT_THROW(Cube C(is_cube), OppositeCornerColorException);
+    EXPECT_THROW(Cube C(is_cube), CornerColorException);
 }
 
 

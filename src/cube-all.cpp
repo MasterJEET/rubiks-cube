@@ -12,4 +12,4 @@
 #include "facelet.cpp"
 #include "cubelet.cpp"
 #include "cube.cpp"
-#include "cuceptions.cpp"
+#include "cuception.cpp"
