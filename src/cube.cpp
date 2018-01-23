@@ -61,23 +61,13 @@ void Cube::_init_(std::istream& is, enInputFormat eifX){
     switch(eifX){
 
         case LINEAR_FORMAT:
-            for(int i=0; i < __NUM_FACE__ ; i++) createFaceFromLinearInput(
-                    is,
-                    vFacelet,
-                    aNumOfCenterCol,
-                    aNumOfEdgeCol,
-                    aNumOfCornerCol
-                    );
+            for(int i=0; i < __NUM_FACE__ ; i++)
+                createFaceFromLinearInput(is, vFacelet, aNumOfCenterCol, aNumOfEdgeCol, aNumOfCornerCol);
             break;
 
         case STEP_FORMAT:
-            for(int i=0; i < __NUM_FACE__ ; i++) createFaceFromStepInput(
-                    is,
-                    vFacelet,
-                    aNumOfCenterCol,
-                    aNumOfEdgeCol,
-                    aNumOfCornerCol
-                    );
+            for(int i=0; i < __NUM_FACE__ ; i++)
+                createFaceFromStepInput(is, vFacelet, aNumOfCenterCol, aNumOfEdgeCol, aNumOfCornerCol);
             break;
 
         default:
@@ -320,6 +310,14 @@ bool Cube::areOppColor(const Color& first, const Color& second){
 }
 
 
+bool Cube::anyOppColor(const Color& c1, const Color& c2, const Color& c3){
+    bool are_opp = aOppColor[ c1 ] == c2;
+    are_opp = are_opp || ( aOppColor[ c2 ] == c3 );
+    are_opp = are_opp || ( aOppColor[ c3 ] == c1 );
+    return are_opp;
+}
+
+
 void Cube::createCube(vecFacelet& vFacelet){
    
     //Create center Cubelets and add to array
@@ -485,7 +483,8 @@ void Cube::rotate(const FaceSide& f,std::size_t no_of_turns,bool is_clockwise){
 
     //rotate front  equivalent (i.e. given ) Face
     rotateSide(f,is_clockwise,no_of_turns);
-    //rotate back equivalent (i.e. opposite of given) Face in the same absolute sense as in case of 'front equivalence'
+    //rotate back equivalent (i.e. opposite of given) Face in the
+    //same absolute sense as in case of 'front equivalence'
     rotateSide(b,!is_clockwise,no_of_turns);
     //rotate mid equivalent layer
     rotateMid(f,no_of_turns,is_clockwise);

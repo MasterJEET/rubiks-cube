@@ -317,10 +317,22 @@ TEST_F(CubeTest,rotate){
     EXPECT_EQ(cube_old.getFacelet(back,up,right)*down, cube_new.getFacelet(left,back,up));
 }
 
+
+TEST_F(CubeTest, opposite_color){
+    EXPECT_TRUE(cube.areOppColor(white, yellow));
+    EXPECT_FALSE(cube.areOppColor(white, red));
+
+    EXPECT_TRUE(cube.anyOppColor(yellow, orange, red));
+    EXPECT_FALSE(cube.anyOppColor(green, red, yellow));
+
+    EXPECT_TRUE(cube.anyOppColor(blue, green, white));
+    EXPECT_FALSE(cube.anyOppColor(white, blue, orange));
+}
+
 TEST(Cube, getCubeletPosition){
 
-    //Out of range 
-    EXPECT_THROW(Cube::getCubeletPosition(30),std::out_of_range);
+    //Out of range
+    EXPECT_THROW(Cube::getCubeletPosition(30), std::out_of_range);
 
     //Center Positions
     EXPECT_EQ(Cube::getCubeletPosition(2), CubeletPosition(up));

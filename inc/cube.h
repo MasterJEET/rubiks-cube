@@ -1,5 +1,5 @@
 /*! \file   cube.h
-T*  \brief  Contains 'class Cube', this can serve as API for cube solving algorithm
+ *  \brief  Contains 'class Cube', this can serve as API for cube solving algorithm
  * 
  * @author: MasterJEET
  * @email : masterjeet9@gmail.com
@@ -10,11 +10,11 @@ T*  \brief  Contains 'class Cube', this can serve as API for cube solving algori
 #ifndef CUBE_H
 #define CUBE_H
 
-//Number of visible Cubelets in 3x3 Cube
+///Number of visible Cubelets in 3x3x3 Cube
 #define __NUM_CUBELET__ 26
-//Number of facelets in 3x3 cube
+///Number of facelets in 3x3x3 cube
 #define __NUM_FACELET__ 54
-//Number of faces in 3x3 cube
+///Number of faces in 3x3x3 cube
 #define __NUM_FACE__ 6
 
 #include <iostream>
@@ -100,8 +100,8 @@ class Cube {
 
         /*! Validate Color on edge Cubelets
          *
-         * Check that no Facelets of any edge Cubelet have same or oppsite Color
-         * (see cuceptions.h for definition of opposite Color)
+         * Check that no Facelets of any edge Cubelet have same or opposite Color
+         * (see cuception.h for definition of opposite Color)
          *
          * */
         void validateEdgeColor(vecFacelet& vFacelet);
@@ -109,7 +109,7 @@ class Cube {
 
         /*! Validate Color on corner Cubelets
          *
-         * Check that no two Facelets of any corner Cubelet have same or oppsite Color
+         * Check that no two Facelets of any corner Cubelet have same or opposite Color
          *
          * */
         void validateCornerColor(vecFacelet& vFacelet);
@@ -150,14 +150,6 @@ class Cube {
          * */
         void setOppColor(vecFacelet& vFacelet);
 
-        /*! Check if two Colors are opposite
-         *
-         * Retuns true if Colors are opposite, else false.
-         * See cuception.h for definition of opposite Color.
-         *
-         * */
-        bool areOppColor(const Color& first, const Color& second);
-
         ///create Cubelets and store in array with help of vecFacelet
         void createCube(vecFacelet& vFacelet);
 
@@ -168,7 +160,12 @@ class Cube {
          * fashion as viewd from specified FaceSide
          *
          * */
-        void rotateLayer(const FaceSide& f, bool is_clockwise = true, std::size_t no_of_turns = 1, bool is_mid = false);
+        void rotateLayer(
+                const FaceSide& f,
+                bool is_clockwise = true,
+                std::size_t no_of_turns = 1,
+                bool is_mid = false
+                );
 
     public:
 
@@ -182,19 +179,29 @@ class Cube {
         Cube(std::string file_path, enInputFormat eifX = LINEAR_FORMAT);
         
         ///get Facelet located at FaceletPosition specified by three given FaceSides
-        Facelet getFacelet(const FaceSide fs1, const FaceSide fs2, const FaceSide fs3) const { return getFacelet( {fs1, fs2, fs3} );}
+        Facelet getFacelet(const FaceSide fs1, const FaceSide fs2, const FaceSide fs3) const {
+            return getFacelet( {fs1, fs2, fs3} );
+        }
 
         ///get Facelet located at FaceletPosition specified by two given FaceSides
-        Facelet getFacelet(const FaceSide fs1, const FaceSide fs2) const{ return getFacelet( {fs1, fs2 } ); }
+        Facelet getFacelet(const FaceSide fs1, const FaceSide fs2) const{
+            return getFacelet( {fs1, fs2 } );
+        }
 
         ///get Facelet located at FaceletPosition
-        Facelet getFacelet(const FaceletPosition pos ) const { return aCubelet.at( CubeletPosition (pos) ).getFacelet(pos) ; }
+        Facelet getFacelet(const FaceletPosition pos ) const {
+            return aCubelet.at( CubeletPosition (pos) ).getFacelet(pos) ;
+        }
 
         ///get corner Cubelet
-        Cubelet getCubelet(const FaceSide& f1, const FaceSide& f2, const FaceSide& f3) const{ return getCubelet({f1,f2,f3}); }
+        Cubelet getCubelet(const FaceSide& f1, const FaceSide& f2, const FaceSide& f3) const{
+            return getCubelet({f1,f2,f3});
+        }
 
         ///get edge Cubelet
-        Cubelet getCubelet(const FaceSide& f1, const FaceSide& f2) const{ return getCubelet({f1,f2}); }
+        Cubelet getCubelet(const FaceSide& f1, const FaceSide& f2) const{
+            return getCubelet({f1,f2});
+        }
 
         ///get Cubelet from CubeletPosition
         Cubelet getCubelet(const CubeletPosition pos) const{ return aCubelet.at( pos ); }
@@ -207,6 +214,22 @@ class Cube {
 
         ///Given an integer between 0 - 5, return associated Color
         static Color getColorFromInt(std::size_t index);
+
+        /*! Check if two Colors are opposite
+         *
+         * Retuns true if Colors are opposite, else false.
+         * See cuception.h for definition of opposite Color.
+         *
+         * */
+        bool areOppColor(const Color& first, const Color& second);
+
+        /*! Check if any two of given three Colors are opposite
+         *
+         * Retuns true if Colors are opposite, else false.
+         * See cuception.h for definition of opposite Color.
+         *
+         * */
+        bool anyOppColor(const Color& first, const Color& second, const Color& third);
 
         ///display a given face (position and color)
         void show(const FaceSide& f);

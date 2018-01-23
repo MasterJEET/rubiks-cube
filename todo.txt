@@ -12,4 +12,4 @@ edge Color, corner Color count in NumOfColorException
 
 
 Next:
-* Add anyOppColor and test for are/anyOppColor
+* implement algobase
