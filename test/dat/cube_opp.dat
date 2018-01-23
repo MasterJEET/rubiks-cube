@@ -1,0 +1,15 @@
+# The input is for detecting opposite colors on same Cubelet
+
+F: G R R G W O O B W
+
+B: B O O B Y R G G B
+
+L: Y W W Y O B R O G    //B was O and last O was B, with this edge {front, left} will have opposite Color
+
+R: Y W O Y R O O Y Y
+
+U: G W Y G B R R G B
+
+D: W W B R G B W Y R
+
+

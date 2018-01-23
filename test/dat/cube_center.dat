@@ -1,0 +1,15 @@
+# Same color has been assigned two pieces
+
+F: G R R G W O O B W
+
+B: B O O B Y R G G B
+
+L: Y W W Y R O R B G    //Here originally center color specified was O (orange) which is now R
+
+R: Y W O Y R O O Y Y
+
+U: G W Y G B O R G B    //Here the O was originally R
+
+D: W W B R G B W Y R
+
+//Abovbe two together should cause runtime error as check of 'Center assigned color' fails

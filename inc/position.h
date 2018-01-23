@@ -26,7 +26,7 @@ class Position {
 
     public:
         ///Default constructor
-        Position(){};
+        Position():vecSide{undefside}, ptype(undeftype){};
 
         ///For initializing any number (1-3) of FaceSides, this constructor is intended to
         ///delegated from other constructors
@@ -45,7 +45,7 @@ class Position {
         PositionType getPositionType() const {return ptype; }
 
         ///Number of FaceSides with valid (not undefside) value
-        size_t size() const{ return vecSide.size()==0 ? 0 : (vecSide[0] != undefside) + (vecSide[1] != undefside) + (vecSide[2] != undefside);}
+        size_t size() const;
 
         ///operator<< overloading to write Position to ostream
         friend std::ostream& operator<<(std::ostream& os, Position P);

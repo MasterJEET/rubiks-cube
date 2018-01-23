@@ -53,7 +53,7 @@ bool next(std::istream& is, std::string& letter){
 
         //Skipping whitespace if any
         is >> std::ws;
-        if(is.peek() == '#'){
+        if(is.peek() == '#' || is.peek() == '/'){
             is.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
             continue;
         }
@@ -78,14 +78,19 @@ void assertColor(std::istream& is, Color& col){
 
     std::string l;
     if(!next(is, l))
-        throw std::runtime_error("Cannot read Color from input. Please make sure to\
-                provide all required information to construct a Cube.\
-                Refer \"Cube.dat\" and \"<to be added>\" for sample input.");
+        throw std::runtime_error(\
+std::string() + __func__ + ": Cannot read Color from input. Please make sure to \
+provide all required information to construct a Cube. \
+Refer \"Cube.dat\" and \"<to be added>\" for sample input."
+);
 
     if(!ColorFromLetter(l, col))
-        throw std::runtime_error("Invalid Color specification found:\
-                check b in X(a,b) of \"Color.def\" for allowed valid arguments.\
-                Refer \"Cube.dat\" and \"<to be added>\" for sample input.");
+        throw std::runtime_error(\
+std::string() + __func__ + ": Invalid Color specification found: \
+check b in X(a,b) of \"Color.def\" for allowed valid arguments. \
+Refer \"Cube.dat\" and \"<to be added>\" for sample input."
+);
+
 };
 
 
@@ -94,14 +99,40 @@ void assertFaceSide(std::istream& is, FaceSide& fs){
 
     std::string l;
     if(!next(is, l))
-        throw std::runtime_error("Cannot read FaceSide from input. Please make sure to\
-                provide all required information to construct a Cube.\
-                Refer \"Cube.dat\" and \"<to be added>\" for sample input.");
+        throw std::runtime_error(\
+std::string() + __func__ + ": Cannot read FaceSide from input. Please make sure to \
+provide all required information to construct a Cube. \
+Refer \"Cube.dat\" and \"<to be added>\" for sample input."
+);
 
     if(!FaceSideFromLetter(l, fs))
-        throw std::runtime_error("Invalid FaceSide specification found:\
-                check b in X(a,b) of \"Color.def\" for allowed valid arguments.\
-                Refer \"Cube.dat\" and \"<to be added>\" for sample input.");
+        throw std::runtime_error(\
+std::string() + __func__ + ": Invalid FaceSide specification found: \
+check b in X(a,b) of \"Color.def\" for allowed valid arguments. \
+Refer \"Cube.dat\" and \"<to be added>\" for sample input."
+);
+
+};
+
+
+
+listVecFaceSide getEdgeFaceSide(){
+    listVecFaceSide lDoubleFS = { 
+                                        { front, up }, { front, right }, { front, down }, { front, left },
+                                        { up, right }, { down, right }, { down, left }, { up, left },
+                                        { back, up }, { back, right }, { back, down }, { back, left }
+                                      };
+    return lDoubleFS;
+};
+
+
+
+listVecFaceSide getCornerFaceSide(){
+    listVecFaceSide lTripleFS = {
+        { front, right, up}, { back, right, up }, { back, left, up}, { front, left, up },
+        { front, right, down}, { back, right, down }, { back, left, down}, { front, left, down }
+    };
+    return lTripleFS;
 };
 
 

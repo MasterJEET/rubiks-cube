@@ -10,21 +10,38 @@
 #ifndef CUBE_H
 #define CUBE_H
 
-//Maximum number of visible Cubelets in 3x3 Cube
-#define __MAX_CUB__ 26
-//Maximum number of facelets in 3x3 cube
-#define __MAX_FAC__ 54
+///Number of visible Cubelets in 3x3x3 Cube
+#define __NUM_CUBELET__ 26
+///Number of facelets in 3x3x3 cube
+#define __NUM_FACELET__ 54
+///Number of faces in 3x3x3 cube
+#define __NUM_FACE__ 6
 
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <list>
 #include <utility>
+#include <algorithm>    //std::find
+#include <iterator>     //std::begin, std::end
 #include "cubelet.h"
 
 
-typedef std::array<Cubelet, __MAX_CUB__> arrCubelet;
-typedef std::array<Facelet, __MAX_FAC__> arrFacelet;
-typedef std::list<FaceletPosition> listFletPos;
+typedef std::array<Cubelet, __NUM_CUBELET__> arrCubelet;
+typedef std::array<Facelet, __NUM_FACELET__> arrFacelet;
+typedef std::array<std::size_t, __NUM_FACE__> arrNumber;
+typedef std::array<bool, __NUM_FACE__> arrBool;
+typedef std::array<Color, __NUM_FACE__> arrColor;
+
+
+/*! \brief For listing out different input format for Cube
+ *
+ * */
+enum enInputFormat {
+    LINEAR_FORMAT,
+    STEP_FORMAT
+};
+
 
 
 class Cube {
@@ -33,14 +50,108 @@ class Cube {
         ///Array for storing Cubelets with CubeletPosition as key
         arrCubelet aCubelet;
 
+        ///Array for storing opposite Color
+        arrColor aOppColor;
+
+        ///vector for mapping of NUMBER -> CBUELET POSITION,
+        ///Given an integer it stores which CubeletPostion int refers to
+        static vecCletPos vCletPos;
+
+        ///vector for mapping of NUMBER -> FACELET POSITION,
+        ///Given an integer it stores which FaceletPostion int refers to
+        static vecFletPos vFletPos;
+
+        ///vector for mapping of NUMBER -> COLOR,
+        ///Given an integer it stores which Color int refers to
+        static std::vector<Color> vCol;
+
+        ///Number of instances of Cube created
+        static std::size_t num_of_instances;
+
+        /*! Make inverse mapping for CubeletPositions.
+         *
+         * All CubeletPositions are associated with an integer (key) by
+         * operator(). This function takes that integer and use it as index
+         * for inserting CubeletPosition to a vector
+         *
+         * */
+        void mapIntToCubeletPosition();
+
+        /*! Make inverse mapping for FaceletPositions.
+         *
+         * All FaceletPositions are associated with an integer (key) by
+         * operator(). This function takes that integer and use it as index
+         * for inserting FaceletPosition to a vector
+         *
+         * */
+        void mapIntToFaceletPosition();
+
+        /*! Make inverse mapping for Color.
+         *
+         * All Colors are associated with an integer (key) as they
+         * are elements of an Enum. This function takes that integer and use it as index
+         * for inserting Color to a vector
+         *
+         * */
+        void mapIntToColor();
+
+        ///Initialize the cube, constructors will call this init method
+        void _init_(std::istream &is, enInputFormat eifX);
+
+        /*! Validate Color on edge Cubelets
+         *
+         * Check that no Facelets of any edge Cubelet have same or opposite Color
+         * (see cuception.h for definition of opposite Color)
+         *
+         * */
+        void validateEdgeColor(vecFacelet& vFacelet);
+
+
+        /*! Validate Color on corner Cubelets
+         *
+         * Check that no two Facelets of any corner Cubelet have same or opposite Color
+         *
+         * */
+        void validateCornerColor(vecFacelet& vFacelet);
+
+
+        /*! Check if number of Colors are assigned to different position types, correct number of times
+         *
+         * */
+        void validateNumOfColor(
+                arrNumber& aNumOfCenterCol,
+                arrNumber& aNumOfEdgeCol,
+                arrNumber& aNumOfCornerCol
+                );
+
         ///get all Facelets of a face from std::stream of step input
-        void createFaceFromStepInput(std::istream &is,   arrFacelet& aFacelet );
+        void createFaceFromStepInput(
+                std::istream &is,
+                vecFacelet& vFacelet,
+                arrNumber& aNumOfCenterCol,
+                arrNumber& aNumOfEdgeCol,
+                arrNumber& aNumOfCornerCol
+                );
 
         ///get all Facelets of a face from std::stream of linear input
-        void createFaceFromLinearInput(std::istream &is,   arrFacelet& aFacelet );
+        void createFaceFromLinearInput(
+                std::istream &is,
+                vecFacelet& vFacelet,
+                arrNumber& aNumOfCenterCol,
+                arrNumber& aNumOfEdgeCol,
+                arrNumber& aNumOfCornerCol
+                );
 
-        ///create Cubelets and store in array with help of hashFacelet
-        void createCube(arrFacelet& aFacelet);
+        /*! Find opposite Color
+         *
+         * Set figure out opposite Color for each Color i.e. let's say we have a Color red
+         * in Center Cubelet of Front side, what is the color on Back (opposite of Front) side
+         *
+         * */
+        void setOppColor(vecFacelet& vFacelet);
+
+        ///create Cubelets and store in array with help of vecFacelet
+        void createCube(vecFacelet& vFacelet);
 
         /*! Rotate any specified layer of Cube
          *
@@ -49,33 +160,76 @@ class Cube {
          * fashion as viewd from specified FaceSide
          *
          * */
-        void rotateLayer(const FaceSide& f, bool is_clockwise = true, std::size_t no_of_turns = 1, bool is_mid = false);
+        void rotateLayer(
+                const FaceSide& f,
+                bool is_clockwise = true,
+                std::size_t no_of_turns = 1,
+                bool is_mid = false
+                );
 
     public:
 
         ///Default constructor
-        Cube(){};
+        Cube();
 
         ///Constructor that takes std::istream and create cubelets
-        Cube(std::istream &is);
+        Cube(std::istream &is, enInputFormat eifX = LINEAR_FORMAT);
+
+        ///Construct cube from file (filepath provided)
+        Cube(std::string file_path, enInputFormat eifX = LINEAR_FORMAT);
         
         ///get Facelet located at FaceletPosition specified by three given FaceSides
-        Facelet getFacelet(const FaceSide fside1, const FaceSide fside2, const FaceSide fside3) const { return getFacelet( {fside1, fside2, fside3} );}
+        Facelet getFacelet(const FaceSide fs1, const FaceSide fs2, const FaceSide fs3) const {
+            return getFacelet( {fs1, fs2, fs3} );
+        }
 
         ///get Facelet located at FaceletPosition specified by two given FaceSides
-        Facelet getFacelet(const FaceSide fside1, const FaceSide fside2) const{ return getFacelet( {fside1, fside2 } ); }
+        Facelet getFacelet(const FaceSide fs1, const FaceSide fs2) const{
+            return getFacelet( {fs1, fs2 } );
+        }
 
         ///get Facelet located at FaceletPosition
-        Facelet getFacelet(const FaceletPosition pos ) const { return aCubelet.at( CubeletPosition (pos) ).getFacelet(pos) ; }
+        Facelet getFacelet(const FaceletPosition pos ) const {
+            return aCubelet.at( CubeletPosition (pos) ).getFacelet(pos) ;
+        }
 
         ///get corner Cubelet
-        Cubelet getCubelet(const FaceSide& f1, const FaceSide& f2, const FaceSide& f3) const{ return getCubelet({f1,f2,f3}); }
+        Cubelet getCubelet(const FaceSide& f1, const FaceSide& f2, const FaceSide& f3) const{
+            return getCubelet({f1,f2,f3});
+        }
 
         ///get edge Cubelet
-        Cubelet getCubelet(const FaceSide& f1, const FaceSide& f2) const{ return getCubelet({f1,f2}); }
+        Cubelet getCubelet(const FaceSide& f1, const FaceSide& f2) const{
+            return getCubelet({f1,f2});
+        }
 
         ///get Cubelet from CubeletPosition
         Cubelet getCubelet(const CubeletPosition pos) const{ return aCubelet.at( pos ); }
+
+        ///Given an interger between 0 - 25, return corresponding CubeletPosition
+        static CubeletPosition getCubeletPosition(std::size_t index);
+
+        ///Given an interger between 0 - 53, return corresponding FaceletPosition
+        static FaceletPosition getFaceletPosition(std::size_t index);
+
+        ///Given an integer between 0 - 5, return associated Color
+        static Color getColorFromInt(std::size_t index);
+
+        /*! Check if two Colors are opposite
+         *
+         * Retuns true if Colors are opposite, else false.
+         * See cuception.h for definition of opposite Color.
+         *
+         * */
+        bool areOppColor(const Color& first, const Color& second);
+
+        /*! Check if any two of given three Colors are opposite
+         *
+         * Retuns true if Colors are opposite, else false.
+         * See cuception.h for definition of opposite Color.
+         *
+         * */
+        bool anyOppColor(const Color& first, const Color& second, const Color& third);
 
         ///display a given face (position and color)
         void show(const FaceSide& f);
@@ -129,8 +283,9 @@ class Cube {
 
 
 
-/*! Fetch list of FaceletPositions associated with a given FaceSide
- *
+/*! \fn std::list<FaceletPosition> getEquivalentFletPos(const FaceSide f)
+ *  \brief  Fetch list of FaceletPositions associated with a given FaceSide
+ *  <pre>
  *                U U U
  *                U U U
  *                U U U
@@ -140,11 +295,12 @@ class Cube {
  *                D D D
  *                D D D
  *                D D D
+ *                </pre>
  * Returns above positions for a face,
  * Order of positions in the list is depicted by above diagram
  *
  * */
-std::list<FaceletPosition> getFaceletPosition(const FaceSide f);
+listFletPos getEquivalentFletPos(const FaceSide f);
 
 
 
@@ -230,7 +386,7 @@ template <typename P> std::vector<P> vecCenterEquivalence(const FaceSide& f);
 
 
 /** \fn template <typename P> std::vector<P> vecMidEdgeEquivalence(const FaceSide& f)
- *  /brief  This function returns a VECtor containing MIDdle EDGE EQUivalent (Cubelet)POSitions of given FaceSide
+ *  \brief  This function returns a VECtor containing MIDdle EDGE EQUivalent (Cubelet)POSitions of given FaceSide
  *
  * What are middle edge equivalent positions?
  *

@@ -9,6 +9,7 @@
 #include "cube.h"
 #include "gtest/gtest.h"
 #include "testcommon.h"
+#include "cuception.h"
 
 class CubeTest: public ::testing::Test {
     protected:
@@ -26,12 +27,13 @@ class CubeTest: public ::testing::Test {
         CubeTest(): pf(front), pfd(front, down), pfur(front, up, right),
                     pd(down), pdl(down, left), pdfr(down, front, right)
          {
-            std::string filepath = std::string() + CUBE_HOME + "/test/dat/cube_linear.dat";
-            is_cube.open( filepath  );
+            std::string linearpath = std::string() + CUBE_HOME + "/test/dat/cube_linear.dat";
+            is_cube.open( linearpath  );
             if(!is_cube)
-                throw std::runtime_error("Couldn't open file: \"" + filepath + "\"");
+                throw std::runtime_error("Couldn't open file: \"" + linearpath + "\"");
             else
                 cube = Cube(is_cube);
+
 
         }
 };
@@ -209,14 +211,14 @@ TEST_F(CubeTest, cubelet){
 }
 
 
-TEST_F(CubeTest, show){
-    cube.show(front);
-    cube.show(back);
-    cube.show(left);
-    cube.show(right);
-    cube.show(up);
-    cube.show(down);
-}
+//TEST_F(CubeTest, show){
+//    cube.show(front);
+//    cube.show(back);
+//    cube.show(left);
+//    cube.show(right);
+//    cube.show(up);
+//    cube.show(down);
+//}
 
 
 TEST_F(CubeTest, rotateSide){
@@ -313,6 +315,124 @@ TEST_F(CubeTest,rotate){
     cube_new = cube_old;
     cube_new.rotate(down,false,7);
     EXPECT_EQ(cube_old.getFacelet(back,up,right)*down, cube_new.getFacelet(left,back,up));
+}
+
+
+TEST_F(CubeTest, opposite_color){
+    EXPECT_TRUE(cube.areOppColor(white, yellow));
+    EXPECT_FALSE(cube.areOppColor(white, red));
+
+    EXPECT_TRUE(cube.anyOppColor(yellow, orange, red));
+    EXPECT_FALSE(cube.anyOppColor(green, red, yellow));
+
+    EXPECT_TRUE(cube.anyOppColor(blue, green, white));
+    EXPECT_FALSE(cube.anyOppColor(white, blue, orange));
+}
+
+TEST(Cube, getCubeletPosition){
+
+    //Out of range
+    EXPECT_THROW(Cube::getCubeletPosition(30), std::out_of_range);
+
+    //Center Positions
+    EXPECT_EQ(Cube::getCubeletPosition(2), CubeletPosition(up));
+    EXPECT_EQ(Cube::getCubeletPosition(5), CubeletPosition(right));
+
+    //Edge Positions
+    EXPECT_EQ(Cube::getCubeletPosition(8), CubeletPosition(left, front));
+    EXPECT_EQ(Cube::getCubeletPosition(11), CubeletPosition(back, down));
+    EXPECT_EQ(Cube::getCubeletPosition(16), CubeletPosition(left, down));
+
+    //Corener Postions
+    EXPECT_EQ(Cube::getCubeletPosition(21), CubeletPosition(front, right, down));
+    EXPECT_EQ(Cube::getCubeletPosition(23), CubeletPosition(up, right, back));
+
+
+}
+
+TEST(Cube, getFaceletPosition){
+    //Out of range
+    EXPECT_THROW(Cube::getFaceletPosition(54), std::out_of_range);
+
+    //Center Positions
+    EXPECT_EQ(Cube::getFaceletPosition(45), FaceletPosition(right));
+
+    //Edge Positions
+    EXPECT_EQ(Cube::getFaceletPosition(22), FaceletPosition(up, left));
+    EXPECT_EQ(Cube::getFaceletPosition(12), FaceletPosition(back, down));
+    EXPECT_EQ(Cube::getFaceletPosition(47), FaceletPosition(right, back));
+    EXPECT_EQ(Cube::getFaceletPosition(28), FaceletPosition(down, front));
+
+    //Corner Positions
+    EXPECT_EQ(Cube::getFaceletPosition(41), FaceletPosition(left,up,front));
+    EXPECT_EQ(Cube::getFaceletPosition(17), FaceletPosition(back,up,right));
+    EXPECT_EQ(Cube::getFaceletPosition(32), FaceletPosition(down,front,right));
+    EXPECT_EQ(Cube::getFaceletPosition(43), FaceletPosition(left,down,back));
+
+}
+
+TEST(Cube, getColorFromInt){
+    //Out of range
+    EXPECT_THROW(Cube::getColorFromInt(6), std::out_of_range);
+
+    EXPECT_EQ(Cube::getColorFromInt(1), yellow);
+    EXPECT_EQ(Cube::getColorFromInt(4), green);
+}
+
+TEST(Cube, Cube){
+    EXPECT_THROW(Cube C1("/home/masterjeet/cube.dat"), std::runtime_error);
+}
+
+//check for duplicate entries in 
+TEST(input, duplicate){
+    std::string errorpath = std::string() + CUBE_HOME + "/test/dat/cube_duplicate.dat";
+
+    EXPECT_THROW(Cube C(errorpath), NumOfFaceletException);
+}
+
+//Checking count of Facelets with given Color
+TEST(input, count){
+    std::ifstream is_cube_color;
+    std::string errorpath = std::string() + CUBE_HOME + "/test/dat/cube_col.dat";
+    is_cube_color.open( errorpath );
+
+    EXPECT_THROW(Cube C(is_cube_color), NumOfColorException);
+}
+
+//Checking no edge Cubelet has same Color
+TEST(input, edgesame){
+    std::ifstream is_cube;
+    std::string errorpath = std::string() + CUBE_HOME + "/test/dat/cube_edge.dat";
+    is_cube.open( errorpath );
+
+    EXPECT_THROW( Cube C(is_cube), EdgeColorException);
+}
+
+//Checking no edge Cubelet has opposite Color
+TEST(input, edgeopp){
+    std::ifstream is_cube;
+    std::string errorpath = std::string() + CUBE_HOME + "/test/dat/cube_opp.dat";
+    is_cube.open( errorpath );
+
+    EXPECT_THROW( Cube C(is_cube), EdgeColorException);
+}
+
+//Checking Colors on a given corner Cubelet are different
+TEST(input, cornersame){
+    std::ifstream is_cube;
+    std::string errorpath = std::string() + CUBE_HOME + "/test/dat/cube_corner_same.dat";
+    is_cube.open( errorpath );
+
+    EXPECT_THROW(Cube C(is_cube), CornerColorException);
+}
+
+//Checking given corner Cubelet doesn't contain opposite Color
+TEST(input, corneropp){
+    std::ifstream is_cube;
+    std::string errorpath = std::string() + CUBE_HOME + "/test/dat/cube_corner_opp.dat";
+    is_cube.open( errorpath );
+
+    EXPECT_THROW(Cube C(is_cube), CornerColorException);
 }
 
 

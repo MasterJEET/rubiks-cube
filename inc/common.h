@@ -13,6 +13,8 @@
 #include <iostream>
 #include <map>
 #include <sstream>
+#include <list>
+#include <vector>
 #include <execinfo.h>
 #include <signal.h>
 #include <unistd.h>
@@ -25,6 +27,7 @@
 #     define __func__ "<unknown>"
 #    endif
 #   endif
+
 
 //============ Define enum start ===========
 #   define X(a,b) a,
@@ -44,6 +47,13 @@ enum PositionType {
 };
 #   undef X
 //=========== Define enum end =============
+
+
+
+
+typedef std::list<std::vector<FaceSide>> listVecFaceSide;
+
+
 
 extern const char *Color_str[];
 
@@ -87,6 +97,27 @@ void assertColor(std::istream& is, Color& col);
 void assertFaceSide(std::istream& is, FaceSide& fs);
 
 
+/*! \fn listVecFaceSide getEdgeFaceSide()
+ *  \brief  get list of vector of FaceSide specifying Edge Cubelet positions
+ *
+ *  Edge Cubelet position can be specified with two FaceSides.
+ *  Such as {front, right} , {up, left} and so on. This function returns list of all
+ *  such permutations.
+ *
+ * */
+listVecFaceSide getEdgeFaceSide();
+
+
+/*! \fn listVecFaceSide getCornerFaceSide()
+ *  \brief  get list of vector of FaceSide specifying Corner Cubelet positions
+ *
+ *  Corner Cubelet position can be specified with three FaceSides.
+ *  Such as {front, right, up} , {up, left, front} and so on. This function returns list of all
+ *  such combinations.
+ *
+ * */
+listVecFaceSide getCornerFaceSide();
+
 
 /*! \fn FaceSide& operator*=(FaceSide& lhs, const FaceSide& rhs)
  *  \brief  Overloding to implement cross multiplication similar to those for
@@ -94,7 +125,6 @@ void assertFaceSide(std::istream& is, FaceSide& fs);
  *
  * */
 FaceSide& operator*=(FaceSide& lhs, const FaceSide& rhs);
-
 
 
 /*! \fn FaceSide operator*(FaceSide lhs, const FaceSide& rhs)
@@ -149,8 +179,10 @@ bool isValidFaceSide(const std::string& f);
  *
  * Observe the current orientation of Cube. If a FaceSide 'fs' is in horizontal plane (up or down),
  * rotate the cube about a horizontal axis parallel to front FaceSide till 'fs' align with the front.
- * Face i.e. at FaceSide up now was let's say at FaceSide 'up_before'. Then 'up_before' is up equivalent
- * of 'fs'.
+ * Face i.e. at FaceSide up now was let's say at FaceSide 'up_before'. Then 'up_before' is <i>up</i> equivalent
+ * of 'fs'. We write it as:
+ *
+ *      up( fs ) = up_before
  *
  * For vertical Faces (front,back,right,left) rotate the Cube about a vertical axis till 'fs' align
  * with font FaceSide. Use above analogy to derive FaceSide equivalence.

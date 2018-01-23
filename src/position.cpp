@@ -49,6 +49,17 @@ FaceSide Position::getSideAt(size_t index) const{
     return vecSide.at(index);
 };
 
+
+std::size_t Position::size() const{
+    std::size_t size = 0;
+    for(auto &fs: vecSide){
+        if(fs != undefside)
+            size ++;
+    }
+    return size;
+}
+
+
 std::ostream& operator<<(std::ostream& os, Position P){
     os << "Position: ptype = " << P.ptype;
     os << ", vecSide = { ";

@@ -51,7 +51,7 @@ librubiks-cube_main.a : cube-all.o main.o
 	$(AR) $(ARFLAGS) $@ $^
 
 
-# Libraris, googletest
+# Libraries, googletest
 $(GTEST_MAKE)/gtest.a :
 	cd $(GTEST_MAKE); make gtest.a
 
