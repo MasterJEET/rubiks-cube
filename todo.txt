@@ -13,3 +13,10 @@ edge Color, corner Color count in NumOfColorException
 
 Next:
 * implement algobase
+    * Maintain a datasructure which will return object ( may be pointer or similar )
+    which will identify a Cubelet uniquely and this won't be invalidated when
+    Cube undergoes multiple operations
+
+* [done] use are/anyOppColor in _init_ method
+* [done] in default constructor Cube(), initialize Cube with solved
+configuration ( i.e. all 9 of each Color in one Face )
