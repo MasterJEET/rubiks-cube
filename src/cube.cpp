@@ -14,25 +14,36 @@ vecFletPos Cube::vFletPos (__NUM_FACELET__);
 std::vector<Color> Cube::vCol (__NUM_FACE__);
 std::size_t Cube::num_of_instances = 0;
 
-Cube::Cube(): aOppColor{undefcol,undefcol,undefcol,undefcol,undefcol,undefcol}
+Cube::Cube()
 {
 
-    num_of_instances ++;
+    std::stringstream ss;
 
-    if(num_of_instances == 1){
-        mapIntToCubeletPosition();
-        mapIntToFaceletPosition();
-        mapIntToColor();
-    }
+    ss << "# The input depicted here is of fully solved Cube" << std::endl;
+
+    ss << "F: W W W W W W W W W" << std::endl;
+
+    ss << "B: Y Y Y Y Y Y Y Y Y" << std::endl;
+
+    ss << "L: O O O O O O O O O    //Just testing different type of comment" << std::endl;
+
+    ss << "R: R R R R R R R R R" << std::endl;
+
+    ss << "U: B B B B B B B B B    /This comment should also get ignored" << std::endl;
+
+    ss << "D: G G G G G G G G G" << std::endl;
+
+    enInputFormat eifX = LINEAR_FORMAT;
+    _init_(ss, eifX);
 
 }
 
-Cube::Cube(std::istream &is, enInputFormat eifX): Cube(){
+Cube::Cube(std::istream &is, enInputFormat eifX) {
     _init_(is, eifX);
 }
 
 
-Cube::Cube(std::string file_path, enInputFormat eifX): Cube(){
+Cube::Cube(std::string file_path, enInputFormat eifX) {
 
     std::ifstream ifs;
     ifs.open(file_path);
@@ -44,6 +55,14 @@ Cube::Cube(std::string file_path, enInputFormat eifX): Cube(){
 
 
 void Cube::_init_(std::istream& is, enInputFormat eifX){
+
+    num_of_instances ++;
+
+    if(num_of_instances == 1){
+        mapIntToCubeletPosition();
+        mapIntToFaceletPosition();
+        mapIntToColor();
+    }
     
     //Array for storing Facelets with FaceletPosition as key
     vecFacelet vFacelet(__NUM_FACELET__);
@@ -175,9 +194,7 @@ void Cube::validateCornerColor(vecFacelet& vFacelet){
         if(are_same)
             throw CornerColorException( CubeletPosition(vfs) ,"Same Color present.");
 
-        bool are_opp = aOppColor[ f1.getColor() ] == f2.getColor();
-        are_opp = are_opp || ( aOppColor[ f2.getColor() ] == f3.getColor() );
-        are_opp = are_opp || ( aOppColor[ f3.getColor() ] == f1.getColor() );
+        bool are_opp = anyOppColor( f1.getColor(), f2.getColor(), f3.getColor() );
         if(are_opp)
             throw CornerColorException( vfs , "Opposite Color present.");
     }
