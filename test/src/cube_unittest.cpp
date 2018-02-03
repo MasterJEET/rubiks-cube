@@ -329,6 +329,20 @@ TEST_F(CubeTest, opposite_color){
     EXPECT_FALSE(cube.anyOppColor(white, blue, orange));
 }
 
+
+TEST(Cube, Cube){
+    Cube C;
+
+    for(const auto& f:{front,back,up,down,right,back})
+    {
+        Color col = C.getFacelet(f).getColor();
+        for(const auto& fp: getEquivalentFletPos(f))
+        {
+            EXPECT_EQ(col, C.getFacelet(fp).getColor());
+        }
+    }
+}
+
 TEST(Cube, getCubeletPosition){
 
     //Out of range
@@ -379,7 +393,7 @@ TEST(Cube, getColorFromInt){
     EXPECT_EQ(Cube::getColorFromInt(4), green);
 }
 
-TEST(Cube, Cube){
+TEST(Cube, CubePath){
     EXPECT_THROW(Cube C1("/home/masterjeet/cube.dat"), std::runtime_error);
 }
 
