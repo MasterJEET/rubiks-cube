@@ -28,10 +28,12 @@
 
 
 typedef std::array<Cubelet, __NUM_CUBELET__> arrCubelet;
+typedef std::array<CubeletPosition, __NUM_CUBELET__> arrCubeletPosition;
 typedef std::array<Facelet, __NUM_FACELET__> arrFacelet;
 typedef std::array<std::size_t, __NUM_FACE__> arrNumber;
 typedef std::array<bool, __NUM_FACE__> arrBool;
 typedef std::array<Color, __NUM_FACE__> arrColor;
+typedef std::array<FaceSide, __NUM_FACE__> arrFaceSide;
 
 
 /*! \brief For listing out different input format for Cube
@@ -40,6 +42,27 @@ typedef std::array<Color, __NUM_FACE__> arrColor;
 enum enInputFormat {
     LINEAR_FORMAT,
     STEP_FORMAT
+};
+
+
+/*! \brief Set of Color
+ *
+ * It can hold a maximum of three Colors, which can be used to refer
+ * a Cubelet which have these Colors on its Facelets
+ *
+ * */
+struct ColorSet{
+    ColorSet(Color c1, Color c2 = undefcol, Color c3 = undefcol);
+    ColorSet(std::vector<Color> vColor);
+    Color min() const{ return col_min;};
+    Color mid() const{ return col_mid;};
+    Color max() const{ return col_max;};
+
+    private:
+    Color col_min;
+    Color col_mid;
+    Color col_max;
+    void init();
 };
 
 
@@ -52,6 +75,10 @@ class Cube {
 
         ///Array for storing opposite Color
         arrColor aOppColor;
+
+        ///This array contains mapping between ColorSet and the CubeletPosition
+        ///This is a class invariant.
+        arrCubeletPosition aCletPos;
 
         ///vector for mapping of NUMBER -> CBUELET POSITION,
         ///Given an integer it stores which CubeletPostion int refers to
@@ -153,6 +180,7 @@ class Cube {
         ///create Cubelets and store in array with help of vecFacelet
         void createCube(vecFacelet& vFacelet);
 
+
         /*! Rotate any specified layer of Cube
          *
          * rotate any layer of cube, side [default] or middle (as per is_mid), parallel to any FaceSide
@@ -203,6 +231,21 @@ class Cube {
             return getCubelet({f1,f2});
         }
 
+        ///get Cubelet from three Colors
+        Cubelet getCubelet(const Color& c1, const Color& c2, const Color& c3) const{
+            return getCubelet({c1, c2, c3});
+        }
+
+        ///get Cubelet from two Colors
+        Cubelet getCubelet(const Color& c1, const Color& c2) const{
+            return getCubelet({c1, c2});
+        }
+
+        ///get Cubelet from ColorSet
+        Cubelet getCubelet(const ColorSet& cs) const{
+            return getCubelet( aCletPos.at( ColorSetToInt(cs) ) );
+        }
+
         ///get Cubelet from CubeletPosition
         Cubelet getCubelet(const CubeletPosition pos) const{ return aCubelet.at( pos ); }
 
@@ -221,7 +264,7 @@ class Cube {
          * See cuception.h for definition of opposite Color.
          *
          * */
-        bool areOppColor(const Color& first, const Color& second);
+        bool areOppColor(const Color& first, const Color& second) const;
 
         /*! Check if any two of given three Colors are opposite
          *
@@ -229,7 +272,63 @@ class Cube {
          * See cuception.h for definition of opposite Color.
          *
          * */
-        bool anyOppColor(const Color& first, const Color& second, const Color& third);
+        bool anyOppColor(const Color& first, const Color& second, const Color& third) const;
+
+
+        ///*! Return the side where given Color is present at center
+        // *
+        // * */
+        //FaceSide getSideOfColor(const Color& c);
+
+
+        /*! Map each ColorSet to an int
+         *
+         * The purpose of this mapping is, with this every combination of three or less Colors
+         * can be associated with an integer. This integer can be used as a key for array
+         * of CubeletPositions, effectively we'll have one-to-one correspondence between
+         * set of three or less Colors and CubeletPositions.
+         * */
+        std::size_t ColorSetToInt(const ColorSet& cs) const;
+        std::size_t ColorSetToInt(const CubeletPosition& cp) const;
+        std::size_t ColorSetToInt(const Color& c1, const Color& c2)const {return ColorSetToInt({c1,c2});};
+        std::size_t ColorSetToInt(const Color& c1, const Color& c2, const Color& c3) const{
+            return ColorSetToInt({c1,c2,c3});
+        }
+
+
+        ///*! Set equivalent Colors
+        // *
+        // * What are equivalent Colors?
+        // *
+        // * For a Color <i>col</i> which is located at center of FaceSide <i>f</i>, and for an arbitrary
+        // * FaceSide <i>x</i>; we define <i>x</i> equivalence of <i>col</i>, x(col), as:
+        // *
+        // *      x(col) = center_color( x(f) )
+        // *
+        // * where center_color(FaceSide) is Color located at center of given FaceSide. For definition of
+        // * of <i>x equivalence of f</i> i.e. x(f), see setEquivalentFaceSide declared in common.h .
+        // *
+        // * Let's say red Color is at the center of top face. Right face is right equivalent of up,
+        // * let's say yellow Color is at the center of right face. Then right equivalent of red Color
+        // * would be yellow:
+        // *
+        // *      col = red, f = up, x = right
+        // *      Now x(col)  = center_color( x(f) )
+        // *      =>  right(red) = center_color( right(up) ) = center_color( right )
+        // *      =>  right(red) = yellow
+        // *
+        // * This function sets up, right, down & left equivalent Color of cFront to
+        // * cUp, cRight, cDown & cLeft respectively.
+        // *
+        // * */
+        //void setEquivalentColor(
+        //        const Color& cFront,
+        //        Color& cUp,
+        //        Color& cRight,
+        //        Color& cDown,
+        //        Color& cLeft
+        //        );
+
 
         ///display a given face (position and color)
         void show(const FaceSide& f);
@@ -252,8 +351,13 @@ class Cube {
          * given FaceSide.
          *
          */
-        void rotateMid(const FaceSide& f, bool is_clockwise, std::size_t no_of_turns = 1);
-        void rotateMid(const FaceSide& f, std::size_t no_of_turns = 1, bool is_clockwise = true);
+        void rotateMid();
+        void rotateMid(const FaceSide& f);
+        void rotateMid(const FaceSide& f, std::size_t no_of_turns);
+        void rotateMid(const FaceSide& f, int no_of_turns);
+        void rotateMid(const FaceSide& f, bool is_clockwise);
+        void rotateMid(const FaceSide& f, std::size_t no_of_turns, bool is_clockwise);
+        void rotateMid(const FaceSide& f, bool is_clockwise, std::size_t no_of_turns);
 
 
         /*! Rotate the Cube 

@@ -201,8 +201,12 @@ TEST_F(CubeTest, cubelet){
     vCol::iterator vc;
 
     for( vc = vtc.begin(), vf = vtfs.begin(); vc != vtc.end()  ; vf++, vc++ ){
-        FaceletPosition fp1( vf->at(0), vf->at(1), vf->at(2) );   FaceletPosition fp2( vf->at(1), vf->at(0), vf->at(2) );   FaceletPosition fp3( vf->at(2), vf->at(0), vf->at(1) );
-        Facelet f1(fp1, vc->at(0) );   Facelet f2(fp2, vc->at(1) );   Facelet f3(fp3, vc->at(2) );
+        FaceletPosition fp1( vf->at(0), vf->at(1), vf->at(2) );
+        FaceletPosition fp2( vf->at(1), vf->at(0), vf->at(2) );
+        FaceletPosition fp3( vf->at(2), vf->at(0), vf->at(1) );
+        Facelet f1(fp1, vc->at(0) );
+        Facelet f2(fp2, vc->at(1) );
+        Facelet f3(fp3, vc->at(2) );
         EXPECT_EQ( Cubelet( f1, f2, f3), cube.getCubelet( fp1 ) );
     }
     }
@@ -218,6 +222,50 @@ TEST_F(CubeTest, cubelet){
 //    cube.show(right);
 //    cube.show(up);
 //    cube.show(down);
+//}
+
+//TEST_F(CubeTest, getSideOfColor){
+//    Color cUp       = cube.getFacelet(up).getColor();
+//    Color cRight    = cube.getFacelet(right).getColor();
+//    Color cDown     = cube.getFacelet(down).getColor();
+//    Color cLeft     = cube.getFacelet(left).getColor();
+//    Color cFront    = cube.getFacelet(front).getColor();
+//    Color cBack     = cube.getFacelet(back).getColor();
+//
+//    cube.rotate(front);
+//
+//    EXPECT_EQ(cube.getSideOfColor(cUp),     right);
+//    EXPECT_EQ(cube.getSideOfColor(cRight),  down);
+//    EXPECT_EQ(cube.getSideOfColor(cDown),   left);
+//    EXPECT_EQ(cube.getSideOfColor(cLeft),   up);
+//    EXPECT_EQ(cube.getSideOfColor(cFront),  front);
+//    EXPECT_EQ(cube.getSideOfColor(cBack),   back);
+//
+//    cube.rotateMid(front,3);
+//
+//    EXPECT_EQ(cube.getSideOfColor(cUp),     up);
+//    EXPECT_EQ(cube.getSideOfColor(cRight),  right);
+//    EXPECT_EQ(cube.getSideOfColor(cDown),   down);
+//    EXPECT_EQ(cube.getSideOfColor(cLeft),   left);
+//    EXPECT_EQ(cube.getSideOfColor(cFront),  front);
+//    EXPECT_EQ(cube.getSideOfColor(cBack),   back);
+//
+//}
+
+
+//TEST_F(CubeTest, setEquivalentColor){
+//    Color cf = green;
+//    Color cu, cr, cd, cl;
+//    cube.setEquivalentColor(cf, cu, cr, cd, cl);
+//
+//    FaceSide f = cube.getSideOfColor(cf);
+//    FaceSide u,r,d,l;
+//    setEquivalentFaceSide(f,u,r,d,l);
+//
+//    EXPECT_EQ(cu,   cube.getFacelet(u).getColor());
+//    EXPECT_EQ(cr,   cube.getFacelet(r).getColor());
+//    EXPECT_EQ(cd,   cube.getFacelet(d).getColor());
+//    EXPECT_EQ(cl,   cube.getFacelet(l).getColor());
 //}
 
 
@@ -329,6 +377,129 @@ TEST_F(CubeTest, opposite_color){
     EXPECT_FALSE(cube.anyOppColor(white, blue, orange));
 }
 
+
+TEST_F(CubeTest, ColorSetToInt){
+    std::size_t tR = cube.ColorSetToInt(red);
+    std::size_t tB = cube.ColorSetToInt(blue);
+    
+    EXPECT_EQ(tR, 3);
+    cube.rotateMid();
+    EXPECT_EQ(tB, 5);
+
+
+    std::size_t tWR = cube.ColorSetToInt(white, red);
+    std::size_t tRW = cube.ColorSetToInt(red, white);
+    std::size_t tRB = cube.ColorSetToInt(red, blue);
+    std::size_t tBR = cube.ColorSetToInt(blue, red);
+    std::size_t tWO = cube.ColorSetToInt(white, orange);
+
+    cube.rotate(up);
+    EXPECT_EQ(tWR, tRW);
+    EXPECT_EQ(tBR, tRB);
+    EXPECT_EQ(tBR, 17); cube.rotateSide(down);
+    EXPECT_EQ(tWO, 6);
+    EXPECT_THROW(cube.ColorSetToInt(white, white), std::runtime_error);
+    EXPECT_THROW(cube.ColorSetToInt(white, yellow), std::runtime_error);
+
+
+    ColorSet cWOB( white, orange, blue );
+    std::size_t tWOB = cube.ColorSetToInt(cWOB);
+    std::size_t tOBW = cube.ColorSetToInt(orange, blue, white);
+    std::size_t tBWO = cube.ColorSetToInt(blue, white, orange);
+    std::size_t tYRB = cube.ColorSetToInt(yellow, red, blue);
+    std::size_t tWOG = cube.ColorSetToInt(white, orange, green);
+
+
+    cube.rotate(back);
+    EXPECT_EQ(tWOB, tOBW);
+    EXPECT_EQ(tWOB, tBWO);
+    EXPECT_EQ(tYRB, 25);    cube.rotateMid(left);
+    EXPECT_EQ(tWOG, 18);
+    EXPECT_THROW(cube.ColorSetToInt(white, red, red), std::runtime_error);  //same Color
+    EXPECT_THROW(cube.ColorSetToInt(green, red, orange), std::runtime_error);  //opposite Color
+
+    CubeletPosition cp(up, back, left);
+    vecFacelet vFac = cube.getCubelet(cp).getFacelet();
+    Color c1 = vFac[0].getColor();
+    Color c2 = vFac[1].getColor();
+    Color c3 = vFac[2].getColor();
+    ColorSet cs1(c1, c2, c3);
+    
+    EXPECT_EQ( cube.ColorSetToInt(cs1), cube.ColorSetToInt(cp) );
+
+
+    CubeletPosition cp2(front);
+    vecFacelet vFac2 = cube.getCubelet(cp2).getFacelet();
+    Color c4 = vFac2[0].getColor();
+    ColorSet cs2(c4);
+
+    EXPECT_EQ( cube.ColorSetToInt(cs2), cube.ColorSetToInt(cp2) );
+}
+
+
+TEST_F(CubeTest, getCubeletUsingColorSet){
+    Cubelet c1b( cube.getCubelet(red,yellow) );
+
+    cube.rotate(left);
+
+    Cubelet c1a( cube.getCubelet(red,yellow) );
+
+    EXPECT_EQ( c1a, c1b * left );
+}
+
+
+TEST(colorset, constructor){
+    ColorSet cs1(red, white, blue);
+    EXPECT_TRUE(cs1.min() <= cs1.mid());
+    EXPECT_TRUE(cs1.mid() <= cs1.max());
+
+    ColorSet cs2(yellow, green, orange);
+    EXPECT_TRUE(cs2.min() <= cs2.mid());
+    EXPECT_TRUE(cs2.mid() <= cs2.max());
+
+    ColorSet cs3(yellow, red);
+    EXPECT_TRUE(cs3.min() <= cs3.mid());
+    EXPECT_TRUE(cs3.mid() <= cs3.max());
+
+    ColorSet cs4(green);
+    EXPECT_TRUE(cs4.min() <= cs4.mid());
+    EXPECT_TRUE(cs4.mid() <= cs4.max());
+
+    //same Color
+    EXPECT_THROW( ColorSet cs5(red, red), std::runtime_error );
+    //Opposite Color
+    EXPECT_THROW( ColorSet cs5(white, green, white), std::runtime_error );
+
+    std::vector<Color> vCol1;
+    EXPECT_THROW( ColorSet cs6(vCol1), std::runtime_error );    //Empty vector
+    vCol1.push_back(yellow);
+    vCol1.push_back(orange);
+    vCol1.push_back(blue);
+
+    ColorSet cs7(vCol1);
+    EXPECT_TRUE(cs7.min() <= cs7.mid());
+    EXPECT_TRUE(cs7.mid() <= cs7.max());
+
+    vCol1.push_back( green );
+    EXPECT_THROW( ColorSet cs8(vCol1), std::runtime_error );    //Size > 3
+
+
+}
+
+
+TEST(Cube, Cube){
+    Cube C;
+
+    for(const auto& f:{front,back,up,down,right,back})
+    {
+        Color col = C.getFacelet(f).getColor();
+        for(const auto& fp: getEquivalentFletPos(f))
+        {
+            EXPECT_EQ(col, C.getFacelet(fp).getColor());
+        }
+    }
+}
+
 TEST(Cube, getCubeletPosition){
 
     //Out of range
@@ -379,7 +550,7 @@ TEST(Cube, getColorFromInt){
     EXPECT_EQ(Cube::getColorFromInt(4), green);
 }
 
-TEST(Cube, Cube){
+TEST(Cube, CubePath){
     EXPECT_THROW(Cube C1("/home/masterjeet/cube.dat"), std::runtime_error);
 }
 

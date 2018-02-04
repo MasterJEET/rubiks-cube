@@ -9,6 +9,8 @@
 #include <unordered_map>
 #include <stdexcept>
 
+
+
 std::unordered_map<std::string, Color> toColor;                                                   //Maps first letter of Color to Color itself
 std::unordered_map<std::string, FaceSide> toFaceSide;                                             //Maps first letter of FaceSide to FaceSide itself
 
@@ -341,3 +343,4 @@ std::string getHome(){
     else
         return std::string( std::getenv("HOME") + std::string("/rubiks-cube"));
 };
+

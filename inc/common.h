@@ -49,8 +49,6 @@ enum PositionType {
 //=========== Define enum end =============
 
 
-
-
 typedef std::list<std::vector<FaceSide>> listVecFaceSide;
 
 
@@ -264,5 +262,6 @@ const PositionType undeftype = P_UNDEFINED;
 extern const std::string CUBE_HOME;
 
 // =============================================
+
 
 #endif

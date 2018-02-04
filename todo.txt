@@ -13,3 +13,9 @@ edge Color, corner Color count in NumOfColorException
 
 Next:
 * implement algobase
+    * [done] Maintain a datasructure which will return object ( may be pointer or similar )
+    which will identify a Cubelet uniquely and this won't be invalidated when
+    Cube undergoes multiple operations
+    * Make ColorSet directly convertible to integer i.e. remove the redundant dependency
+    of using ColorSetToInt
+    * Add more test cases for above points
