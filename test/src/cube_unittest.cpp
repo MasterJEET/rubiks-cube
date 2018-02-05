@@ -439,12 +439,26 @@ TEST_F(CubeTest, ColorSetToInt){
 
 TEST_F(CubeTest, getCubeletUsingColorSet){
     Cubelet c1b( cube.getCubelet(red,yellow) );
-
     cube.rotate(left);
-
-    Cubelet c1a( cube.getCubelet(red,yellow) );
+    Cubelet c1a( cube.getCubelet(yellow,red) );
 
     EXPECT_EQ( c1a, c1b * left );
+    
+
+    Cubelet c2b = cube.getCubelet( white );
+    cube.rotate( down, 2 );
+    Cubelet c2a = cube.getCubelet( white );
+    c2a *= up; c2b *= down;
+
+    EXPECT_EQ( c2a, c2b );
+
+
+    Cubelet c3b( cube.getCubelet(yellow, orange, blue) );
+    cube.rotate( back, false );
+    Cubelet c3a( cube.getCubelet(blue, yellow, orange) );
+
+    EXPECT_EQ( c3b * front, c3a );
+
 }
 
 

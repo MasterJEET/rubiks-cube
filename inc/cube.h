@@ -123,7 +123,7 @@ class Cube {
         void mapIntToColor();
 
         ///Initialize the cube, constructors will call this init method
-        void _init_(std::istream &is, enInputFormat eifX);
+        void init(std::istream &is, enInputFormat eifX);
 
         /*! Validate Color on edge Cubelets
          *
@@ -275,9 +275,9 @@ class Cube {
         bool anyOppColor(const Color& first, const Color& second, const Color& third) const;
 
 
-        ///*! Return the side where given Color is present at center
-        // *
-        // * */
+        //! Return the side where given Color is present at center
+        //
+        //
         //FaceSide getSideOfColor(const Color& c);
 
 
@@ -296,31 +296,31 @@ class Cube {
         }
 
 
-        ///*! Set equivalent Colors
-        // *
-        // * What are equivalent Colors?
-        // *
-        // * For a Color <i>col</i> which is located at center of FaceSide <i>f</i>, and for an arbitrary
-        // * FaceSide <i>x</i>; we define <i>x</i> equivalence of <i>col</i>, x(col), as:
-        // *
-        // *      x(col) = center_color( x(f) )
-        // *
-        // * where center_color(FaceSide) is Color located at center of given FaceSide. For definition of
-        // * of <i>x equivalence of f</i> i.e. x(f), see setEquivalentFaceSide declared in common.h .
-        // *
-        // * Let's say red Color is at the center of top face. Right face is right equivalent of up,
-        // * let's say yellow Color is at the center of right face. Then right equivalent of red Color
-        // * would be yellow:
-        // *
-        // *      col = red, f = up, x = right
-        // *      Now x(col)  = center_color( x(f) )
-        // *      =>  right(red) = center_color( right(up) ) = center_color( right )
-        // *      =>  right(red) = yellow
-        // *
-        // * This function sets up, right, down & left equivalent Color of cFront to
-        // * cUp, cRight, cDown & cLeft respectively.
-        // *
-        // * */
+        // Set equivalent Colors
+        //
+        // What are equivalent Colors?
+        //
+        // For a Color <i>col</i> which is located at center of FaceSide <i>f</i>, and for an arbitrary
+        // FaceSide <i>x</i>; we define <i>x</i> equivalence of <i>col</i>, x(col), as:
+        //
+        //      x(col) = center_color( x(f) )
+        //
+        // where center_color(FaceSide) is Color located at center of given FaceSide. For definition of
+        // of <i>x equivalence of f</i> i.e. x(f), see setEquivalentFaceSide declared in common.h .
+        //
+        // Let's say red Color is at the center of top face. Right face is right equivalent of up,
+        // let's say yellow Color is at the center of right face. Then right equivalent of red Color
+        // would be yellow:
+        //
+        //      col = red, f = up, x = right
+        //      Now x(col)  = center_color( x(f) )
+        //      =>  right(red) = center_color( right(up) ) = center_color( right )
+        //      =>  right(red) = yellow
+        //
+        // This function sets up, right, down & left equivalent Color of cFront to
+        // cUp, cRight, cDown & cLeft respectively.
+        //
+        //
         //void setEquivalentColor(
         //        const Color& cFront,
         //        Color& cUp,
@@ -330,8 +330,8 @@ class Cube {
         //        );
 
 
-        ///display a given face (position and color)
-        void show(const FaceSide& f);
+        //display a given face (position and color)
+        //void show(const FaceSide& f);
 
 
         /*! Rotate any specified side of Cube
@@ -340,8 +340,13 @@ class Cube {
          * fashion as viewed from that (given FaceSide) side
          *
          */
-        void rotateSide(const FaceSide& f, bool is_clockwise, std::size_t no_of_turns = 1);
-        void rotateSide(const FaceSide& f, std::size_t no_of_turns = 1, bool is_clockwise = true);
+        void rotateSide();
+        void rotateSide(const FaceSide& f);
+        void rotateSide(const FaceSide& f, std::size_t no_of_turns);
+        void rotateSide(const FaceSide& f, int no_of_turns);
+        void rotateSide(const FaceSide& f, bool is_clockwise);
+        void rotateSide(const FaceSide& f, bool is_clockwise, std::size_t no_of_turns);
+        void rotateSide(const FaceSide& f, std::size_t no_of_turns, bool is_clockwise);
 
 
         /*! Rotate any specified middle layer of Cube
@@ -363,26 +368,25 @@ class Cube {
         /*! Rotate the Cube 
          *
          * Let 1 & 2 denotes the state of Cube before & after the operation. With usual notation of
-         * - F: Front
-         * - B: Back
-         * - U: Up
-         * - D: Down
-         * - L: Left
-         * - R: Right
+         *
+         *      F: Front,   B: Back,    U: Up
+         *      D: Down,    L: Left,    R: Right
          *
          * If operated with FaceSide Up on Cube with is_clockwise set to true(default behaviour),
          * Up and Down Faces remain at their place.
          * Front FaceSide turns to Left, Left turns to Back and so on.
-         * - 1U -> 2U
-         * - 1D -> 2D
-         * - 1F -> 2L
-         * - 1R -> 2F
-         * - 1B -> 2R
-         * - 1L -> 2B
+         *
+         *      1U -> 2U,   1D -> 2D,   1F -> 2L
+         *      1R -> 2F,   1B -> 2R,   1L -> 2B
          *
          */
-        void rotate(const FaceSide& f, bool is_clockwise, std::size_t no_of_turns = 1);
-        void rotate(const FaceSide& f, std::size_t no_of_turns = 1, bool is_clockwise = true);
+        void rotate();
+        void rotate(const FaceSide& f);
+        void rotate(const FaceSide& f, std::size_t no_of_turns);
+        void rotate(const FaceSide& f, int no_of_turns);
+        void rotate(const FaceSide& f, bool is_clockwise);
+        void rotate(const FaceSide& f, std::size_t no_of_turns, bool is_clockwise);
+        void rotate(const FaceSide& f, bool is_clockwise, std::size_t no_of_turns);
 };
 
 

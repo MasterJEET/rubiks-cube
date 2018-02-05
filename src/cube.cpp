@@ -52,7 +52,8 @@ void ColorSet::init(){
     //Color must not be same
     if( col_mid != undefcol && col_max == undefcol && col_min == col_mid)
         throw std::runtime_error(std::string() + __func__ + ": Two defined Colors are same.");
-    if( ( col_mid != undefcol && col_max != undefcol ) && ( col_min == col_mid || col_mid == col_max || col_max == col_min ) )
+    if( ( col_mid != undefcol && col_max != undefcol ) &&\
+            ( col_min == col_mid || col_mid == col_max || col_max == col_min ) )
         throw std::runtime_error(std::string() + __func__ + ": At least two among three defined Colors are same.");
 }
 
@@ -77,12 +78,12 @@ Cube::Cube()
     ss << "D: G G G G G G G G G" << std::endl;
 
     enInputFormat eifX = LINEAR_FORMAT;
-    _init_(ss, eifX);
+    init(ss, eifX);
 
 }
 
 Cube::Cube(std::istream &is, enInputFormat eifX) {
-    _init_(is, eifX);
+    init(is, eifX);
 }
 
 
@@ -92,12 +93,12 @@ Cube::Cube(std::string file_path, enInputFormat eifX) {
     ifs.open(file_path);
     if(!ifs)
         throw std::runtime_error("Could not open file: \"" + file_path + "\".");
-    _init_(ifs, eifX);
+    init(ifs, eifX);
 
 }
 
 
-void Cube::_init_(std::istream& is, enInputFormat eifX){
+void Cube::init(std::istream& is, enInputFormat eifX){
 
     num_of_instances ++;
 
@@ -527,14 +528,16 @@ void Cube::createCube(vecFacelet& vFacelet){
 
 CubeletPosition Cube::getCubeletPosition(std::size_t index){
     if( index > __NUM_CUBELET__ - 1 )
-        throw std::out_of_range("Index: " + std::to_string(index) + " is not within range: [0, " + std::to_string(__NUM_CUBELET__) + ").");
+        throw std::out_of_range("Index: " + std::to_string(index) +\
+                " is not within range: [0, " + std::to_string(__NUM_CUBELET__) + ").");
 
     return vCletPos[ index ];
 }
 
 FaceletPosition Cube::getFaceletPosition(std::size_t index){
     if( index > __NUM_FACELET__ - 1 )
-        throw std::out_of_range("Index: " + std::to_string(index) + " is not within range: [0, " + std::to_string(__NUM_FACELET__) + ").");
+        throw std::out_of_range("Index: " + std::to_string(index) +\
+                " is not within range: [0, " + std::to_string(__NUM_FACELET__) + ").");
 
     return vFletPos[ index ];
 }
@@ -542,21 +545,22 @@ FaceletPosition Cube::getFaceletPosition(std::size_t index){
 
 Color Cube::getColorFromInt(std::size_t index){
     if( index > __NUM_FACE__ - 1 )
-        throw std::out_of_range("Index: " + std::to_string(index) + " is not within range: [0, " + std::to_string(__NUM_FACE__) + ").");
+        throw std::out_of_range("Index: " + std::to_string(index) +\
+                " is not within range: [0, " + std::to_string(__NUM_FACE__) + ").");
 
     return vCol[ index ];
 }
 
-void Cube::show(const FaceSide& f){
-    auto tlist = getEquivalentFletPos(f);
-    auto it = tlist.begin();
-    while( it != tlist.end()){
-        for(int i=0;i<3;i++,it++){
-            std::cout << getFacelet(*it).colorFormat() << " " ;
-        }
-        std::cout << std::endl;
-    }
-}
+//void Cube::show(const FaceSide& f){
+//    auto tlist = getEquivalentFletPos(f);
+//    auto it = tlist.begin();
+//    while( it != tlist.end()){
+//        for(int i=0;i<3;i++,it++){
+//            std::cout << getFacelet(*it).colorFormat() << " " ;
+//        }
+//        std::cout << std::endl;
+//    }
+//}
 
 
 void Cube::rotateLayer(const FaceSide& f, bool is_clockwise, std::size_t no_of_turns , bool is_mid){
@@ -640,6 +644,21 @@ void Cube::rotateLayer(const FaceSide& f, bool is_clockwise, std::size_t no_of_t
 }
 
 
+void Cube::rotateSide(){
+    rotateLayer(front,true,1);
+}
+void Cube::rotateSide(const FaceSide& f){
+    rotateLayer(f,true,1);
+}
+void Cube::rotateSide(const FaceSide& f, std::size_t no_of_turns){
+    rotateLayer(f,true,no_of_turns);
+}
+void Cube::rotateSide(const FaceSide& f, int no_of_turns){
+    rotateLayer(f,true,no_of_turns);
+}
+void Cube::rotateSide(const FaceSide& f, bool is_clockwise){
+    rotateLayer(f,is_clockwise,1);
+}
 void Cube::rotateSide(const FaceSide& f, bool is_clockwise, std::size_t no_of_turns){
     rotateLayer(f,is_clockwise,no_of_turns);
 }
@@ -671,6 +690,21 @@ void Cube::rotateMid(const FaceSide& f, bool is_clockwise, std::size_t no_of_tur
 }
 
 
+void Cube::rotate(){
+    rotate(front,1,true);
+}
+void Cube::rotate(const FaceSide& f){
+    rotate(f,1,true);
+}
+void Cube::rotate(const FaceSide& f, std::size_t no_of_turns){
+    rotate(f,no_of_turns,true);
+}
+void Cube::rotate(const FaceSide& f, int no_of_turns){
+    rotate(f,no_of_turns,true);
+}
+void Cube::rotate(const FaceSide& f, bool is_clockwise){
+    rotate(f,1,is_clockwise);
+}
 void Cube::rotate(const FaceSide& f,bool is_clockwise,std::size_t no_of_turns){
     rotate(f,no_of_turns,is_clockwise);
 }
