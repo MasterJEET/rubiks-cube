@@ -6,7 +6,7 @@
  * */
 
 #include "gtest/gtest.h"
-#include "position.h"
+#include "cube.h"
 #include "testcommon.h"
 
 class PositionTest : public ::testing::Test {
@@ -142,3 +142,128 @@ TEST_F(PositionTest, multiplication) {
 }
 
 
+TEST_F(PositionTest, getRelativePosition){
+    Position P(front, left, down);
+    EXPECT_EQ(P.getRelativePosition(right), Position(left,back,down));
+    EXPECT_EQ(P.getRelativePosition(left), Position(right,front,down));
+    EXPECT_EQ(P.getRelativePosition(up), Position(down,left,back));
+    EXPECT_EQ(P.getRelativePosition(down), Position(up,left,front));
+    EXPECT_EQ(P.getRelativePosition(front), Position(front,left,down));
+    EXPECT_EQ(P.getRelativePosition(back), Position(back,right,down));
+
+
+    Position P2(back, undefside, up);
+    EXPECT_EQ(P2.getRelativePosition(up), Position(up,front));
+    EXPECT_EQ(P2.getRelativePosition(right), Position(right,up,undefside));
+    EXPECT_EQ(P2.getRelativePosition(back), Position(front,undefside,up));
+
+
+}
+
+TEST_F(PositionTest, ifRotated)
+{
+    Step s(down,2);
+    Position pGet = pdrf.ifRotated(s);
+
+    EXPECT_EQ(pGet, Position(down, left, back));
+
+    StepSequence seq({s});
+    seq.push_back({right,false,1,true});
+    Position pGet2 = pdrf.ifRotated(seq);
+
+    EXPECT_EQ(pGet2, pGet);
+}
+
+
+TEST(Step, constructor)
+{
+    Step s1(back, 1, true);
+
+    EXPECT_EQ(s1.f, back);
+    EXPECT_EQ(s1.is_clockwise, true);
+    EXPECT_EQ(s1.no_of_turns, 1);
+
+
+    Step s2(right,false, 2);
+
+    EXPECT_EQ(s2.f, right);
+    EXPECT_EQ(s2.is_clockwise, false);
+    EXPECT_EQ(s2.no_of_turns, 2);
+
+
+    Step s3(up, true);
+
+    EXPECT_EQ(s3.f, up);
+    EXPECT_EQ(s3.is_clockwise, true);
+    EXPECT_EQ(s3.no_of_turns, 1);
+
+
+    Step s4(down, 3);
+
+    EXPECT_EQ(s4.f, down);
+    EXPECT_EQ(s4.is_clockwise, true);
+    EXPECT_EQ(s4.no_of_turns, 3);
+
+
+    Step s5(left);
+
+    EXPECT_EQ(s5.f, left);
+    EXPECT_EQ(s5.is_clockwise, true);
+    EXPECT_EQ(s5.no_of_turns, 1);
+
+
+    Step s6;
+
+    EXPECT_EQ(s6.f, undefside);
+    //EXPECT_EQ(s6.is_clockwise, true);
+    //EXPECT_EQ(s6.no_of_turns, 1);
+}
+
+
+
+TEST(Position, isOn)
+{
+    Position p1(front,undefside,up);
+
+    EXPECT_TRUE(p1.isOn(front));
+    EXPECT_TRUE(p1.isOn(up));
+    EXPECT_FALSE(p1.isOn(back));
+}
+
+
+
+TEST(Position, willGetAffected)
+{
+    Position P_corner(front,up,right);
+
+    Step F(front);
+    EXPECT_TRUE(P_corner.willGetAffected(F));
+
+    Step u(up,false);
+    EXPECT_TRUE(P_corner.willGetAffected(u));
+
+    Step R(right);
+    EXPECT_TRUE(P_corner.willGetAffected(R));
+
+    Step b(back,false);
+    EXPECT_FALSE(P_corner.willGetAffected(b));
+
+    Step D(down);
+    EXPECT_FALSE(P_corner.willGetAffected(D));
+
+    Step l(left,false);
+    EXPECT_FALSE(P_corner.willGetAffected(l));
+
+    Step bm(front,false,1,true);
+    EXPECT_FALSE(P_corner.willGetAffected(bm));
+
+    Position P_edge(back,left);
+
+    EXPECT_TRUE(P_edge.willGetAffected(b));
+    Step Um(up,true,1,true);
+    EXPECT_TRUE(P_edge.willGetAffected(Um));
+    EXPECT_FALSE(P_edge.willGetAffected(u));
+    Step f(front,false);
+    EXPECT_FALSE(P_edge.willGetAffected(f));
+
+}

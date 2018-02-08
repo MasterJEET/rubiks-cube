@@ -16,11 +16,11 @@ CXXFLAGS += -g -Wall -Wextra -pthread -rdynamic -std=c++11
 
 # All tests produced by this Makefile.  Remember to add new tests you
 # created to the list.
-TEST_OBJ += common_unittest.o position_unittest.o facelet_unittest.o cubelet_unittest.o cube_unittest.o
+TEST_OBJ += common_unittest.o position_unittest.o facelet_unittest.o cubelet_unittest.o cube_unittest.o algobase_unittest.o
 
 
 # All objects for original program ( excluding those of test cases and 'main')
-ALL_OBJ += common.o position.o facelet.o cubelet.o cube.o
+ALL_OBJ += common.o position.o facelet.o cubelet.o cube.o algobase.o
 # All source files for cube
 CUBE_SRC += $(SRC_DIR)/*.cpp $(INC_DIR)/*.h
 
@@ -30,7 +30,7 @@ CUBE_SRC += $(SRC_DIR)/*.cpp $(INC_DIR)/*.h
 all : rubiktest
 
 clean :
-	rm -f *.o *.a *.out common* facelet* position* cube* rubik*
+	rm -f *.o *.a *.out common* facelet* position* cube* rubik* algobase*
 
 cleanall :
 	make clean

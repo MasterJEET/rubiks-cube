@@ -193,3 +193,11 @@ TEST(FaceletPosition, TypeOperator){
     EXPECT_EQ(53, FaceletPosition(right,up,front));
 
 }
+
+TEST(FaceletPosition, getRelativePosition)
+{
+    FaceletPosition P(front, up, right);
+    FaceletPosition P2(left, down, front);
+
+    EXPECT_EQ(getRelativePosition(P,P2), P.getRelativePosition(P2.getSideAt(0)));
+}

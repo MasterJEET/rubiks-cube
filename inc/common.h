@@ -157,13 +157,9 @@ FaceSide opposite(const FaceSide& fs);
  *  \brief  Returns true if the string (one letter) corresponds to a Valid FaceSide enum
  *
  *  List of string that corresponds to a valid FaceSide:
- *          One letter string   ->  FaceSide
- *          F   ->  Front
- *          B   ->  Back
- *          U   ->  Up
- *          D   ->  Down
- *          L   ->  Left
- *          R   ->  Right
+ *
+ *          F   ->  Front,  B   ->  Back,   U   ->  Up
+ *          D   ->  Down,   L   ->  Left,   R   ->  Right
  *
  * */
 bool isValidFaceSide(const std::string& f);
@@ -176,13 +172,13 @@ bool isValidFaceSide(const std::string& f);
  * What are equivalent FaceSides?
  *
  * Observe the current orientation of Cube. If a FaceSide 'fs' is in horizontal plane (up or down),
- * rotate the cube about a horizontal axis parallel to front FaceSide till 'fs' align with the front.
+ * rotate the cube about a horizontal axis parallel to front FaceSide till 'fs' coincides with the front.
  * Face i.e. at FaceSide up now was let's say at FaceSide 'up_before'. Then 'up_before' is <i>up</i> equivalent
  * of 'fs'. We write it as:
  *
  *      up( fs ) = up_before
  *
- * For vertical Faces (front,back,right,left) rotate the Cube about a vertical axis till 'fs' align
+ * For vertical Faces (front,back,right,left) rotate the Cube about a vertical axis till 'fs' coincides
  * with font FaceSide. Use above analogy to derive FaceSide equivalence.
  *
  * Note: for any FaceSide f, f(front) = f
@@ -195,6 +191,40 @@ bool isValidFaceSide(const std::string& f);
  *
  * */
 void setEquivalentFaceSide(const FaceSide& f,FaceSide& u,FaceSide& r,FaceSide& d,FaceSide& l);
+
+/*! \fn FaceSide getEquivalentFaceSide(const FaceSide& first, const FaceSide& second)
+ *  \brief Return first FaceSide quivalent of second i.e. first(up)
+ *
+ * */
+FaceSide getEquivalentFaceSide(const FaceSide& first, const FaceSide& second);
+
+/*! \fn FaceSide getRelativeFaceSide(const FaceSide& first, const FaceSide& second)
+ *  \brief Returns relative orientation of first FaceSide w.r.t. second
+ * 
+ * What is relative orientation?
+ *
+ * Relative orientation of any FaceSide <i>x</i> w.r.t. a given FaceSide <i>f</i> is
+ * defined as the new FaceSide <i>x_new</i> that <i>x</i> would occupy if FaceSide
+ * <i>f</i> is brought to front side following standard methods of rotation ( See
+ * rotation defined for function setEquivalentFaceSide in common.h ). Let's denote
+ * relative orientation of <i>x</i> w.r.t. FaceSide <i>f</i> as rel(x,f), we can write
+ *
+ *      rel(x,f) = x_new
+ *
+ * Note: For any given FaceSide <i>x</i>,
+ *      * rel(<i>x</i>, front) = <i>x</i>
+ *      * rel(<i>x</i>, <i>x</i>) = front
+ *
+ * Examples: List relative orientation of left w.r.t. all other FaceSides
+ *      * rel(left, front) = left
+ *      * rel(left, left) = front
+ *      * rel(left, back) = right
+ *      * rel(left, up) = left
+ *      * rel(left, down) = left
+ *      * rel(left, right) = back
+ *
+ * */
+FaceSide getRelativeFaceSide(const FaceSide& first, const FaceSide& second);
 
 void createmapColor();
 void createmapFaceSide();

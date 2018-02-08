@@ -230,30 +230,61 @@ FaceSide opposite(const FaceSide& fs){
 
 void setEquivalentFaceSide(const FaceSide& f,FaceSide& u,FaceSide& r,FaceSide& d,FaceSide& l){
 
-    switch(f){
-        case Front:
-            u = up; r = right; d = down; l = left;
-            break;
-        case Back:
-            u = up; r = left; d = down; l = right;
-            break;
-        case Right:
-            u = up; r = back; d = down; l = front;
-            break;
-        case Left:
-            u = up; r = front; d = down; l = back;
-            break;
-        case Up:
-            u = back; r = right; d = front; l = left;
-            break;
-        case Down:
-            u = front; r = right; d = back; l = left;
-            break;
+    u = getEquivalentFaceSide(up,f);
+    r = getEquivalentFaceSide(right,f);
+    d = getEquivalentFaceSide(down,f);
+    l = getEquivalentFaceSide(left,f);
+
+}
+
+FaceSide getEquivalentFaceSide(const FaceSide& first, const FaceSide& second)
+{
+    FaceSide ret;
+
+    switch(second)
+    {
+        case front:
+            ret = first;    break;
+        case back:
+            ret = first * up;   ret *= up;  break;
+        case left:
+            ret = first * up;   break;
+        case right:
+            ret = first * down; break;
+        case up:
+            ret = first * right;    break;
+        case down:
+            ret = first * left; break;
+        default:
+            ret = undefside;    break;
+    }
+
+    return ret;
+}
+
+FaceSide getRelativeFaceSide(const FaceSide& first, const FaceSide& second){
+
+    FaceSide ret;
+
+    switch(second){
+        case front:
+            ret = first;    break;
+        case back:
+            ret = first * up;   ret *= up;  break;
+        case left:
+            ret = first * down; break;
+        case right:
+            ret = first * up;   break;
+        case up:
+            ret = first * left; break;
+        case down:
+            ret = first * right;    break;
         default:
             break;
     }
 
-};
+    return ret;
+}
 
 
 //======== Create maps | Start =========
@@ -277,7 +308,10 @@ void createmapFaceSide(){
 
 
 bool ColorFromLetter(const char c, Color& col){
-    std::string s = &c;
+    std::stringstream ss;
+    std::string s;
+    ss << c;
+    ss >> s;
     return ColorFromLetter(s,col);
 };
 
@@ -292,7 +326,10 @@ bool ColorFromLetter(const std::string& s, Color& col){
 };
 
 bool FaceSideFromLetter(const char c, FaceSide& fs){
-    std::string s = &c;
+    std::stringstream ss;
+    std::string s;
+    ss << c;
+    ss >> s;
     return FaceSideFromLetter(s,fs);
 };
 

@@ -26,7 +26,6 @@
 #include <iterator>     //std::begin, std::end
 #include "cubelet.h"
 
-
 typedef std::array<Cubelet, __NUM_CUBELET__> arrCubelet;
 typedef std::array<CubeletPosition, __NUM_CUBELET__> arrCubeletPosition;
 typedef std::array<Facelet, __NUM_FACELET__> arrFacelet;
@@ -36,33 +35,17 @@ typedef std::array<Color, __NUM_FACE__> arrColor;
 typedef std::array<FaceSide, __NUM_FACE__> arrFaceSide;
 
 
+namespace AlgoBase {
+    class Query;
+};
+
+
 /*! \brief For listing out different input format for Cube
  *
  * */
 enum enInputFormat {
     LINEAR_FORMAT,
     STEP_FORMAT
-};
-
-
-/*! \brief Set of Color
- *
- * It can hold a maximum of three Colors, which can be used to refer
- * a Cubelet which have these Colors on its Facelets
- *
- * */
-struct ColorSet{
-    ColorSet(Color c1, Color c2 = undefcol, Color c3 = undefcol);
-    ColorSet(std::vector<Color> vColor);
-    Color min() const{ return col_min;};
-    Color mid() const{ return col_mid;};
-    Color max() const{ return col_max;};
-
-    private:
-    Color col_min;
-    Color col_mid;
-    Color col_max;
-    void init();
 };
 
 
@@ -179,6 +162,11 @@ class Cube {
 
         ///create Cubelets and store in array with help of vecFacelet
         void createCube(vecFacelet& vFacelet);
+
+        /*! Auxiliary function to be called from rotateLayer
+         *
+         * */
+        void helper(const CubeletPosition& cp, FaceSide f, std::size_t n = 1);
 
 
         /*! Rotate any specified layer of Cube
@@ -347,6 +335,7 @@ class Cube {
         void rotateSide(const FaceSide& f, bool is_clockwise);
         void rotateSide(const FaceSide& f, bool is_clockwise, std::size_t no_of_turns);
         void rotateSide(const FaceSide& f, std::size_t no_of_turns, bool is_clockwise);
+        void rotateSide(Step s);
 
 
         /*! Rotate any specified middle layer of Cube
@@ -363,6 +352,7 @@ class Cube {
         void rotateMid(const FaceSide& f, bool is_clockwise);
         void rotateMid(const FaceSide& f, std::size_t no_of_turns, bool is_clockwise);
         void rotateMid(const FaceSide& f, bool is_clockwise, std::size_t no_of_turns);
+        void rotateMid(Step s);
 
 
         /*! Rotate the Cube 
@@ -387,6 +377,26 @@ class Cube {
         void rotate(const FaceSide& f, bool is_clockwise);
         void rotate(const FaceSide& f, std::size_t no_of_turns, bool is_clockwise);
         void rotate(const FaceSide& f, bool is_clockwise, std::size_t no_of_turns);
+        void rotate(Step s);
+        void rotate(StepSequence seq);
+
+        /*! Update the cube by rotating it as specified in StepSequence
+         *
+         * */
+        void update(StepSequence s);
+
+        /*! Making FaceletColor a friend
+         *
+         * */
+        friend class FaceletColor;
+
+        /*! Making Query class a friend
+         *
+         * Query class will address basic queries that will arise while solving Cube
+         * and might require access to Cube's private attributes.
+         *
+         * */
+        friend class AlgoBase::Query;
 };
 
 
@@ -516,5 +526,57 @@ template <typename P> std::vector<P> vecCenterEquivalence(const FaceSide& f);
  *
  */
 template <typename P> std::vector<P> vecMidEdgeEquivalence(const FaceSide& f);
+
+
+
+struct PositionColor
+{
+    Cube& cube;
+    Color col1;
+    Color col2;
+    Color col3;
+
+    PositionColor(Cube& _cube, Color _col1 = undefcol, Color _col2 = undefcol, Color _col3 = undefcol):
+        cube(_cube), col1(_col1), col2(_col2), col3(_col3)
+    {};
+
+    virtual operator std::size_t() const = 0;
+};
+
+/*! Defined for associating Colors with FaceletPosition
+ *
+ * */
+struct FaceletColor: public PositionColor
+{
+    FaceletColor(Cube& _cube, Color _col1 = undefcol, Color _col2 = undefcol, Color _col3 = undefcol):
+        PositionColor(_cube, _col1, _col2, _col3)
+    {};
+
+    /*! This assigns a unique number to each unique FaceletColor as per Cube configuration
+     *
+     * Uniqueness is defined by first Color and set of last tow[optional] Colors. Let N ( 0 <= N <=3 ) be the
+     * total number of Colors defined in FaceletColor. Two FaceletColors with N1 and N2 number of defined Colors are
+     * identical if and only if N1 = N2 and following holds:
+     *      * N1 = N2 = 1: then single Color of both FaceletColor must match
+     *      * N1 = N2 = 2: Both the Colors must match in ordered sequence i.e. first Color of FaceletColor1 must match
+     *      with first Color of FaceletColor2 and similary second Color of both must match.
+     *      * N1 = N2 = 3: Fist Color of both must match. Second and third Color FaceletColor1 & 2 must form identical set i.e.
+     *      order is not important in second and third Color.
+     *
+     * Example:
+     *      * {orange} & {orange,yellow} are unique or different.
+     *      * {red} & {green} are unique.
+     *      * {white, yellow} & {yellow, white} are unique.
+     *      * {white,red,green} & {white,green,red} are identical.
+     *      * {white,red,green} & {white,red,blue} are unique.
+     *
+     * A valid FacleletColor is the one where at least one Color is defined and doesn't contain
+     * Colors present in opposite FaceSides. All valid FaceletColor are assigned a number between 0 to 53
+     * both inclusive as there are 54 Facelets in a 3X3X3 Cube. All non-valid FaceletColor are
+     * assigned -1.
+     *
+     * */
+    operator std::size_t() const;
+};
 
 #endif

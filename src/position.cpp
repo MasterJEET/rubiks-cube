@@ -9,32 +9,44 @@
 #include <iostream>
 #include <algorithm>
 
+std::ostream& operator<<(std::ostream &os, Step S)
+{
+    os << "side: " << S.f << ", is_clockwise: " << S.is_clockwise << ", no_of_turns: " << S.no_of_turns \
+        << ", is_mid: " << S.is_mid ;
+    return os;
+}
 
 Position::Position(const std::vector<FaceSide> _vecSide):vecSide(_vecSide){
         
-    if(_vecSide.size() > 3){
-        throw std::runtime_error(__func__ + std::string(": Number of FaceSides should be at most three for a Position specification"));
+    if(vecSide.size() > 3 || vecSide.size() == 0){
+        throw std::runtime_error(__func__ +\
+                std::string(": Number of FaceSides should be at most three and at least one."));
     }
 
 
-    if(_vecSide[0] == undefside)
+    if(vecSide[0] == undefside)
         throw std::runtime_error(__func__ + std::string(": First FaceSide cannot be undefside."));
 
+    //In case of two or three elements present in vecSide, append undefside
+    while(vecSide.size() != 3)
+        vecSide.push_back(undefside);
+
+
     //Keeping undefside to last
-    if(_vecSide[1] == undefside && _vecSide[2] != undefside)
+    if(vecSide[1] == undefside && vecSide[2] != undefside)
         std::iter_swap(vecSide.begin()+1, vecSide.begin()+2);
 
-    if(_vecSide[1] == undefside && _vecSide[2] == undefside)
+    if(vecSide[1] == undefside && vecSide[2] == undefside)
         ptype = center;
 
-    if(_vecSide[1] != undefside && _vecSide[2] == undefside){
-        if(areOpposite(_vecSide[1], _vecSide[2]))
+    if(vecSide[1] != undefside && vecSide[2] == undefside){
+        if(areOpposite(vecSide[1], vecSide[2]))
             throw std::runtime_error(__func__ + std::string(": Pair of FaceSides contain opposite faces."));
         ptype = edge;
     }
 
-    if(_vecSide[1] != undefside && _vecSide[2] != undefside){
-        if(anyOpposite(_vecSide[0], _vecSide[1], _vecSide[2]))
+    if(vecSide[1] != undefside && vecSide[2] != undefside){
+        if(anyOpposite(vecSide[0], vecSide[1], vecSide[2]))
             throw std::runtime_error(__func__ + std::string(": Triplet of FaceSides contain opposite faces."));
         ptype = corner;
     }
@@ -43,11 +55,12 @@ Position::Position(const std::vector<FaceSide> _vecSide):vecSide(_vecSide){
 
 FaceSide Position::getSideAt(size_t index) const{
     if(index > 2 )
-        throw std::runtime_error(__func__ + std::string(": There are only three allowed values for index: 0 , 1 & 2 whereas " + std::to_string(index) + std::string(" was provided")));
+        throw std::runtime_error(__func__ + std::string(": There are only three allowed values for index: 0 , 1 & 2 whereas "\
+                    + std::to_string(index) + std::string(" was provided.")));
     if(index >= vecSide.size())
         return undefside;
     return vecSide.at(index);
-};
+}
 
 
 std::size_t Position::size() const{
@@ -57,6 +70,45 @@ std::size_t Position::size() const{
             size ++;
     }
     return size;
+}
+
+
+Position Position::getRelativePosition(const FaceSide& f) const{
+    std::vector<FaceSide> vFS;
+    for(const auto& fs: vecSide)
+        vFS.push_back( getRelativeFaceSide(fs, f) );
+
+    return vFS;
+}
+
+bool Position::willGetAffected(Step s) const
+{
+    ///If faceside is not defined then roatation itself is not defined, return false
+    if(s.f == undefside)
+        return false;
+
+    ///Return true when Position is on the Face being roated
+    if(s.is_mid==false && isOn(s.f))
+        return true;
+
+    ///Return true when Position is on the Middle layer being roated
+    if(s.is_mid==true && !isOn(s.f) && !isOn( opposite(s.f) ))
+        return true;
+
+    ///Other wise return false
+    return false;
+}
+
+Position Position::ifRotated(StepSequence seq) const
+{
+    Position pRet(vecSide);
+
+    for(const auto& s: seq)
+        for(std::size_t turns = 1; turns <= s.no_of_turns; turns++)
+            if(s.f != undefside && pRet.willGetAffected(s))
+                pRet *= (s.is_clockwise ? s.f : opposite(s.f) );
+
+    return pRet;
 }
 
 

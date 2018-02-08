@@ -15,49 +15,6 @@ std::vector<Color> Cube::vCol (__NUM_FACE__);
 std::size_t Cube::num_of_instances = 0;
 
 
-
-ColorSet::ColorSet(Color c1,Color c2, Color c3):
-    col_min(c1), col_mid(c2), col_max(c3)
-{
-    init();
-}
-
-ColorSet::ColorSet(std::vector<Color> vColor):
-    col_mid(undefcol), col_max(undefcol)
-{
-    if( vColor.size() == 0 || vColor.size() > 3 )
-        throw std::runtime_error(std::string() + __func__ + ": vector<Color> size can only be 1, 2 or 3." );
-    col_min = vColor[0];
-    if(vColor.size() > 1)
-        col_mid = vColor[1];
-    if(vColor.size() == 3)
-        col_max = vColor[2];
-
-    init();
-}
-
-void ColorSet::init(){
-    if( col_min > col_mid )
-        std::swap(col_min, col_mid);
-    if( col_mid > col_max )
-        std::swap(col_mid, col_max);
-    if( col_min > col_mid )
-        std::swap(col_min, col_mid);
-
-    //At least one Color must be defined, it'll automatically
-    //be present in col_min due above check & swap
-    if( col_min == undefcol )
-        throw std::runtime_error(std::string() + __func__ + ": At least one Color must be defined.");
-
-    //Color must not be same
-    if( col_mid != undefcol && col_max == undefcol && col_min == col_mid)
-        throw std::runtime_error(std::string() + __func__ + ": Two defined Colors are same.");
-    if( ( col_mid != undefcol && col_max != undefcol ) &&\
-            ( col_min == col_mid || col_mid == col_max || col_max == col_min ) )
-        throw std::runtime_error(std::string() + __func__ + ": At least two among three defined Colors are same.");
-}
-
-
 Cube::Cube()
 {
 
@@ -563,7 +520,20 @@ Color Cube::getColorFromInt(std::size_t index){
 //}
 
 
+void Cube::helper(const CubeletPosition& cp, FaceSide f, std::size_t n)
+{
+    for(std::size_t i = 0; i<n; i++)
+    {
+        aCubelet[cp] *= f;
+        aCletPos[ ColorSetToInt(cp) ] *= f;
+    }
+}
+
+
 void Cube::rotateLayer(const FaceSide& f, bool is_clockwise, std::size_t no_of_turns , bool is_mid){
+
+    //Do nothing if FaceSide is not specified
+    if(f==undefside)return;
 
     //edge ( center if is_mid is true ) positions to operate on
     vecCletPos ve;
@@ -584,20 +554,19 @@ void Cube::rotateLayer(const FaceSide& f, bool is_clockwise, std::size_t no_of_t
 
         //Updating Cubelets at required position
         for(const auto& p:v){
+            FaceSide fs;
             switch(no_of_turns){
                 case 1:
-                    aCubelet[p] *= (is_clockwise?f:opposite(f));
-                    aCletPos[ ColorSetToInt(p) ] *= (is_clockwise?f:opposite(f));
+                    fs = (is_clockwise?f:opposite(f));
+                    helper(p,fs);
                     break;
                 case 2:
-                    aCubelet[p] *= (is_clockwise?f:opposite(f));
-                    aCubelet[p] *= (is_clockwise?f:opposite(f));
-                    aCletPos[ ColorSetToInt(p) ] *= (is_clockwise?f:opposite(f));
-                    aCletPos[ ColorSetToInt(p) ] *= (is_clockwise?f:opposite(f));
+                    fs = (is_clockwise?f:opposite(f));
+                    helper(p,fs,2);
                     break;
                 case 3:
-                    aCubelet[p] *= (!is_clockwise?f:opposite(f));
-                    aCletPos[ ColorSetToInt(p) ] *= (!is_clockwise?f:opposite(f));
+                    fs = (!is_clockwise?f:opposite(f));
+                    helper(p,fs);
                     break;
                 default:
                     break;
@@ -665,6 +634,9 @@ void Cube::rotateSide(const FaceSide& f, bool is_clockwise, std::size_t no_of_tu
 void Cube::rotateSide(const FaceSide& f, std::size_t no_of_turns, bool is_clockwise ){
     rotateLayer(f,is_clockwise,no_of_turns);
 }
+void Cube::rotateSide(Step s){
+    rotateLayer(s.f, s.is_clockwise, s.no_of_turns);
+}
 
 
 void Cube::rotateMid(){
@@ -687,6 +659,9 @@ void Cube::rotateMid(const FaceSide& f, std::size_t no_of_turns, bool is_clockwi
 }
 void Cube::rotateMid(const FaceSide& f, bool is_clockwise, std::size_t no_of_turns){
     rotateLayer(f,is_clockwise,no_of_turns,true);
+}
+void Cube::rotateMid(Step s){
+    rotateLayer(s.f, s.is_clockwise, s.no_of_turns, true);
 }
 
 
@@ -718,6 +693,22 @@ void Cube::rotate(const FaceSide& f,std::size_t no_of_turns,bool is_clockwise){
     rotateSide(b,!is_clockwise,no_of_turns);
     //rotate mid equivalent layer
     rotateMid(f,no_of_turns,is_clockwise);
+}
+void Cube::rotate(Step s){
+    rotate(s.f, s.no_of_turns, s.is_clockwise);
+}
+void Cube::rotate(StepSequence seq){
+    for(const auto& s : seq)
+        rotate(s.f, s.no_of_turns, s.is_clockwise);
+}
+
+
+void Cube::update(StepSequence seq){
+    for(StepSequence::iterator it = seq.begin(); it != seq.end(); it++)
+        if(!it->is_mid)
+            rotateLayer(it->f, it->is_clockwise, it->no_of_turns);
+        else
+            rotateLayer(it->f, it->is_clockwise, it->no_of_turns, true);
 }
 
 
@@ -802,4 +793,76 @@ std::vector<P> vecMidEdgeEquivalence(const FaceSide& f){
     vpos.push_back( P(d,l) );
 
     return vpos;
+}
+
+
+FaceletColor::operator std::size_t () const
+{
+    ///In FaceletColor, first Color must be defined
+    if(col1 == undefcol)
+        return -1;
+
+    //Here we have col1 defined. rest two cols can be anything
+    ///If there's only undefcol in last two cols then put it to last.
+    Color tmp1 = col1;
+    Color tmp2 = col2;
+    Color tmp3 = col3;
+    if( tmp2 == undefcol && tmp3 != undefcol )
+        std::swap(tmp2, tmp3);
+
+    ///1. Colors are enum (integer). if there's only one defined that.
+    ///Each Color is assigned a Color between [0 5].
+    if( tmp2 == undefcol && tmp3 == undefcol )
+        return tmp1;
+
+    ///2. if two Colors are defined, count possible arrangements sequenctially.
+    ///When there is a match between possible arrangement and given arrangement (FaceletColor) add the
+    ///count to previous (step #1) count max (i.e. 5).
+    if ( tmp2 != undefcol && tmp3 == undefcol )
+    {
+
+        std::size_t count = 0;
+
+        for( std::size_t i1 = 0; i1 < __NUM_FACE__ ; i1++ )
+            for( std::size_t i2 = 0; i2 < __NUM_FACE__ ; i2++ )
+            {
+                if( !cube.areOppColor( Cube::vCol[i1], Cube::vCol[i2] ) && i2 != i1 )
+                {
+                    count++;
+                    if( Cube::vCol[i2] == tmp2 && Cube::vCol[i1] == tmp1 )
+                        return 5 + count;
+                }
+
+            }
+
+    }
+
+
+    ///3. If all the three Colors are defined, count as in Step #2. When there's a match add the count to total number of valid
+    ///valid configuration seen so far including the ones in step #1 and step #2.
+    if ( tmp2 != undefcol && tmp3 != undefcol )
+    {
+        //sort second and third Color (put larger one to last), this is necessary make their order irrelevant
+        if(tmp2 > tmp3)
+            std::swap(tmp2,tmp3);
+
+        std::size_t count = 0;
+        for( std::size_t i1 = 0; i1 < __NUM_FACE__ ; i1++ )
+            for( std::size_t i2 = 0; i2 < __NUM_FACE__ ; i2++ )
+                for( std::size_t i3 = i2 + 1; i3 < __NUM_FACE__ ; i3++ )
+                {
+                    //If there are no opposite or same Colors, increment count
+                    if( !cube.anyOppColor( Cube::vCol[i1], Cube::vCol[i2], Cube::vCol[i3] ) &&\
+                            ( Cube::vCol[i1] != Cube::vCol[i2] && Cube::vCol[i2] != Cube::vCol[i3] && Cube::vCol[i3] != Cube::vCol[i1] ) )
+                    {
+                        count++;
+                        if( Cube::vCol[i1] == tmp1 && Cube::vCol[i2] == tmp2 && Cube::vCol[i3] == tmp3 )
+                            return 29 + count;
+                    }
+                }
+    }
+
+
+    ///If doesn't belong to above categories then retrun -1 indicating a failure
+    return -1;
 }

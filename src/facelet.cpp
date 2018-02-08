@@ -40,6 +40,13 @@ FaceletPosition& FaceletPosition::operator*=(const FaceSide& rhs){
     return *this;
 }
 
+
+FaceletPosition getRelativePosition(const FaceletPosition& P1, const FaceletPosition& P2){
+    Position P( P1.getRelativePosition(P2.getSideAt(0)) );
+    return FaceletPosition(P.getSide());
+}
+
+
 FaceletPosition::operator std::size_t() const{
 
     if(size() == 0)

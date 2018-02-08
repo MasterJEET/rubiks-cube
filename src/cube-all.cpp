@@ -13,3 +13,4 @@
 #include "cubelet.cpp"
 #include "cube.cpp"
 #include "cuception.cpp"
+#include "algobase.cpp"

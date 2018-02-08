@@ -16,6 +16,9 @@ Next:
     * [done] Maintain a datasructure which will return object ( may be pointer or similar )
     which will identify a Cubelet uniquely and this won't be invalidated when
     Cube undergoes multiple operations
-    * [discarded] Make ColorSet directly convertible to integer i.e. remove the redundant dependency
-    of using ColorSetToInt
     * [done] Add more test cases for above points
+    * implement primitve movements to solve single face
+        * add method get relative FaceSide and Position
+    * Add check for is_mid in roate implementation
+    * Reduce the number of implementation of rotation functions by using Step
+    * Add relative position based 'sequence finding'

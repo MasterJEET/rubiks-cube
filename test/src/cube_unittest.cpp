@@ -60,6 +60,12 @@ class CubeTest: public ::testing::Test {
  * =================================================
  */
 
+TEST_F(CubeTest, IgnoreThisTest) {
+
+    std::cout << "This is a dummy test. Please ignore it." << std::endl;
+
+}
+
 TEST_F(CubeTest, facelet) {
 
     EXPECT_PRED_FORMAT2(checkPrint, "Facelet: col = W, side = Front", cube.getFacelet(front));
@@ -300,6 +306,15 @@ TEST_F(CubeTest, rotateSide){
     EXPECT_EQ(cube_old.getCubelet({down,back,left})*right, cube_new.getCubelet({down,front,left}));
     EXPECT_EQ(cube_old.getCubelet({down,front,left})*right, cube_new.getCubelet({up,front,left}));
     EXPECT_EQ(cube_old.getCubelet({up,front,left})*right, cube_new.getCubelet({up,back,left}));
+
+    Cube cube_old1(cube);
+    Cube cube_new1(cube);
+    Step s(right, 2, false);
+    cube_new1.rotateSide(s);
+
+    EXPECT_EQ(cube_old1.getCubelet({down,right})*left, cube_new1.getCubelet({up,right})*right);
+    
+    EXPECT_EQ(cube_old1.getCubelet({up,front,right})*right, cube_new1.getCubelet({down,back,right})*left);
 }
 
 
@@ -332,6 +347,15 @@ TEST_F(CubeTest,rotateMid){
     EXPECT_EQ(cube_old.getCubelet({down,back})*left, cube_new.getCubelet({up,back}));
     EXPECT_EQ(cube_old.getCubelet({up,back})*left, cube_new.getCubelet({up,front}));
 
+
+    Cube cube_old1(cube);
+    Cube cube_new1(cube);
+    Step s(back, 1, false);
+    cube_new1.rotateSide(s);
+
+    EXPECT_EQ(cube_old1.getCubelet({back,right})*front, cube_new1.getCubelet({back,down}));
+    
+    EXPECT_EQ(cube_old1.getCubelet({up,back,right})*front, cube_new1.getCubelet({down,back,right}));
 }
 
 
@@ -363,6 +387,15 @@ TEST_F(CubeTest,rotate){
     cube_new = cube_old;
     cube_new.rotate(down,false,7);
     EXPECT_EQ(cube_old.getFacelet(back,up,right)*down, cube_new.getFacelet(left,back,up));
+
+    Cube cube_old1(cube);
+    Cube cube_new1(cube);
+    Step s(down, 3, false);
+    cube_new1.rotateSide(s);
+
+    EXPECT_EQ(cube_old1.getCubelet({down,right})*down, cube_new1.getCubelet({back,down}));
+    
+    EXPECT_EQ(cube_old1.getCubelet({down,back,right})*down, cube_new1.getCubelet({down,back,left}));
 }
 
 
@@ -458,45 +491,6 @@ TEST_F(CubeTest, getCubeletUsingColorSet){
     Cubelet c3a( cube.getCubelet(blue, yellow, orange) );
 
     EXPECT_EQ( c3b * front, c3a );
-
-}
-
-
-TEST(colorset, constructor){
-    ColorSet cs1(red, white, blue);
-    EXPECT_TRUE(cs1.min() <= cs1.mid());
-    EXPECT_TRUE(cs1.mid() <= cs1.max());
-
-    ColorSet cs2(yellow, green, orange);
-    EXPECT_TRUE(cs2.min() <= cs2.mid());
-    EXPECT_TRUE(cs2.mid() <= cs2.max());
-
-    ColorSet cs3(yellow, red);
-    EXPECT_TRUE(cs3.min() <= cs3.mid());
-    EXPECT_TRUE(cs3.mid() <= cs3.max());
-
-    ColorSet cs4(green);
-    EXPECT_TRUE(cs4.min() <= cs4.mid());
-    EXPECT_TRUE(cs4.mid() <= cs4.max());
-
-    //same Color
-    EXPECT_THROW( ColorSet cs5(red, red), std::runtime_error );
-    //Opposite Color
-    EXPECT_THROW( ColorSet cs5(white, green, white), std::runtime_error );
-
-    std::vector<Color> vCol1;
-    EXPECT_THROW( ColorSet cs6(vCol1), std::runtime_error );    //Empty vector
-    vCol1.push_back(yellow);
-    vCol1.push_back(orange);
-    vCol1.push_back(blue);
-
-    ColorSet cs7(vCol1);
-    EXPECT_TRUE(cs7.min() <= cs7.mid());
-    EXPECT_TRUE(cs7.mid() <= cs7.max());
-
-    vCol1.push_back( green );
-    EXPECT_THROW( ColorSet cs8(vCol1), std::runtime_error );    //Size > 3
-
 
 }
 
@@ -833,4 +827,93 @@ TEST(Equivalence,MidEdge){
     EXPECT_EQ(CubeletPosition(up,back), pur);
     EXPECT_EQ(CubeletPosition(down,front), pdl);
     EXPECT_EQ(CubeletPosition(down,back), pdr);
+}
+
+
+
+TEST_F(CubeTest, FaceletColor)
+{
+#   define  FACELETCOLOR_TEST(fc, num, ...)\
+    FaceletColor fc(cube, __VA_ARGS__);\
+    EXPECT_EQ(fc, num);
+
+    //Single Color
+    FACELETCOLOR_TEST(fc0, 0, white);
+    FACELETCOLOR_TEST(fc1, 1, yellow);
+    FACELETCOLOR_TEST(fc1_1, 1, yellow, undefcol);
+    FACELETCOLOR_TEST(fc2, 2, orange);
+    FACELETCOLOR_TEST(fc3, 3, red);
+    FACELETCOLOR_TEST(fc4, 4, green);
+    FACELETCOLOR_TEST(fc4_1, 4, green,undefcol,undefcol);
+    FACELETCOLOR_TEST(fc5, 5, blue);
+
+    //Double Color
+    FACELETCOLOR_TEST(fc6, 6, white, orange);
+    FACELETCOLOR_TEST(fc7, 7, white, red);
+    FACELETCOLOR_TEST(fc8, 8, white, green);
+    FACELETCOLOR_TEST(fc9, 9, white, blue);
+    FACELETCOLOR_TEST(fc10, 10, yellow, orange);
+    FACELETCOLOR_TEST(fc11, 11, yellow, red);
+    FACELETCOLOR_TEST(fc11_1, 11, yellow, red, undefcol);
+    FACELETCOLOR_TEST(fc12, 12, yellow, green);
+    FACELETCOLOR_TEST(fc13, 13, yellow, blue);
+    FACELETCOLOR_TEST(fc14, 14, orange, white);
+    FACELETCOLOR_TEST(fc15, 15, orange, yellow);
+    FACELETCOLOR_TEST(fc16, 16, orange, green);
+    FACELETCOLOR_TEST(fc17, 17, orange, blue);
+    FACELETCOLOR_TEST(fc18, 18, red, white);
+    FACELETCOLOR_TEST(fc19, 19, red, yellow);
+    FACELETCOLOR_TEST(fc20, 20, red, green);
+    FACELETCOLOR_TEST(fc21, 21, red, blue);
+    FACELETCOLOR_TEST(fc21_1, 21, red, blue, undefcol);
+    FACELETCOLOR_TEST(fc22, 22, green, white);
+    FACELETCOLOR_TEST(fc23, 23, green, yellow);
+    FACELETCOLOR_TEST(fc24, 24, green, orange);
+    FACELETCOLOR_TEST(fc25, 25, green, red);
+    FACELETCOLOR_TEST(fc26, 26, blue, white);
+    FACELETCOLOR_TEST(fc27, 27, blue, yellow);
+    FACELETCOLOR_TEST(fc28, 28, blue, orange);
+    FACELETCOLOR_TEST(fc29, 29, blue, red);
+    FACELETCOLOR_TEST(fc29_1, 29, blue, undefcol, red);
+
+    //Triple Color
+    FACELETCOLOR_TEST(fc30, 30, white, orange, green);
+    FACELETCOLOR_TEST(fc30_1, 30, white, green, orange);
+    FACELETCOLOR_TEST(fc31, 31, white, orange, blue);
+    FACELETCOLOR_TEST(fc31_1, 31, white, blue, orange);
+    FACELETCOLOR_TEST(fc32, 32, white, red, green);
+    FACELETCOLOR_TEST(fc32_1, 32, white, green, red);
+    FACELETCOLOR_TEST(fc33, 33, white, red, blue);
+    FACELETCOLOR_TEST(fc33_1, 33, white, blue, red);
+    FACELETCOLOR_TEST(fc34, 34, yellow, orange, green);
+    FACELETCOLOR_TEST(fc35, 35, yellow, orange, blue);
+    FACELETCOLOR_TEST(fc36, 36, yellow, red, green);
+    FACELETCOLOR_TEST(fc37, 37, yellow, red, blue);
+    FACELETCOLOR_TEST(fc38, 38, orange, white, green);
+    FACELETCOLOR_TEST(fc39, 39, orange, white, blue);
+    FACELETCOLOR_TEST(fc40, 40, orange, yellow, green);
+    FACELETCOLOR_TEST(fc41, 41, orange, yellow, blue);
+    FACELETCOLOR_TEST(fc42, 42, red, white, green);
+    FACELETCOLOR_TEST(fc42_1, 42, red, green, white);
+    FACELETCOLOR_TEST(fc43, 43, red, white, blue);
+    FACELETCOLOR_TEST(fc44, 44, red, yellow, green);
+    FACELETCOLOR_TEST(fc44_1, 44, red, green, yellow);
+    FACELETCOLOR_TEST(fc45, 45, red, yellow, blue);
+    FACELETCOLOR_TEST(fc46, 46, green, white, orange);
+    FACELETCOLOR_TEST(fc47, 47, green, white, red);
+    FACELETCOLOR_TEST(fc48, 48, green, yellow, orange);
+    FACELETCOLOR_TEST(fc49, 49, green, yellow, red);
+    FACELETCOLOR_TEST(fc50, 50, blue, white, orange);
+    FACELETCOLOR_TEST(fc51, 51, blue, white, red);
+    FACELETCOLOR_TEST(fc52, 52, blue, yellow, orange);
+    FACELETCOLOR_TEST(fc53, 53, blue, yellow, red);
+
+
+    //Invalid FaceletColor
+    FACELETCOLOR_TEST(inv1, -1, undefcol, yellow);  //first col undefined
+    FACELETCOLOR_TEST(inv2, -1, white, yellow);     //Opposite Color
+    FACELETCOLOR_TEST(inv3, -1, white, green, blue);//Opposite Color B,G
+
+
+#   undef   FACELETCOLOR_TEST
 }

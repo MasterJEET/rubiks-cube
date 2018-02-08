@@ -21,6 +21,30 @@ typedef std::vector<Facelet> vecFacelet;
 typedef std::list<FaceletPosition> listFletPos;
 
 
+/*! \brief Set of Color
+ *
+ * It can hold a maximum of three Colors, which can be used to refer
+ * a Cubelet which have these Colors on its Facelets
+ *
+ * */
+struct ColorSet{
+    ColorSet(Color c1, Color c2 = undefcol, Color c3 = undefcol);
+    ColorSet(std::vector<Color> vColor);
+    Color min() const{ return col_min;};
+    Color mid() const{ return col_mid;};
+    Color max() const{ return col_max;};
+    friend bool operator==(const ColorSet& lhs, const ColorSet& rhs){
+        return lhs.min() == rhs.min() && lhs.mid() == rhs.mid() && lhs.max() == rhs.max();
+    }
+
+    private:
+    Color col_min;
+    Color col_mid;
+    Color col_max;
+    void init();
+};
+
+
 class CubeletPosition : public Position {
     public:
         ///Constructors same as those of Position
@@ -33,6 +57,9 @@ class CubeletPosition : public Position {
         ///initialize from  FaceletPosition
         CubeletPosition(const FaceletPosition& fp): Position( fp.getSide() ){};
 
+        ///Initialize from Position
+        CubeletPosition(const Position& P): Position( P.getSide() ) {};
+
         ///operator<< overloading to write CubeletPosition to ostream
         friend std::ostream& operator<<(std::ostream& os, CubeletPosition P);
 
@@ -42,9 +69,20 @@ class CubeletPosition : public Position {
         ///Inequality
         friend bool operator!=(const CubeletPosition& lhs, const CubeletPosition& rhs){ return !(lhs == rhs); }
 
+        ///Returns one FaceSide shared by both the CubeletPositions
+        friend FaceSide getCommonFace(const CubeletPosition& first, const CubeletPosition& second);
+
+        /*! Return bool suggesting if the given CubeletPositions are located clockwise or not
+         *
+         * Let's consider the positions P1(front,left,down) and P2(front,left,up). On the front face they
+         * are clockwise whereas on left face they are anticlockwise
+         *
+         * */
+        friend bool areClockwise(const CubeletPosition& from, const CubeletPosition& to, const FaceSide& f);
+
         /** Type operator, converting to size_t to be used as array index later
          *
-         * Here we simply list and assign unique numbers (between 0 to 25) to each Cubelets.
+         * Here we simply list and assign unique numbers (between 0 to 25) to each CubeletPosition.
          * Although there is a return statement with a negative integer, execution should never reach that point.
          *
          * */
@@ -98,6 +136,11 @@ class Cubelet{
 
         ///Equality
         friend bool operator==(const Cubelet& lhs, const Cubelet& rhs);
+
+        /*! Returns true of both Cubelets have same set of Colors, false other wise
+         *
+         * */
+        friend bool haveSameColors(const Cubelet& lhs, const Cubelet& rhs);
 
         ///Inequality
         friend bool operator!=(const Cubelet& lhs, const Cubelet& rhs){ return !(lhs == rhs); }

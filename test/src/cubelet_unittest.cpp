@@ -89,6 +89,23 @@ TEST_F(CubeletTest, overloading) {
 }
 
 
+TEST_F(CubeletTest, ColorSetEquality)
+{
+    Cubelet cr_new(cr);
+    Cubelet cfu_new(cfu);
+    Cubelet cbld_new(cbld);
+
+    cr_new *= right;
+    EXPECT_TRUE(haveSameColors(cr, cr_new));
+
+    cfu_new *= down;
+    EXPECT_TRUE(haveSameColors(cfu, cfu_new));
+
+    cbld_new *= back;
+    EXPECT_TRUE(haveSameColors(cbld, cbld_new));
+}
+
+
 TEST_F(CubeletTest, CubeletPosition){
     //Create CubeletPositons
     CubeletPosition cp_f(front);
@@ -96,10 +113,17 @@ TEST_F(CubeletTest, CubeletPosition){
     CubeletPosition cp_fld(front, left, down);
     CubeletPosition cp_fdl(front, down, left);
     CubeletPosition cp_dfl( down,front, left);
+    CubeletPosition cp_fur(front,up,right);
+    CubeletPosition cp_bdl(back,down,left);
+    CubeletPosition cp_fnl(left,undefside, front);
 
     EXPECT_FALSE( cp_f == cp_fl );
     EXPECT_FALSE( cp_fld != cp_fdl );
     EXPECT_FALSE( cp_dfl != cp_fdl );
+
+    EXPECT_EQ( getCommonFace(cp_fur, cp_fdl), front );
+    EXPECT_EQ( getCommonFace(cp_fur, cp_bdl), undefside );
+    EXPECT_EQ( getCommonFace(cp_fnl, cp_fl), left );
 
 }
 
@@ -175,4 +199,59 @@ TEST(Cubelet, TypeOperator){
     EXPECT_EQ(24, CubeletPosition(back,down,left));
     EXPECT_EQ(25, CubeletPosition(back,down,right));
 
+}
+
+
+TEST(colorset, constructor){
+    ColorSet cs1(red, white, blue);
+    EXPECT_TRUE(cs1.min() <= cs1.mid());
+    EXPECT_TRUE(cs1.mid() <= cs1.max());
+
+    ColorSet cs2(yellow, green, orange);
+    EXPECT_TRUE(cs2.min() <= cs2.mid());
+    EXPECT_TRUE(cs2.mid() <= cs2.max());
+
+    ColorSet cs3(yellow, red);
+    EXPECT_TRUE(cs3.min() <= cs3.mid());
+    EXPECT_TRUE(cs3.mid() <= cs3.max());
+
+    ColorSet cs4(green);
+    EXPECT_TRUE(cs4.min() <= cs4.mid());
+    EXPECT_TRUE(cs4.mid() <= cs4.max());
+
+    //same Color
+    EXPECT_THROW( ColorSet cs5(red, red), std::runtime_error );
+    //Opposite Color
+    EXPECT_THROW( ColorSet cs5(white, green, white), std::runtime_error );
+
+    std::vector<Color> vCol1;
+    EXPECT_THROW( ColorSet cs6(vCol1), std::runtime_error );    //Empty vector
+    vCol1.push_back(yellow);
+    vCol1.push_back(orange);
+    vCol1.push_back(blue);
+
+    ColorSet cs7(vCol1);
+    EXPECT_TRUE(cs7.min() <= cs7.mid());
+    EXPECT_TRUE(cs7.mid() <= cs7.max());
+
+    vCol1.push_back( green );
+    EXPECT_THROW( ColorSet cs8(vCol1), std::runtime_error );    //Size > 3
+
+
+}
+
+
+TEST(CubeletPosition, areClockwise)
+{
+    CubeletPosition cpFrom(front,down,left);
+    CubeletPosition cpTo(front,down,right);
+
+    EXPECT_TRUE(areClockwise(cpFrom,cpTo,down));
+    EXPECT_FALSE(areClockwise(cpFrom,cpTo,front));
+
+    EXPECT_THROW(areClockwise(cpFrom,cpTo,left), std::runtime_error);
+
+    CubeletPosition cpFrom2(front,down);
+
+    EXPECT_FALSE(areClockwise(cpFrom2, cpTo,down));
 }

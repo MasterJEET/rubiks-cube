@@ -37,6 +37,13 @@ class FaceletPosition: public Position  {
         ///Multiplication, return object copy
         friend FaceletPosition operator*(FaceletPosition lhs, const FaceSide& rhs){ lhs *= rhs; return lhs; }
 
+        /*! Return relative position of P1 w.r.t. P2.
+         *
+         *      rel(P1, P2) = rel(P1, P2.side())
+         *
+         * */
+        friend FaceletPosition getRelativePosition(const FaceletPosition& P1, const FaceletPosition& P2);
+
         /*! Type operator, converting to size_t to be used as array index later
          *
          * Conversion is aimed at assigning each Facelet of cube an unique number specific to its position,

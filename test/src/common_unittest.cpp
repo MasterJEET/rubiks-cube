@@ -106,18 +106,21 @@ TEST(cubemetabolism, mapping) {
      * ==================================================
      */
 
-    Color col;
     // Color from std::string with single letter
+    Color col;
     ColorFromLetter(std::string("B"), col);
     EXPECT_EQ(blue, col);
     // Color from string literal of single character
-    ColorFromLetter("W", col);
-    EXPECT_EQ(white, col);
+    Color col1;
+    ColorFromLetter("W", col1);
+    EXPECT_EQ(white, col1);
     // Color from a single character literal
-    ColorFromLetter('G', col);
-    EXPECT_EQ(green, col);
+    Color col2;
+    ColorFromLetter('G', col2);
+    EXPECT_EQ(green, col2);
     // When letter does not represent any Color
-    EXPECT_FALSE(ColorFromLetter('X',col));
+    Color col3;
+    EXPECT_FALSE(ColorFromLetter('X',col3));
 
 
     FaceSide fs;
@@ -125,14 +128,16 @@ TEST(cubemetabolism, mapping) {
     FaceSideFromLetter(std::string("D"), fs);
     EXPECT_EQ(down, fs);
     // FaceSide from string literal of single character
-    FaceSideFromLetter("L", fs);
-    EXPECT_EQ(left, fs);
+    FaceSide fs1;
+    FaceSideFromLetter("L", fs1);
+    EXPECT_EQ(left, fs1);
     // FaceSide from a single character literal
-    FaceSideFromLetter('B', fs);
-    EXPECT_EQ(back, fs);
+    FaceSide fs2;
+    FaceSideFromLetter('B', fs2);
+    EXPECT_EQ(back, fs2);
     // When letter doesn't represent any FaceSide
-    EXPECT_FALSE(FaceSideFromLetter('X',fs));
-
+    FaceSide fs3;
+    EXPECT_FALSE(FaceSideFromLetter('X',fs3));
 
 }
 
@@ -180,6 +185,59 @@ TEST(faceside,equivalence){
     EXPECT_EQ(back,r);
     EXPECT_EQ(down,d);
     EXPECT_EQ(front,l);
+}
+
+
+TEST(faceside, relative){
+
+    FaceSide x = left;
+    EXPECT_EQ(getRelativeFaceSide(x,front), left);
+    EXPECT_EQ(getRelativeFaceSide(x,back), right);
+    EXPECT_EQ(getRelativeFaceSide(x,up), left);
+    EXPECT_EQ(getRelativeFaceSide(x,down), left);
+    EXPECT_EQ(getRelativeFaceSide(x,right), back);
+    EXPECT_EQ(getRelativeFaceSide(x,x), front);
+
+    x = right;
+    EXPECT_EQ(getRelativeFaceSide(x,front), right);
+    EXPECT_EQ(getRelativeFaceSide(x,back), left);
+    EXPECT_EQ(getRelativeFaceSide(x,up), right);
+    EXPECT_EQ(getRelativeFaceSide(x,down), right);
+    EXPECT_EQ(getRelativeFaceSide(x,left), back);
+    EXPECT_EQ(getRelativeFaceSide(x,x), front);
+
+    x = up;
+    EXPECT_EQ(getRelativeFaceSide(x,front), up);
+    EXPECT_EQ(getRelativeFaceSide(x,back), up);
+    EXPECT_EQ(getRelativeFaceSide(x,left), up);
+    EXPECT_EQ(getRelativeFaceSide(x,down), back);
+    EXPECT_EQ(getRelativeFaceSide(x,right), up);
+    EXPECT_EQ(getRelativeFaceSide(x,x), front);
+
+    x = down;
+    EXPECT_EQ(getRelativeFaceSide(x,front), down);
+    EXPECT_EQ(getRelativeFaceSide(x,back), down);
+    EXPECT_EQ(getRelativeFaceSide(x,up), back);
+    EXPECT_EQ(getRelativeFaceSide(x,left), down);
+    EXPECT_EQ(getRelativeFaceSide(x,right), down);
+    EXPECT_EQ(getRelativeFaceSide(x,x), front);
+
+    x = front;
+    EXPECT_EQ(getRelativeFaceSide(x,left), right);
+    EXPECT_EQ(getRelativeFaceSide(x,back), back);
+    EXPECT_EQ(getRelativeFaceSide(x,up), down);
+    EXPECT_EQ(getRelativeFaceSide(x,down), up);
+    EXPECT_EQ(getRelativeFaceSide(x,right), left);
+    EXPECT_EQ(getRelativeFaceSide(x,x), front);
+
+    x = back;
+    EXPECT_EQ(getRelativeFaceSide(x,front), back);
+    EXPECT_EQ(getRelativeFaceSide(x,left), left);
+    EXPECT_EQ(getRelativeFaceSide(x,up), up);
+    EXPECT_EQ(getRelativeFaceSide(x,down), down);
+    EXPECT_EQ(getRelativeFaceSide(x,right), right);
+    EXPECT_EQ(getRelativeFaceSide(x,x), front);
+
 }
 
 
