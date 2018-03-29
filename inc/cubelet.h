@@ -19,6 +19,7 @@
 
 typedef std::vector<Facelet> vecFacelet;
 typedef std::list<FaceletPosition> listFletPos;
+typedef CollectionWrapper<FaceSide,false> CubeletPosition;
 
 
 /*! \brief Set of Color
@@ -27,13 +28,13 @@ typedef std::list<FaceletPosition> listFletPos;
  * a Cubelet which have these Colors on its Facelets
  *
  * */
-struct ColorSet{
-    ColorSet(Color c1, Color c2 = undefcol, Color c3 = undefcol);
-    ColorSet(std::vector<Color> vColor);
+struct SetOfColor{
+    SetOfColor(Color c1, Color c2 = undefcol, Color c3 = undefcol);
+    SetOfColor(std::vector<Color> vColor);
     Color min() const{ return col_min;};
     Color mid() const{ return col_mid;};
     Color max() const{ return col_max;};
-    friend bool operator==(const ColorSet& lhs, const ColorSet& rhs){
+    friend bool operator==(const SetOfColor& lhs, const SetOfColor& rhs){
         return lhs.min() == rhs.min() && lhs.mid() == rhs.mid() && lhs.max() == rhs.max();
     }
 
@@ -45,49 +46,17 @@ struct ColorSet{
 };
 
 
-class CubeletPosition : public Position {
-    public:
-        ///Constructors same as those of Position
-        CubeletPosition(): Position(){};
-        CubeletPosition(const FaceSide first): Position(first){};
-        CubeletPosition(const FaceSide first, const FaceSide second): Position(first, second){};
-        CubeletPosition(const FaceSide first, const FaceSide second, const FaceSide third): Position(first, second, third){};
-        CubeletPosition(const std::vector<FaceSide> _vecSide): Position(_vecSide){};
-        
-        ///initialize from  FaceletPosition
-        CubeletPosition(const FaceletPosition& fp): Position( fp.getSide() ){};
+///Returns one FaceSide shared by both the CubeletPositions
+FaceSide getCommonFace(const CubeletPosition&, const CubeletPosition&);
 
-        ///Initialize from Position
-        CubeletPosition(const Position& P): Position( P.getSide() ) {};
+/*! Return bool suggesting if the given CubeletPositions are located clockwise or not
+ *
+ * Let's consider the positions P1(front,left,down) and P2(front,left,up). On the front face they
+ * are clockwise whereas on left face they are anticlockwise
+ *
+ * */
+bool areClockwise(const CubeletPosition& from, const CubeletPosition& to, const FaceSide& f);
 
-        ///operator<< overloading to write CubeletPosition to ostream
-        friend std::ostream& operator<<(std::ostream& os, CubeletPosition P);
-
-        ///Equality
-        friend bool operator==(const CubeletPosition& lhs, const CubeletPosition& rhs);
-
-        ///Inequality
-        friend bool operator!=(const CubeletPosition& lhs, const CubeletPosition& rhs){ return !(lhs == rhs); }
-
-        ///Returns one FaceSide shared by both the CubeletPositions
-        friend FaceSide getCommonFace(const CubeletPosition& first, const CubeletPosition& second);
-
-        /*! Return bool suggesting if the given CubeletPositions are located clockwise or not
-         *
-         * Let's consider the positions P1(front,left,down) and P2(front,left,up). On the front face they
-         * are clockwise whereas on left face they are anticlockwise
-         *
-         * */
-        friend bool areClockwise(const CubeletPosition& from, const CubeletPosition& to, const FaceSide& f);
-
-        /** Type operator, converting to size_t to be used as array index later
-         *
-         * Here we simply list and assign unique numbers (between 0 to 25) to each CubeletPosition.
-         * Although there is a return statement with a negative integer, execution should never reach that point.
-         *
-         * */
-        operator std::size_t() const;
-};
 
 typedef std::vector<CubeletPosition> vecCletPos;
 
@@ -128,7 +97,7 @@ class Cubelet{
         ///Returns Position
         CubeletPosition getPosition() const{ return pos;}
 
-        ///Sets Position for cubelet
+        //Sets Position for cubelet
         void setPosition(const CubeletPosition _pos){ pos = _pos; }
 
         ///operator<< overloading for writing Cubelet to ostream

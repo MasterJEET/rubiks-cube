@@ -11,11 +11,11 @@
 #define CUBE_H
 
 ///Number of visible Cubelets in 3x3x3 Cube
-#define __NUM_CUBELET__ 26
+#define __NUM_CUBELET__     26
 ///Number of facelets in 3x3x3 cube
-#define __NUM_FACELET__ 54
-///Number of faces in 3x3x3 cube
-#define __NUM_FACE__ 6
+#define __NUM_FACELET__     54
+///Maximum number of FaceSide or Color required to specify a Facelet or Cubelet
+#define __NUM_REQUIRED__    3
 
 #include <iostream>
 #include <fstream>
@@ -33,11 +33,14 @@ typedef std::array<std::size_t, __NUM_FACE__> arrNumber;
 typedef std::array<bool, __NUM_FACE__> arrBool;
 typedef std::array<Color, __NUM_FACE__> arrColor;
 typedef std::array<FaceSide, __NUM_FACE__> arrFaceSide;
+typedef std::list<FaceletPosition> lFletPos;
 
 
 namespace AlgoBase {
     class Query;
 };
+
+class Cube;
 
 
 /*! \brief For listing out different input format for Cube
@@ -49,33 +52,92 @@ enum enInputFormat {
 };
 
 
+template <bool _isFaceletType>
+class CollectionWrapper<Color, _isFaceletType> : public CollectionChild<Color, _isFaceletType>
+{
+
+    Cube *pCube;
+
+    public:
+    CollectionWrapper( Cube* p, Color c1 = undefcol, Color c2 = undefcol, Color c3 = undefcol ):
+        CollectionChild<Color, _isFaceletType>( c1, c2, c3 ), pCube(p)
+    {}
+
+    bool are_opposite(Color c1, Color c2) const;
+    bool any_opposite(Color c1, Color c2, Color c3) const;
+};
+
+
+/*! Generic interface for collection
+ *
+ * */
+struct Collection {
+    template<typename E, bool _isFaceletType> Collection(
+            E _first    = upper_limit<E>(),
+            E _second   = upper_limit<E>(),
+            E _third    = upper_limit<E>()
+            ):
+        pbase( new CollectionChild<E,_isFaceletType> (_first, _second, _third) )
+    {};
+
+    operator std::size_t() const { return (std::size_t)(*pbase); }
+
+    private:
+    CollectionBase::ptr pbase;
+};
+
+
 
 class Cube {
     private:
 
-        ///Array for storing Cubelets with CubeletPosition as key
+        /*! Array for storing Cubelets with CubeletPosition as key
+         *
+         * */
         arrCubelet aCubelet;
 
-        ///Array for storing opposite Color
+        /*! Array for storing opposite Color
+         *
+         * */
         arrColor aOppColor;
 
-        ///This array contains mapping between ColorSet and the CubeletPosition
-        ///This is a class invariant.
+        /*! This array contains mapping between SetOfColor and the CubeletPosition.
+         * This is a class invariant.
+         *
+         * */
         arrCubeletPosition aCletPos;
 
-        ///vector for mapping of NUMBER -> CBUELET POSITION,
-        ///Given an integer it stores which CubeletPostion int refers to
+        /*! vector for mapping of NUMBER -> CBUELET POSITION,
+         * Given an integer it stores which CubeletPostion int refers to
+         *
+         * */
         static vecCletPos vCletPos;
+        static bool is_vCletPos_set;
 
-        ///vector for mapping of NUMBER -> FACELET POSITION,
-        ///Given an integer it stores which FaceletPostion int refers to
+        /*! vector for mapping of NUMBER -> FACELET POSITION,
+         * Given an integer it stores which FaceletPostion int refers to
+         *
+         * */
         static vecFletPos vFletPos;
+        static bool is_vFletPos_set;
 
-        ///vector for mapping of NUMBER -> COLOR,
-        ///Given an integer it stores which Color int refers to
+        /*! vector for mapping of NUMBER -> COLOR,
+         * Given an integer it stores which Color int refers to
+         *
+         * */
         static std::vector<Color> vCol;
+        static bool is_vCol_set;
 
-        ///Number of instances of Cube created
+        /*! vector containing mapping between NUMBER --> FaceSide
+         * Given and integer, idx: 0 <= idx < __NUM_FACE__, stores which FaceSide idx refers to
+         *
+         * */
+        static std::vector<FaceSide> vFS;
+        static bool is_vFS_set;
+
+        /*! Number of instances of Cube created
+         *
+         * */
         static std::size_t num_of_instances;
 
         /*! Make inverse mapping for CubeletPositions.
@@ -85,7 +147,7 @@ class Cube {
          * for inserting CubeletPosition to a vector
          *
          * */
-        void mapIntToCubeletPosition();
+        static void mapIntToCubeletPosition();
 
         /*! Make inverse mapping for FaceletPositions.
          *
@@ -94,7 +156,7 @@ class Cube {
          * for inserting FaceletPosition to a vector
          *
          * */
-        void mapIntToFaceletPosition();
+        static void mapIntToFaceletPosition();
 
         /*! Make inverse mapping for Color.
          *
@@ -103,7 +165,16 @@ class Cube {
          * for inserting Color to a vector
          *
          * */
-        void mapIntToColor();
+        static void mapIntToColor(){ vCol = ::elements<Color>(); is_vCol_set = true;}
+
+        /*! Make inverse mapping of FaceSide
+         *
+         * All FaceSides ae associated with an integer (key) as they
+         * are elements of an Enum. This function takes that integer and use it as index
+         * for inserting FaceSide to a vector
+         *
+         * */
+        static void mapIntToFaceSide(){ vFS = ::elements<FaceSide>(); is_vFS_set = true;}
 
         ///Initialize the cube, constructors will call this init method
         void init(std::istream &is, enInputFormat eifX);
@@ -206,12 +277,12 @@ class Cube {
 
         ///get Facelet located at FaceletPosition
         Facelet getFacelet(const FaceletPosition pos ) const {
-            return aCubelet.at( CubeletPosition (pos) ).getFacelet(pos) ;
+            return aCubelet.at( CubeletPosition (pos.all()) ).getFacelet(pos) ;
         }
 
         ///get corner Cubelet
         Cubelet getCubelet(const FaceSide& f1, const FaceSide& f2, const FaceSide& f3) const{
-            return getCubelet({f1,f2,f3});
+            return getCubelet(CubeletPosition(f1,f2,f3));
         }
 
         ///get edge Cubelet
@@ -230,7 +301,7 @@ class Cube {
         }
 
         ///get Cubelet from ColorSet
-        Cubelet getCubelet(const ColorSet& cs) const{
+        Cubelet getCubelet(const SetOfColor& cs) const{
             return getCubelet( aCletPos.at( ColorSetToInt(cs) ) );
         }
 
@@ -246,9 +317,12 @@ class Cube {
         ///Given an integer between 0 - 5, return associated Color
         static Color getColorFromInt(std::size_t index);
 
+        ///Get list of FaceletPositions associated with give CubeletPosition
+        static lFletPos getFaceletPositions(CubeletPosition cp);
+
         /*! Check if two Colors are opposite
          *
-         * Retuns true if Colors are opposite, else false.
+         * Retuns true if Colors are opposite, else false. When first Color is not defined, returns false.
          * See cuception.h for definition of opposite Color.
          *
          * */
@@ -257,6 +331,7 @@ class Cube {
         /*! Check if any two of given three Colors are opposite
          *
          * Retuns true if Colors are opposite, else false.
+         * If first or second Color is not defined, then also returns false.
          * See cuception.h for definition of opposite Color.
          *
          * */
@@ -269,14 +344,14 @@ class Cube {
         //FaceSide getSideOfColor(const Color& c);
 
 
-        /*! Map each ColorSet to an int
+        /*! Map each SetOfColor to an int
          *
          * The purpose of this mapping is, with this every combination of three or less Colors
          * can be associated with an integer. This integer can be used as a key for array
          * of CubeletPositions, effectively we'll have one-to-one correspondence between
          * set of three or less Colors and CubeletPositions.
          * */
-        std::size_t ColorSetToInt(const ColorSet& cs) const;
+        std::size_t ColorSetToInt(const SetOfColor& cs) const;
         std::size_t ColorSetToInt(const CubeletPosition& cp) const;
         std::size_t ColorSetToInt(const Color& c1, const Color& c2)const {return ColorSetToInt({c1,c2});};
         std::size_t ColorSetToInt(const Color& c1, const Color& c2, const Color& c3) const{
@@ -380,7 +455,7 @@ class Cube {
         void rotate(Step s);
         void rotate(StepSequence seq);
 
-        /*! Update the cube by rotating it as specified in StepSequence
+        /*! Update the cube by rotating its FaceSides as specified in StepSequence
          *
          * */
         void update(StepSequence s);
@@ -397,6 +472,12 @@ class Cube {
          *
          * */
         friend class AlgoBase::Query;
+
+        /*! Making CollectionWrapper<Color,bool> a friend.
+         * partially specialized template classes are tough to make friend due to weired syntax.
+         *
+         * */
+        template <typename E,bool _isFaceletType> friend class CollectionWrapper;
 };
 
 
@@ -527,56 +608,5 @@ template <typename P> std::vector<P> vecCenterEquivalence(const FaceSide& f);
  */
 template <typename P> std::vector<P> vecMidEdgeEquivalence(const FaceSide& f);
 
-
-
-struct PositionColor
-{
-    Cube& cube;
-    Color col1;
-    Color col2;
-    Color col3;
-
-    PositionColor(Cube& _cube, Color _col1 = undefcol, Color _col2 = undefcol, Color _col3 = undefcol):
-        cube(_cube), col1(_col1), col2(_col2), col3(_col3)
-    {};
-
-    virtual operator std::size_t() const = 0;
-};
-
-/*! Defined for associating Colors with FaceletPosition
- *
- * */
-struct FaceletColor: public PositionColor
-{
-    FaceletColor(Cube& _cube, Color _col1 = undefcol, Color _col2 = undefcol, Color _col3 = undefcol):
-        PositionColor(_cube, _col1, _col2, _col3)
-    {};
-
-    /*! This assigns a unique number to each unique FaceletColor as per Cube configuration
-     *
-     * Uniqueness is defined by first Color and set of last tow[optional] Colors. Let N ( 0 <= N <=3 ) be the
-     * total number of Colors defined in FaceletColor. Two FaceletColors with N1 and N2 number of defined Colors are
-     * identical if and only if N1 = N2 and following holds:
-     *      * N1 = N2 = 1: then single Color of both FaceletColor must match
-     *      * N1 = N2 = 2: Both the Colors must match in ordered sequence i.e. first Color of FaceletColor1 must match
-     *      with first Color of FaceletColor2 and similary second Color of both must match.
-     *      * N1 = N2 = 3: Fist Color of both must match. Second and third Color FaceletColor1 & 2 must form identical set i.e.
-     *      order is not important in second and third Color.
-     *
-     * Example:
-     *      * {orange} & {orange,yellow} are unique or different.
-     *      * {red} & {green} are unique.
-     *      * {white, yellow} & {yellow, white} are unique.
-     *      * {white,red,green} & {white,green,red} are identical.
-     *      * {white,red,green} & {white,red,blue} are unique.
-     *
-     * A valid FacleletColor is the one where at least one Color is defined and doesn't contain
-     * Colors present in opposite FaceSides. All valid FaceletColor are assigned a number between 0 to 53
-     * both inclusive as there are 54 Facelets in a 3X3X3 Cube. All non-valid FaceletColor are
-     * assigned -1.
-     *
-     * */
-    operator std::size_t() const;
-};
 
 #endif

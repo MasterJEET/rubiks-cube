@@ -251,60 +251,17 @@ Step Primitive::howTo(const FaceSide& from, const FaceSide& to)
     return s;
 }
 
-//StepSequence Primitive::getStepsToReference(const CubeletPosition& from, const CubeletPosition& to)
-//{
-//    StepSequence seq;
-//    FaceSide commonFace = getCommonFace(from,to);
-//    Step s1 = howTo(commonFace, down);
-//
-//    //get the updated positions
-//    Position pTFrom = from.ifRotated(s1);
-//    Position pTTo = to.ifRotated(s1);
-//
-//
-//    Step s2(down);
-//    Step s3;
-//    s3.f = undefside;
-//
-//    //rotate till 'from' is on back, 'to' is on front
-//    std::size_t no_of_turns = 0;
-//
-//    while( !pTFrom.isOn(back) || !pTTo.isOn(front) )
-//    {
-//        pTFrom = pTFrom.ifRotated(s2);
-//        pTTo = pTTo.ifRotated(s2);
-//        no_of_turns++;
-//    }
-//
-//    s2.no_of_turns = no_of_turns;
-//
-//    //Check for extra rotation required for Corner Cubelets
-//    if(pTFrom.size() == 3 && pTTo.size() == 3)
-//    {
-//        if(areClockwise(pTFrom,pTTo,down) && pTFrom.isOn(right) && pTTo.isOn(right))
-//            s2.no_of_turns += 2;
-//        if(!areClockwise(pTFrom,pTTo,down) && pTFrom.isOn(right) && pTTo.isOn(right))
-//            s3.f = front;
-//    }
-//
-//    seq.push_back(s1);
-//    seq.push_back(s2);
-//    seq.push_back(s3);
-//
-//    return seq;
-//}
-
 StepSequence Primitive::getSeqToStandard(FaceletPosition fp_from)
 {
 
     StepSequence sqRet;
 
-    Step s1 = howTo(fp_from.getSideAt(0), front);
+    Step s1 = howTo(fp_from.first(), front);
     Step s2;
 
     sqRet.push_back(s1);
 
-    CubeletPosition cp_from(fp_from);
+    CubeletPosition cp_from(fp_from.all());
     if(s1.f != undefside)
         for(std::size_t c = 0; c < s1.no_of_turns; c++)
             cp_from *= (s1.is_clockwise ? s1.f : opposite(s1.f) );
@@ -327,12 +284,12 @@ StepSequence Primitive::getSequence(FaceletPosition P_start, FaceletPosition P_e
 
     StepSequence ret;
 
-    CubeletPosition cp_start(P_start);
+    CubeletPosition cp_start(P_start.all());
     CubeletPosition cp_should;
 
-    if(P_start.getPositionType() == corner)
+    if(P_start.ptype() == corner)
         cp_should = CubeletPosition(down,back,left);
-    else if(P_start.getPositionType() == edge)
+    else if(P_start.ptype() == edge)
         cp_should = CubeletPosition(down,back);
 
     ///1. Get step seq required to bring destination position to standard position.
@@ -359,8 +316,8 @@ StepSequence Primitive::getSequence(FaceletPosition P_start, FaceletPosition P_e
     }
 
     ///3. Finally move P_start to P_end (rotation fo Face)
-    Position p_new = P_start.ifRotated(ret);
-    FaceletPosition fp_new( p_new.getSide() );
+    Position p_new = P_start.result(ret).all();
+    FaceletPosition fp_new( p_new.all() );
 
     Relation key( fp_new, P_end);
     auto seq = mRelStep[key];

@@ -203,39 +203,39 @@ TEST(Cubelet, TypeOperator){
 
 
 TEST(colorset, constructor){
-    ColorSet cs1(red, white, blue);
+    SetOfColor cs1(red, white, blue);
     EXPECT_TRUE(cs1.min() <= cs1.mid());
     EXPECT_TRUE(cs1.mid() <= cs1.max());
 
-    ColorSet cs2(yellow, green, orange);
+    SetOfColor cs2(yellow, green, orange);
     EXPECT_TRUE(cs2.min() <= cs2.mid());
     EXPECT_TRUE(cs2.mid() <= cs2.max());
 
-    ColorSet cs3(yellow, red);
+    SetOfColor cs3(yellow, red);
     EXPECT_TRUE(cs3.min() <= cs3.mid());
     EXPECT_TRUE(cs3.mid() <= cs3.max());
 
-    ColorSet cs4(green);
+    SetOfColor cs4(green);
     EXPECT_TRUE(cs4.min() <= cs4.mid());
     EXPECT_TRUE(cs4.mid() <= cs4.max());
 
     //same Color
-    EXPECT_THROW( ColorSet cs5(red, red), std::runtime_error );
+    EXPECT_THROW( SetOfColor cs5(red, red), std::runtime_error );
     //Opposite Color
-    EXPECT_THROW( ColorSet cs5(white, green, white), std::runtime_error );
+    EXPECT_THROW( SetOfColor cs5(white, green, white), std::runtime_error );
 
     std::vector<Color> vCol1;
-    EXPECT_THROW( ColorSet cs6(vCol1), std::runtime_error );    //Empty vector
+    EXPECT_THROW( SetOfColor cs6(vCol1), std::runtime_error );    //Empty vector
     vCol1.push_back(yellow);
     vCol1.push_back(orange);
     vCol1.push_back(blue);
 
-    ColorSet cs7(vCol1);
+    SetOfColor cs7(vCol1);
     EXPECT_TRUE(cs7.min() <= cs7.mid());
     EXPECT_TRUE(cs7.mid() <= cs7.max());
 
     vCol1.push_back( green );
-    EXPECT_THROW( ColorSet cs8(vCol1), std::runtime_error );    //Size > 3
+    EXPECT_THROW( SetOfColor cs8(vCol1), std::runtime_error );    //Size > 3
 
 
 }

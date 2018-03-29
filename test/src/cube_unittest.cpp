@@ -186,7 +186,7 @@ TEST_F(CubeTest, cubelet){
     for( vc = vdc.begin(), vf = vdfs.begin(); vc != vdc.end()  ; vf++, vc++ ){
         FaceletPosition fp1( vf->at(0), vf->at(1) );   FaceletPosition fp2( vf->at(1), vf->at(0) );
         Facelet f1(fp1, vc->at(0) );   Facelet f2(fp2, vc->at(1) );
-        EXPECT_EQ( Cubelet( f1, f2), cube.getCubelet( fp1 ) );
+        EXPECT_EQ( Cubelet( f1, f2), cube.getCubelet( fp1.all() ) );
     }
     }
 
@@ -213,7 +213,7 @@ TEST_F(CubeTest, cubelet){
         Facelet f1(fp1, vc->at(0) );
         Facelet f2(fp2, vc->at(1) );
         Facelet f3(fp3, vc->at(2) );
-        EXPECT_EQ( Cubelet( f1, f2, f3), cube.getCubelet( fp1 ) );
+        EXPECT_EQ( Cubelet( f1, f2, f3), cube.getCubelet( fp1.all() ) );
     }
     }
     
@@ -393,9 +393,9 @@ TEST_F(CubeTest,rotate){
     Step s(down, 3, false);
     cube_new1.rotateSide(s);
 
-    EXPECT_EQ(cube_old1.getCubelet({down,right})*down, cube_new1.getCubelet({back,down}));
+    EXPECT_EQ(cube_old1.getCubelet(down,right)*down, cube_new1.getCubelet(back,down));
     
-    EXPECT_EQ(cube_old1.getCubelet({down,back,right})*down, cube_new1.getCubelet({down,back,left}));
+    EXPECT_EQ(cube_old1.getCubelet(down,back,right)*down, cube_new1.getCubelet(down,back,left));
 }
 
 
@@ -435,7 +435,7 @@ TEST_F(CubeTest, ColorSetToInt){
     EXPECT_THROW(cube.ColorSetToInt(white, yellow), std::runtime_error);
 
 
-    ColorSet cWOB( white, orange, blue );
+    SetOfColor cWOB( white, orange, blue );
     std::size_t tWOB = cube.ColorSetToInt(cWOB);
     std::size_t tOBW = cube.ColorSetToInt(orange, blue, white);
     std::size_t tBWO = cube.ColorSetToInt(blue, white, orange);
@@ -456,7 +456,7 @@ TEST_F(CubeTest, ColorSetToInt){
     Color c1 = vFac[0].getColor();
     Color c2 = vFac[1].getColor();
     Color c3 = vFac[2].getColor();
-    ColorSet cs1(c1, c2, c3);
+    SetOfColor cs1(c1, c2, c3);
     
     EXPECT_EQ( cube.ColorSetToInt(cs1), cube.ColorSetToInt(cp) );
 
@@ -464,7 +464,7 @@ TEST_F(CubeTest, ColorSetToInt){
     CubeletPosition cp2(front);
     vecFacelet vFac2 = cube.getCubelet(cp2).getFacelet();
     Color c4 = vFac2[0].getColor();
-    ColorSet cs2(c4);
+    SetOfColor cs2(c4);
 
     EXPECT_EQ( cube.ColorSetToInt(cs2), cube.ColorSetToInt(cp2) );
 }
@@ -534,19 +534,14 @@ TEST(Cube, getFaceletPosition){
     EXPECT_THROW(Cube::getFaceletPosition(54), std::out_of_range);
 
     //Center Positions
-    EXPECT_EQ(Cube::getFaceletPosition(45), FaceletPosition(right));
+    EXPECT_EQ(Cube::getFaceletPosition(45), FaceletPosition(down,right,back));
 
     //Edge Positions
-    EXPECT_EQ(Cube::getFaceletPosition(22), FaceletPosition(up, left));
-    EXPECT_EQ(Cube::getFaceletPosition(12), FaceletPosition(back, down));
-    EXPECT_EQ(Cube::getFaceletPosition(47), FaceletPosition(right, back));
-    EXPECT_EQ(Cube::getFaceletPosition(28), FaceletPosition(down, front));
+    EXPECT_EQ(Cube::getFaceletPosition(22), FaceletPosition(left, front));
+    EXPECT_EQ(Cube::getFaceletPosition(12), FaceletPosition(back, left));
 
     //Corner Positions
-    EXPECT_EQ(Cube::getFaceletPosition(41), FaceletPosition(left,up,front));
-    EXPECT_EQ(Cube::getFaceletPosition(17), FaceletPosition(back,up,right));
-    EXPECT_EQ(Cube::getFaceletPosition(32), FaceletPosition(down,front,right));
-    EXPECT_EQ(Cube::getFaceletPosition(43), FaceletPosition(left,down,back));
+    EXPECT_EQ(Cube::getFaceletPosition(35), FaceletPosition(back,up,right));
 
 }
 
@@ -831,89 +826,191 @@ TEST(Equivalence,MidEdge){
 
 
 
-TEST_F(CubeTest, FaceletColor)
+TEST_F(CubeTest, getFaceletPositions)
 {
-#   define  FACELETCOLOR_TEST(fc, num, ...)\
-    FaceletColor fc(cube, __VA_ARGS__);\
-    EXPECT_EQ(fc, num);
+    CubeletPosition cp1(front);
+    lFletPos lfp1 = Cube::getFaceletPositions(cp1);
+    auto it1 = lfp1.begin();
+    EXPECT_EQ(*it1, FaceletPosition(front));
 
-    //Single Color
-    FACELETCOLOR_TEST(fc0, 0, white);
-    FACELETCOLOR_TEST(fc1, 1, yellow);
-    FACELETCOLOR_TEST(fc1_1, 1, yellow, undefcol);
-    FACELETCOLOR_TEST(fc2, 2, orange);
-    FACELETCOLOR_TEST(fc3, 3, red);
-    FACELETCOLOR_TEST(fc4, 4, green);
-    FACELETCOLOR_TEST(fc4_1, 4, green,undefcol,undefcol);
-    FACELETCOLOR_TEST(fc5, 5, blue);
+    CubeletPosition cp2(up,back);
+    lFletPos lfp2 = Cube::getFaceletPositions(cp2);
+    auto it2 = lfp2.begin();
+    EXPECT_EQ(*it2, FaceletPosition(back,up));
+    it2++;
+    EXPECT_EQ(*it2, FaceletPosition(up,back));
 
-    //Double Color
-    FACELETCOLOR_TEST(fc6, 6, white, orange);
-    FACELETCOLOR_TEST(fc7, 7, white, red);
-    FACELETCOLOR_TEST(fc8, 8, white, green);
-    FACELETCOLOR_TEST(fc9, 9, white, blue);
-    FACELETCOLOR_TEST(fc10, 10, yellow, orange);
-    FACELETCOLOR_TEST(fc11, 11, yellow, red);
-    FACELETCOLOR_TEST(fc11_1, 11, yellow, red, undefcol);
-    FACELETCOLOR_TEST(fc12, 12, yellow, green);
-    FACELETCOLOR_TEST(fc13, 13, yellow, blue);
-    FACELETCOLOR_TEST(fc14, 14, orange, white);
-    FACELETCOLOR_TEST(fc15, 15, orange, yellow);
-    FACELETCOLOR_TEST(fc16, 16, orange, green);
-    FACELETCOLOR_TEST(fc17, 17, orange, blue);
-    FACELETCOLOR_TEST(fc18, 18, red, white);
-    FACELETCOLOR_TEST(fc19, 19, red, yellow);
-    FACELETCOLOR_TEST(fc20, 20, red, green);
-    FACELETCOLOR_TEST(fc21, 21, red, blue);
-    FACELETCOLOR_TEST(fc21_1, 21, red, blue, undefcol);
-    FACELETCOLOR_TEST(fc22, 22, green, white);
-    FACELETCOLOR_TEST(fc23, 23, green, yellow);
-    FACELETCOLOR_TEST(fc24, 24, green, orange);
-    FACELETCOLOR_TEST(fc25, 25, green, red);
-    FACELETCOLOR_TEST(fc26, 26, blue, white);
-    FACELETCOLOR_TEST(fc27, 27, blue, yellow);
-    FACELETCOLOR_TEST(fc28, 28, blue, orange);
-    FACELETCOLOR_TEST(fc29, 29, blue, red);
-    FACELETCOLOR_TEST(fc29_1, 29, blue, undefcol, red);
+    CubeletPosition cp3(left,undefside,down);
+    lFletPos lfp3 = Cube::getFaceletPositions(cp3);
+    auto it3 = lfp3.begin();
+    EXPECT_EQ(*it3, FaceletPosition(down,left));
+    it3++;
+    EXPECT_EQ(*it3, FaceletPosition(left,down));
 
-    //Triple Color
-    FACELETCOLOR_TEST(fc30, 30, white, orange, green);
-    FACELETCOLOR_TEST(fc30_1, 30, white, green, orange);
-    FACELETCOLOR_TEST(fc31, 31, white, orange, blue);
-    FACELETCOLOR_TEST(fc31_1, 31, white, blue, orange);
-    FACELETCOLOR_TEST(fc32, 32, white, red, green);
-    FACELETCOLOR_TEST(fc32_1, 32, white, green, red);
-    FACELETCOLOR_TEST(fc33, 33, white, red, blue);
-    FACELETCOLOR_TEST(fc33_1, 33, white, blue, red);
-    FACELETCOLOR_TEST(fc34, 34, yellow, orange, green);
-    FACELETCOLOR_TEST(fc35, 35, yellow, orange, blue);
-    FACELETCOLOR_TEST(fc36, 36, yellow, red, green);
-    FACELETCOLOR_TEST(fc37, 37, yellow, red, blue);
-    FACELETCOLOR_TEST(fc38, 38, orange, white, green);
-    FACELETCOLOR_TEST(fc39, 39, orange, white, blue);
-    FACELETCOLOR_TEST(fc40, 40, orange, yellow, green);
-    FACELETCOLOR_TEST(fc41, 41, orange, yellow, blue);
-    FACELETCOLOR_TEST(fc42, 42, red, white, green);
-    FACELETCOLOR_TEST(fc42_1, 42, red, green, white);
-    FACELETCOLOR_TEST(fc43, 43, red, white, blue);
-    FACELETCOLOR_TEST(fc44, 44, red, yellow, green);
-    FACELETCOLOR_TEST(fc44_1, 44, red, green, yellow);
-    FACELETCOLOR_TEST(fc45, 45, red, yellow, blue);
-    FACELETCOLOR_TEST(fc46, 46, green, white, orange);
-    FACELETCOLOR_TEST(fc47, 47, green, white, red);
-    FACELETCOLOR_TEST(fc48, 48, green, yellow, orange);
-    FACELETCOLOR_TEST(fc49, 49, green, yellow, red);
-    FACELETCOLOR_TEST(fc50, 50, blue, white, orange);
-    FACELETCOLOR_TEST(fc51, 51, blue, white, red);
-    FACELETCOLOR_TEST(fc52, 52, blue, yellow, orange);
-    FACELETCOLOR_TEST(fc53, 53, blue, yellow, red);
+    CubeletPosition cp4(front,right,undefside);
+    lFletPos lfp4 = Cube::getFaceletPositions(cp4);
+    auto it4 = lfp4.begin();
+    EXPECT_EQ(*it4, FaceletPosition(front,right));
+    it4++;
+    EXPECT_EQ(*it4, FaceletPosition(right,front));
+
+    CubeletPosition cp5(down,left,back);
+    lFletPos lfp5 = Cube::getFaceletPositions(cp5);
+    auto it5 = lfp5.begin();
+    EXPECT_EQ(*it5, FaceletPosition(back,down,left));
+    it5++;
+    EXPECT_EQ(*it5, FaceletPosition(down,left,back));
+    it5++;
+    EXPECT_EQ(*it5, FaceletPosition(left,back,down));
+}
 
 
-    //Invalid FaceletColor
-    FACELETCOLOR_TEST(inv1, -1, undefcol, yellow);  //first col undefined
-    FACELETCOLOR_TEST(inv2, -1, white, yellow);     //Opposite Color
-    FACELETCOLOR_TEST(inv3, -1, white, green, blue);//Opposite Color B,G
+TEST_F(CubeTest, CollectionWrapper__are_opposite)
+{
+    CollectionWrapper<Color, true> cw(&cube);
+    EXPECT_TRUE( cw.are_opposite(white, yellow) );
+    EXPECT_TRUE( cw.are_opposite(red, orange) );
+    EXPECT_TRUE( cw.are_opposite(blue, green) );
+    EXPECT_TRUE( cw.any_opposite(blue, green, red) );
+    EXPECT_TRUE( cw.any_opposite(red, yellow, orange) );
+    EXPECT_FALSE( cw.are_opposite(white, orange) );
+    EXPECT_FALSE( cw.are_opposite(yellow, orange) );
+    EXPECT_FALSE( cw.are_opposite(blue, red) );
+    EXPECT_FALSE( cw.any_opposite(yellow, green, red) );
+    EXPECT_FALSE( cw.any_opposite(red, yellow, blue) );
+
+    CollectionWrapper<FaceSide, false> cwf;
+    EXPECT_TRUE( cwf.are_opposite(left, right) );
+    EXPECT_TRUE( cwf.any_opposite(up, down, front) );
+    EXPECT_FALSE( cwf.are_opposite(back, down) );
+    EXPECT_FALSE( cwf.any_opposite(back, down, right) );
+}
 
 
-#   undef   FACELETCOLOR_TEST
+TEST_F(CubeTest, CollectionWrapper__size_t)
+{
+#define WRAPPERSIZE_TEST(T,b,x,n,...)\
+    CollectionWrapper<T,b> x(__VA_ARGS__);\
+    EXPECT_EQ(x,n);
+
+
+    //CubeletType, single Color
+    WRAPPERSIZE_TEST(Color,false,cwcn,-1,&cube,undefcol);
+    WRAPPERSIZE_TEST(Color,false,cwcn0,0,&cube,white);
+    WRAPPERSIZE_TEST(Color,false,cwcn1,1,&cube,yellow);
+    WRAPPERSIZE_TEST(Color,false,cwcn2,2,&cube,orange);
+    WRAPPERSIZE_TEST(Color,false,cwcn3,3,&cube,red);
+    WRAPPERSIZE_TEST(Color,false,cwcn4,4,&cube,green);
+    WRAPPERSIZE_TEST(Color,false,cwcn5,5,&cube,blue);
+    WRAPPERSIZE_TEST(Color,false,cwcn1_1,1,&cube,yellow,undefcol);
+    WRAPPERSIZE_TEST(Color,false,cwcn4_1,4,&cube,green,undefcol,undefcol);
+
+    //CubeletType, double Color
+    WRAPPERSIZE_TEST(Color,false,cwcn_1,-1,&cube,undefcol,undefcol);
+    WRAPPERSIZE_TEST(Color,false,cwcn6,6,&cube,white,orange);
+    WRAPPERSIZE_TEST(Color,false,cwcn7,7,&cube,white,red);
+    WRAPPERSIZE_TEST(Color,false,cwcn7_1,7,&cube,red,white);
+    WRAPPERSIZE_TEST(Color,false,cwcn8,8,&cube,white,green);
+    WRAPPERSIZE_TEST(Color,false,cwcn9,9,&cube,white,blue);
+    WRAPPERSIZE_TEST(Color,false,cwcn9_1,9,&cube,white,blue,undefcol);
+    WRAPPERSIZE_TEST(Color,false,cwcn10,10,&cube,yellow,orange);
+    WRAPPERSIZE_TEST(Color,false,cwcn11,11,&cube,yellow,red);
+    WRAPPERSIZE_TEST(Color,false,cwcn11_1,11,&cube,red,yellow);
+    WRAPPERSIZE_TEST(Color,false,cwcn12,12,&cube,yellow,green);
+    WRAPPERSIZE_TEST(Color,false,cwcn13,13,&cube,yellow,blue);
+    WRAPPERSIZE_TEST(Color,false,cwcn13_1,13,&cube,yellow,undefcol,blue);
+    WRAPPERSIZE_TEST(Color,false,cwcn14,14,&cube,orange,green);
+    WRAPPERSIZE_TEST(Color,false,cwcn15,15,&cube,orange,blue);
+    WRAPPERSIZE_TEST(Color,false,cwcn15_1,15,&cube,blue,orange);
+    WRAPPERSIZE_TEST(Color,false,cwcn16,16,&cube,red,green);
+    WRAPPERSIZE_TEST(Color,false,cwcn17,17,&cube,red,blue);
+    WRAPPERSIZE_TEST(Color,false,cwcn17_1,17,&cube,blue,red);
+
+    //CubeletType, triple Color
+    WRAPPERSIZE_TEST(Color,false,cwcn_2,-1,&cube,undefcol,undefcol,undefcol);
+    WRAPPERSIZE_TEST(Color,false,cwcn18,18,&cube,white,orange,green);
+    WRAPPERSIZE_TEST(Color,false,cwcn19,19,&cube,white,orange,blue);
+    WRAPPERSIZE_TEST(Color,false,cwcn20,20,&cube,white,red,green);
+    WRAPPERSIZE_TEST(Color,false,cwcn21,21,&cube,white,red,blue);
+    WRAPPERSIZE_TEST(Color,false,cwcn22,22,&cube,yellow,orange,green);
+    WRAPPERSIZE_TEST(Color,false,cwcn23,23,&cube,yellow,orange,blue);
+    WRAPPERSIZE_TEST(Color,false,cwcn24,24,&cube,yellow,red,green);
+    WRAPPERSIZE_TEST(Color,false,cwcn25,25,&cube,yellow,red,blue);
+
+
+    //FaceletType, single Color
+    WRAPPERSIZE_TEST(Color,true,cwcf,-1,&cube,undefcol);
+    WRAPPERSIZE_TEST(Color,true,cwcf0,0,&cube,white);
+    WRAPPERSIZE_TEST(Color,true,cwcf1,1,&cube,yellow);
+    WRAPPERSIZE_TEST(Color,true,cwcf2,2,&cube,orange);
+    WRAPPERSIZE_TEST(Color,true,cwcf3,3,&cube,red);
+    WRAPPERSIZE_TEST(Color,true,cwcf4,4,&cube,green);
+    WRAPPERSIZE_TEST(Color,true,cwcf5,5,&cube,blue);
+    WRAPPERSIZE_TEST(Color,true,cwcf0_1,0,&cube,white,undefcol);
+    WRAPPERSIZE_TEST(Color,true,cwcf3_1,3,&cube,red,undefcol,undefcol);
+
+    //FaceletType, double Color
+    WRAPPERSIZE_TEST(Color,true,cwcf6, 6,&cube, white, orange);
+    WRAPPERSIZE_TEST(Color,true,cwcf7, 7,&cube, white, red);
+    WRAPPERSIZE_TEST(Color,true,cwcf8, 8,&cube, white, green);
+    WRAPPERSIZE_TEST(Color,true,cwcf9, 9,&cube, white, blue);
+    WRAPPERSIZE_TEST(Color,true,cwcf10, 10,&cube, yellow, orange);
+    WRAPPERSIZE_TEST(Color,true,cwcf11, 11,&cube, yellow, red);
+    WRAPPERSIZE_TEST(Color,true,cwcf11_1, 11,&cube, yellow, red, undefcol);
+    WRAPPERSIZE_TEST(Color,true,cwcf12, 12,&cube, yellow, green);
+    WRAPPERSIZE_TEST(Color,true,cwcf13, 13,&cube, yellow, blue);
+    WRAPPERSIZE_TEST(Color,true,cwcf14, 14,&cube, orange, white);
+    WRAPPERSIZE_TEST(Color,true,cwcf15, 15,&cube, orange, yellow);
+    WRAPPERSIZE_TEST(Color,true,cwcf16, 16,&cube, orange, green);
+    WRAPPERSIZE_TEST(Color,true,cwcf17, 17,&cube, orange, blue);
+    WRAPPERSIZE_TEST(Color,true,cwcf18, 18,&cube, red, white);
+    WRAPPERSIZE_TEST(Color,true,cwcf19, 19,&cube, red, yellow);
+    WRAPPERSIZE_TEST(Color,true,cwcf20, 20,&cube, red, green);
+    WRAPPERSIZE_TEST(Color,true,cwcf21, 21,&cube, red, blue);
+    WRAPPERSIZE_TEST(Color,true,cwcf21_1, 21,&cube, red, blue, undefcol);
+    WRAPPERSIZE_TEST(Color,true,cwcf22, 22,&cube, green, white);
+    WRAPPERSIZE_TEST(Color,true,cwcf23, 23,&cube, green, yellow);
+    WRAPPERSIZE_TEST(Color,true,cwcf24, 24,&cube, green, orange);
+    WRAPPERSIZE_TEST(Color,true,cwcf25, 25,&cube, green, red);
+    WRAPPERSIZE_TEST(Color,true,cwcf26, 26,&cube, blue, white);
+    WRAPPERSIZE_TEST(Color,true,cwcf27, 27,&cube, blue, yellow);
+    WRAPPERSIZE_TEST(Color,true,cwcf28, 28,&cube, blue, orange);
+    WRAPPERSIZE_TEST(Color,true,cwcf29, 29,&cube, blue, red);
+    WRAPPERSIZE_TEST(Color,true,cwcf29_1, 29,&cube, blue, undefcol, red);
+
+    //FaceletType, Triple Color
+    WRAPPERSIZE_TEST(Color,true,cwcf30, 30,&cube, white, orange, green);
+    WRAPPERSIZE_TEST(Color,true,cwcf30_1, 30,&cube, white, green, orange);
+    WRAPPERSIZE_TEST(Color,true,cwcf31, 31,&cube, white, orange, blue);
+    WRAPPERSIZE_TEST(Color,true,cwcf31_1, 31,&cube, white, blue, orange);
+    WRAPPERSIZE_TEST(Color,true,cwcf32, 32,&cube, white, red, green);
+    WRAPPERSIZE_TEST(Color,true,cwcf32_1, 32,&cube, white, green, red);
+    WRAPPERSIZE_TEST(Color,true,cwcf33, 33,&cube, white, red, blue);
+    WRAPPERSIZE_TEST(Color,true,cwcf33_1, 33,&cube, white, blue, red);
+    WRAPPERSIZE_TEST(Color,true,cwcf34, 34,&cube, yellow, orange, green);
+    WRAPPERSIZE_TEST(Color,true,cwcf35, 35,&cube, yellow, orange, blue);
+    WRAPPERSIZE_TEST(Color,true,cwcf36, 36,&cube, yellow, red, green);
+    WRAPPERSIZE_TEST(Color,true,cwcf37, 37,&cube, yellow, red, blue);
+    WRAPPERSIZE_TEST(Color,true,cwcf38, 38,&cube, orange, white, green);
+    WRAPPERSIZE_TEST(Color,true,cwcf39, 39,&cube, orange, white, blue);
+    WRAPPERSIZE_TEST(Color,true,cwcf40, 40,&cube, orange, yellow, green);
+    WRAPPERSIZE_TEST(Color,true,cwcf41, 41,&cube, orange, yellow, blue);
+    WRAPPERSIZE_TEST(Color,true,cwcf42, 42,&cube, red, white, green);
+    WRAPPERSIZE_TEST(Color,true,cwcf42_1, 42,&cube, red, green, white);
+    WRAPPERSIZE_TEST(Color,true,cwcf43, 43,&cube, red, white, blue);
+    WRAPPERSIZE_TEST(Color,true,cwcf44, 44,&cube, red, yellow, green);
+    WRAPPERSIZE_TEST(Color,true,cwcf44_1, 44,&cube, red, green, yellow);
+    WRAPPERSIZE_TEST(Color,true,cwcf45, 45,&cube, red, yellow, blue);
+    WRAPPERSIZE_TEST(Color,true,cwcf46, 46,&cube, green, white, orange);
+    WRAPPERSIZE_TEST(Color,true,cwcf47, 47,&cube, green, white, red);
+    WRAPPERSIZE_TEST(Color,true,cwcf48, 48,&cube, green, yellow, orange);
+    WRAPPERSIZE_TEST(Color,true,cwcf49, 49,&cube, green, yellow, red);
+    WRAPPERSIZE_TEST(Color,true,cwcf50, 50,&cube, blue, white, orange);
+    WRAPPERSIZE_TEST(Color,true,cwcf51, 51,&cube, blue, white, red);
+    WRAPPERSIZE_TEST(Color,true,cwcf52, 52,&cube, blue, yellow, orange);
+    WRAPPERSIZE_TEST(Color,true,cwcf53, 53,&cube, blue, yellow, red);
+
+
+
+#undef  WRAPPERSIZE_TEST
 }

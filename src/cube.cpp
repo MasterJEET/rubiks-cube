@@ -12,7 +12,13 @@
 vecCletPos Cube::vCletPos (__NUM_CUBELET__);
 vecFletPos Cube::vFletPos (__NUM_FACELET__);
 std::vector<Color> Cube::vCol (__NUM_FACE__);
+std::vector<FaceSide> Cube::vFS (__NUM_FACE__);
+bool Cube::is_vCletPos_set = false;
+bool Cube::is_vFletPos_set = false;
+bool Cube::is_vCol_set = false;
+bool Cube::is_vFS_set = false;
 std::size_t Cube::num_of_instances = 0;
+
 
 
 Cube::Cube()
@@ -52,17 +58,18 @@ Cube::Cube(std::string file_path, enInputFormat eifX) {
         throw std::runtime_error("Could not open file: \"" + file_path + "\".");
     init(ifs, eifX);
 
+    num_of_instances ++;
+
 }
 
 
 void Cube::init(std::istream& is, enInputFormat eifX){
 
-    num_of_instances ++;
-
-    if(num_of_instances == 1){
+    if(num_of_instances == 0){
         mapIntToCubeletPosition();
         mapIntToFaceletPosition();
         mapIntToColor();
+        mapIntToFaceSide();
     }
     
     //Array for storing Facelets with FaceletPosition as key
@@ -131,6 +138,7 @@ void Cube::mapIntToCubeletPosition(){
     vCletPos[ CubeletPosition(f) ] = CubeletPosition(f);
     vCletPos[ CubeletPosition(b) ] = CubeletPosition(b);
 
+    is_vCletPos_set = true;
 }
 
 void Cube::mapIntToFaceletPosition(){
@@ -142,16 +150,8 @@ void Cube::mapIntToFaceletPosition(){
     for(const auto fs: {f,b,u,r,d,l}){
         for(const auto fp: getEquivalentFletPos(fs)) vFletPos[ fp ] = fp;
     }
-}
 
-
-void Cube::mapIntToColor(){
-    vCol[white]     = white;
-    vCol[red]       = red;
-    vCol[yellow]    = yellow;
-    vCol[orange]    = orange;
-    vCol[green]     = green;
-    vCol[blue]      = blue;
+    is_vFletPos_set = true;
 }
 
 
@@ -284,10 +284,10 @@ void Cube::createFaceFromLinearInput(
         Color col;
         assertColor(is,col);
 
-        switch(fp.getPositionType()){
+        switch(fp.ptype()){
             case center:
                 aNumOfCenterCol[col] ++;
-                //aFaceSide[col] = fp.getSideAt(0);
+                //aFaceSide[col] = fp.first();
                 break;
             case edge:
                 aNumOfEdgeCol[col] ++;
@@ -326,14 +326,18 @@ void Cube::setOppColor(vecFacelet& vFacelet){
 
 
 bool Cube::areOppColor(const Color& first, const Color& second) const{
+    if(first == undefcol)
+        return false;
     return aOppColor[ first ] == second;
 }
 
 
 bool Cube::anyOppColor(const Color& c1, const Color& c2, const Color& c3) const{
+    if(c1==undefcol || c2==undefcol)
+        return false;
     bool are_opp = aOppColor[ c1 ] == c2;
     are_opp = are_opp || ( aOppColor[ c2 ] == c3 );
-    are_opp = are_opp || ( aOppColor[ c3 ] == c1 );
+    are_opp = are_opp || ( aOppColor[ c1 ] == c3 );
     return are_opp;
 }
 
@@ -345,7 +349,7 @@ bool Cube::anyOppColor(const Color& c1, const Color& c2, const Color& c3) const{
 //}
 
 
-std::size_t Cube::ColorSetToInt(const ColorSet& cs) const{
+std::size_t Cube::ColorSetToInt(const SetOfColor& cs) const{
 
     //if only one Color is defined, return it
     if(cs.mid() == undefcol && cs.max() == undefcol)
@@ -356,7 +360,7 @@ std::size_t Cube::ColorSetToInt(const ColorSet& cs) const{
     if( cs.mid() != undefcol && cs.max() == undefcol )
     {
         if( areOppColor(cs.min(), cs.mid() ) )
-            throw std::runtime_error(std::string() + __func__+ ": Two defined Colors in ColorSet are opposite.");
+            throw std::runtime_error(std::string() + __func__+ ": Two defined Colors in SetOfColor are opposite.");
 
 
         //No need to sort elements as the elements are already
@@ -435,7 +439,7 @@ std::size_t Cube::ColorSetToInt(const CubeletPosition& cp) const
 //}
 
 
-//std::size_t Cube::ColorSetToInt(const ColorSet& cs){
+//std::size_t Cube::ColorSetToInt(const SetOfColor& cs){
 //    
 //    if(cs.mid() == undefside && cs.max() == undefside)
 //        return cs.min();
@@ -444,7 +448,7 @@ std::size_t Cube::ColorSetToInt(const CubeletPosition& cp) const
 //    {
 //        bool are_opp = areOppColor( cs.min(), cs.mid() );
 //        if(are_opp)
-//            throw std::runtime_error(std::string() + __func__ + "Two defined Colors,in ColorSet, are opposite.");
+//            throw std::runtime_error(std::string() + __func__ + "Two defined Colors,in SetOfColor, are opposite.");
 //        if(cs.min()
 //    }
 //}
@@ -491,6 +495,7 @@ CubeletPosition Cube::getCubeletPosition(std::size_t index){
     return vCletPos[ index ];
 }
 
+
 FaceletPosition Cube::getFaceletPosition(std::size_t index){
     if( index > __NUM_FACELET__ - 1 )
         throw std::out_of_range("Index: " + std::to_string(index) +\
@@ -506,6 +511,38 @@ Color Cube::getColorFromInt(std::size_t index){
                 " is not within range: [0, " + std::to_string(__NUM_FACE__) + ").");
 
     return vCol[ index ];
+}
+
+
+lFletPos Cube::getFaceletPositions(CubeletPosition cp)
+{
+    std::vector<FaceSide> vec{cp.first(),cp.second(),cp.third()};
+    std::sort(vec.begin(),vec.end());
+    FaceSide f1 = vec[0];
+    FaceSide f2 = vec[1];
+    FaceSide f3 = vec[2];
+    lFletPos lfp;
+    if( cp.num() == 1 )
+    {
+        lfp.push_back({f1});
+        return lfp;
+    }
+    else if(cp.num() == 2)
+    {
+        lfp.push_back({f1,f2});
+        lfp.push_back({f2,f1});
+        return lfp;
+    }
+    else if(cp.num() == 3)
+    {
+        lfp.push_back({f1,f2,f3});
+        lfp.push_back({f2,f3,f1});
+        lfp.push_back({f3,f1,f2});
+        return lfp;
+    }
+
+    //Can reach here if no valid FaceSide are defined for given CubeletPosition
+    return lfp;
 }
 
 //void Cube::show(const FaceSide& f){
@@ -795,74 +832,18 @@ std::vector<P> vecMidEdgeEquivalence(const FaceSide& f){
     return vpos;
 }
 
-
-FaceletColor::operator std::size_t () const
+template <bool _isFaceletType>
+bool CollectionWrapper<Color, _isFaceletType>::are_opposite(Color c1, Color c2) const
 {
-    ///In FaceletColor, first Color must be defined
-    if(col1 == undefcol)
-        return -1;
-
-    //Here we have col1 defined. rest two cols can be anything
-    ///If there's only undefcol in last two cols then put it to last.
-    Color tmp1 = col1;
-    Color tmp2 = col2;
-    Color tmp3 = col3;
-    if( tmp2 == undefcol && tmp3 != undefcol )
-        std::swap(tmp2, tmp3);
-
-    ///1. Colors are enum (integer). if there's only one defined that.
-    ///Each Color is assigned a Color between [0 5].
-    if( tmp2 == undefcol && tmp3 == undefcol )
-        return tmp1;
-
-    ///2. if two Colors are defined, count possible arrangements sequenctially.
-    ///When there is a match between possible arrangement and given arrangement (FaceletColor) add the
-    ///count to previous (step #1) count max (i.e. 5).
-    if ( tmp2 != undefcol && tmp3 == undefcol )
-    {
-
-        std::size_t count = 0;
-
-        for( std::size_t i1 = 0; i1 < __NUM_FACE__ ; i1++ )
-            for( std::size_t i2 = 0; i2 < __NUM_FACE__ ; i2++ )
-            {
-                if( !cube.areOppColor( Cube::vCol[i1], Cube::vCol[i2] ) && i2 != i1 )
-                {
-                    count++;
-                    if( Cube::vCol[i2] == tmp2 && Cube::vCol[i1] == tmp1 )
-                        return 5 + count;
-                }
-
-            }
-
-    }
-
-
-    ///3. If all the three Colors are defined, count as in Step #2. When there's a match add the count to total number of valid
-    ///valid configuration seen so far including the ones in step #1 and step #2.
-    if ( tmp2 != undefcol && tmp3 != undefcol )
-    {
-        //sort second and third Color (put larger one to last), this is necessary make their order irrelevant
-        if(tmp2 > tmp3)
-            std::swap(tmp2,tmp3);
-
-        std::size_t count = 0;
-        for( std::size_t i1 = 0; i1 < __NUM_FACE__ ; i1++ )
-            for( std::size_t i2 = 0; i2 < __NUM_FACE__ ; i2++ )
-                for( std::size_t i3 = i2 + 1; i3 < __NUM_FACE__ ; i3++ )
-                {
-                    //If there are no opposite or same Colors, increment count
-                    if( !cube.anyOppColor( Cube::vCol[i1], Cube::vCol[i2], Cube::vCol[i3] ) &&\
-                            ( Cube::vCol[i1] != Cube::vCol[i2] && Cube::vCol[i2] != Cube::vCol[i3] && Cube::vCol[i3] != Cube::vCol[i1] ) )
-                    {
-                        count++;
-                        if( Cube::vCol[i1] == tmp1 && Cube::vCol[i2] == tmp2 && Cube::vCol[i3] == tmp3 )
-                            return 29 + count;
-                    }
-                }
-    }
-
-
-    ///If doesn't belong to above categories then retrun -1 indicating a failure
-    return -1;
+    return pCube->areOppColor(c1, c2);
 }
+
+template <bool _isFaceletType>
+bool CollectionWrapper<Color, _isFaceletType>::any_opposite(Color c1, Color c2, Color c3) const
+{
+    return pCube->anyOppColor(c1,c2,c3);
+}
+
+template class CollectionWrapper<Color,true>;
+template class CollectionWrapper<Color,false>;
+

@@ -65,7 +65,7 @@ EdgeColorException::EdgeColorException(FaceletPosition _fp, std::string str)
 const char* EdgeColorException::what() const throw()
 {
     std::ostringstream oss;
-    oss << "\nCheck Colors on edge Cubelet at " << CubeletPosition(fp) << ".\n" << runtime_error::what() << std::endl;
+    oss << "\nCheck Colors on edge Cubelet at " << CubeletPosition(fp.all()) << ".\n" << runtime_error::what() << std::endl;
     message = oss.str();
     return message.c_str();
 }

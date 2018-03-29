@@ -22,3 +22,10 @@ Next:
     * Add check for is_mid in roate implementation
     * Reduce the number of implementation of rotation functions by using Step
     * Add relative position based 'sequence finding'
+
+
+Generic:
+    * add generic interface for collection of elements/objects of a particular type
+    * uniqueness of collections to be defined by certain rules
+    * each unique element be assigned one unique number between [0  max_no_elements-1], both endpoints inclusive
+    * This unique integer associated can be used as an index

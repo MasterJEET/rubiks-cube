@@ -13,54 +13,11 @@
 #include "position.h"
 #include <ostream>
 
-class FaceletPosition: public Position  {
-    public:
-        ///All constructor similar to those in base class Position
-        FaceletPosition(): Position(){};
-        FaceletPosition(const FaceSide first): Position(first){};
-        FaceletPosition(const FaceSide first, const FaceSide second): Position(first, second){};
-        FaceletPosition(const FaceSide first, const FaceSide second, const FaceSide third): Position(first, second, third){};
-        FaceletPosition(const std::vector<FaceSide> _vecSide): Position(_vecSide){};
-
-        ///operator<< overloading to write FaceletPosition to ostream
-        friend std::ostream& operator<<(std::ostream& os, FaceletPosition FP);
-
-        ///Equality
-        friend bool operator==(const FaceletPosition& lhs, const FaceletPosition& rhs);
-
-        ///Inequality
-        friend bool operator!=(const FaceletPosition& lhs, const FaceletPosition& rhs){ return !(lhs == rhs); }
-
-        ///Multiplication, modify object
-        FaceletPosition& operator*=(const FaceSide& rhs);
-
-        ///Multiplication, return object copy
-        friend FaceletPosition operator*(FaceletPosition lhs, const FaceSide& rhs){ lhs *= rhs; return lhs; }
-
-        /*! Return relative position of P1 w.r.t. P2.
-         *
-         *      rel(P1, P2) = rel(P1, P2.side())
-         *
-         * */
-        friend FaceletPosition getRelativePosition(const FaceletPosition& P1, const FaceletPosition& P2);
-
-        /*! Type operator, converting to size_t to be used as array index later
-         *
-         * Conversion is aimed at assigning each Facelet of cube an unique number specific to its position,
-         * i.e. assign each FaceletPosition a unique number
-         *
-         * For this purpose each FaceSide (which have nine Facelets) is thought of an unit and
-         * assigned an unique number between 0 to 5 (as there are total of 6 FaceSides).
-         * And each Facelet in a FaceSide is assigned a unique number between 0 to 8 (guess why?).
-         * Using these two, unique numbers can be assigned to each FaceletPosition as computed in the code.
-         *
-         */
-        operator std::size_t() const;
-
-};
-
-
+typedef CollectionWrapper<FaceSide,false> Position;
+typedef CollectionWrapper<FaceSide,true> FaceletPosition;
 typedef std::vector<FaceletPosition> vecFletPos;
+
+FaceletPosition relative(const FaceletPosition&, const FaceletPosition&);
 
 
 class Facelet {
@@ -86,10 +43,10 @@ class Facelet {
         FaceletPosition getPosition() const { return pos; }
 
         ///Returns which FaceSide given Facelet is located at
-        FaceSide side() const { return pos.getSideAt(0); }
+        FaceSide side() const { return pos.first(); }
 
-        ///Sets 'side'
-        void setPosition(const FaceletPosition _pos) { pos = _pos; }
+        ////Sets 'side'
+        //void setPosition(const FaceletPosition _pos) { pos = _pos; }
 
         ///Overloading operator*= to define multiplication of type
         ///Facelet*=FaceSide

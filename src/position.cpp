@@ -16,72 +16,163 @@ std::ostream& operator<<(std::ostream &os, Step S)
     return os;
 }
 
-Position::Position(const std::vector<FaceSide> _vecSide):vecSide(_vecSide){
+
+template <> Color upper_limit(){ return undefcol; }
+template <> FaceSide upper_limit(){ return undefside; }
+
+
+template <typename E, bool _isFaceletType>
+CollectionChild<E,_isFaceletType>::CollectionChild(E e1, E e2, E e3):
+    CollectionChild<E,_isFaceletType>(typename std::vector<E>{e1,e2,e3})
+{
+}
+
+template <typename E, bool B>
+CollectionChild<E,B>::CollectionChild(std::vector<E> _ve):
+    isFaceletType(B), _first(upper_limit<E>()), _second(upper_limit<E>()), _third(upper_limit<E>()), _num(0)
+{
+    // [Plan] Add support for vector of any size containing 3 or less valid FaceSides
+    if( _ve.size()>3)
+        throw std::runtime_error(std::string(__func__) + ": Vector size n must be, 0 < n <= 3.");
+    if(_ve.size() >= 1) _first = _ve[0];
+    if(_ve.size() >= 2) _second = _ve[1];
+    if(_ve.size() == 3) _third = _ve[2];
+
+    std::size_t max_limit = upper_limit<E>();
+    _num += _first    != max_limit;
+    _num += _second   != max_limit;
+    _num += _third    != max_limit;
+}
+
+template <typename E, bool _isFaceletType>
+CollectionChild<E,_isFaceletType>::operator std::size_t () const
+{
+
+#define ITR typename std::vector<E>::iterator
+
+    std::size_t max_limit = upper_limit<E>();
+    if(_first == max_limit)
+        return -1;
+
+    std::vector<E> vecE({_first,_second,_third});
+    if(isFaceletType)
+        std::sort(vecE.begin()+1,vecE.end());
+    else
+        std::sort(vecE.begin(),vecE.end());
+
+    std::vector<E> vall = ::elements<E>();
+    if(vecE[1]==max_limit && vecE[2]==max_limit)
+    {
+        std::size_t count = -1;
+        for(ITR it0 = vall.begin(); it0 != vall.end(); it0++)
+        {
+            count++;
+            if(*it0 == vecE[0])     return count;
+        }
+    }
+
+    if(vecE[1]!=max_limit && vecE[2]==max_limit)
+    {
+        std::size_t count = 5;
+        for(ITR it0 = vall.begin(); it0 != vall.end(); it0++)
+        {
+            ITR it1;
+            if(isFaceletType)   it1 = vall.begin();
+            else    it1 = it0+1;
+
+            for(;it1 != vall.end(); it1 ++)
+            {
+                if(*it0 != *it1 && !are_opposite(*it0, *it1))   count++;
+                if(vecE[0] == *it0 && vecE[1] == *it1)          return count;
+            }
+        }
+
+    }
+
+    if(vecE[1]!=max_limit && vecE[2]!=max_limit)
+    {
+        std::size_t count;
+        if(isFaceletType)   count = 29;
+        else                count = 17;
+        for(ITR it0 = vall.begin(); it0 != vall.end(); it0++)
+        {
+            ITR it1;
+            if(isFaceletType)   it1 = vall.begin();
+            else                it1 = it0+1;
+
+            for(;it1 != vall.end(); it1 ++)
+            {
+                for(ITR it2 = it1+1; it2 != vall.end(); it2++)
+                {
+                    if(!any_same(*it0,*it1,*it2) && !any_opposite(*it0,*it1,*it2))  count++;
+                    if(vecE[0] == *it0 && vecE[1] == *it1 && vecE[2] == *it2)       return count;
+                }
+            }
+        }
+    }
         
-    if(vecSide.size() > 3 || vecSide.size() == 0){
-        throw std::runtime_error(__func__ +\
-                std::string(": Number of FaceSides should be at most three and at least one."));
-    }
 
+    return -1;
 
-    if(vecSide[0] == undefside)
-        throw std::runtime_error(__func__ + std::string(": First FaceSide cannot be undefside."));
-
-    //In case of two or three elements present in vecSide, append undefside
-    while(vecSide.size() != 3)
-        vecSide.push_back(undefside);
-
-
-    //Keeping undefside to last
-    if(vecSide[1] == undefside && vecSide[2] != undefside)
-        std::iter_swap(vecSide.begin()+1, vecSide.begin()+2);
-
-    if(vecSide[1] == undefside && vecSide[2] == undefside)
-        ptype = center;
-
-    if(vecSide[1] != undefside && vecSide[2] == undefside){
-        if(areOpposite(vecSide[1], vecSide[2]))
-            throw std::runtime_error(__func__ + std::string(": Pair of FaceSides contain opposite faces."));
-        ptype = edge;
-    }
-
-    if(vecSide[1] != undefside && vecSide[2] != undefside){
-        if(anyOpposite(vecSide[0], vecSide[1], vecSide[2]))
-            throw std::runtime_error(__func__ + std::string(": Triplet of FaceSides contain opposite faces."));
-        ptype = corner;
-    }
+#undef  ITR
 
 }
 
-FaceSide Position::getSideAt(size_t index) const{
-    if(index > 2 )
-        throw std::runtime_error(__func__ + std::string(": There are only three allowed values for index: 0 , 1 & 2 whereas "\
-                    + std::to_string(index) + std::string(" was provided.")));
-    if(index >= vecSide.size())
-        return undefside;
-    return vecSide.at(index);
+
+template <typename E, bool B>
+bool operator==(const CollectionChild<E,B>& lhs, const CollectionChild<E,B>& rhs){
+    std::size_t lt = lhs;
+    std::size_t rt = rhs;
+    return (lt==rt);
 }
 
+template <bool _isFaceletType>
+CollectionWrapper<FaceSide,_isFaceletType>::CollectionWrapper(std::vector<FaceSide> v):
+    CollectionChild<FaceSide,_isFaceletType>(v),
+    _first(CollectionChild<FaceSide,_isFaceletType>::_first),
+    _second(CollectionChild<FaceSide,_isFaceletType>::_second),
+    _third(CollectionChild<FaceSide,_isFaceletType>::_third),
+    _num(CollectionChild<FaceSide,_isFaceletType>::_num)
+{
+    if(any_opposite(_first,_second,_third))
+        throw std::runtime_error(std::string(__func__) + ": opposite elements present.");
 
-std::size_t Position::size() const{
-    std::size_t size = 0;
-    for(auto &fs: vecSide){
-        if(fs != undefside)
-            size ++;
+    if(_num==0)
+        _ptype = undeftype;
+    else
+    {
+        std::vector<PositionType> v = ::elements<PositionType>();
+        _ptype = v[_num-1];
     }
-    return size;
 }
 
+template <bool B>
+CollectionWrapper<FaceSide,B>::CollectionWrapper(const CollectionWrapper<FaceSide,B>& cw):
+    CollectionWrapper(cw.all())
+{}
 
-Position Position::getRelativePosition(const FaceSide& f) const{
+template <bool B>
+CollectionWrapper<FaceSide,B>& CollectionWrapper<FaceSide,B>::operator=(CollectionWrapper<FaceSide,B> cw)
+{
+    std::swap(_ptype, cw._ptype);
+    std::swap(_first, cw._first);
+    std::swap(_second, cw._second);
+    std::swap(_third, cw._third);
+    std::swap(_num, cw._num);
+    return *this;
+}
+
+template <bool B>
+CollectionWrapper<FaceSide, B> CollectionWrapper<FaceSide,B>::relative(const FaceSide& f) const{
     std::vector<FaceSide> vFS;
-    for(const auto& fs: vecSide)
+    for(const auto& fs: {_first,_second,_third})
         vFS.push_back( getRelativeFaceSide(fs, f) );
 
     return vFS;
 }
 
-bool Position::willGetAffected(Step s) const
+template <bool B>
+bool CollectionWrapper<FaceSide,B>::affectable(Step s) const
 {
     ///If faceside is not defined then roatation itself is not defined, return false
     if(s.f == undefside)
@@ -99,23 +190,34 @@ bool Position::willGetAffected(Step s) const
     return false;
 }
 
-Position Position::ifRotated(StepSequence seq) const
+template <bool B>
+CollectionWrapper<FaceSide,B> CollectionWrapper<FaceSide,B>::result(StepSequence seq) const
 {
-    Position pRet(vecSide);
+    CollectionWrapper<FaceSide,B> pRet(_first,_second,_third);
 
     for(const auto& s: seq)
         for(std::size_t turns = 1; turns <= s.no_of_turns; turns++)
-            if(s.f != undefside && pRet.willGetAffected(s))
+            if(s.f != undefside && pRet.affectable(s))
                 pRet *= (s.is_clockwise ? s.f : opposite(s.f) );
 
     return pRet;
 }
 
+template <bool B>
+CollectionWrapper<FaceSide,B>& CollectionWrapper<FaceSide,B>::operator*=(const FaceSide& rhs){
+    if(rhs == undefside )
+        throw std::runtime_error(__func__ + std::string(": Position multiplication with undefside is not allowed"));
+    _first *= rhs;
+    _second *= rhs;
+    _third *= rhs;
+    return *this;
+}
 
-std::ostream& operator<<(std::ostream& os, Position P){
-    os << "Position: ptype = " << P.ptype;
+template <bool B>
+std::ostream& operator<<(std::ostream& os, CollectionWrapper<FaceSide,B> P){
+    os << "Position: ptype = " << P._ptype;
     os << ", vecSide = { ";
-    for(const auto& face : P.vecSide){
+    for(const auto& face : P.all()){
         if(face != undefside)
             os << face << " ";
     }
@@ -124,20 +226,9 @@ std::ostream& operator<<(std::ostream& os, Position P){
 }
 
 
-
-bool operator==(const Position& lhs, const Position& rhs){
-    
-    if( lhs.getSideAt(0) == rhs.getSideAt(0) && lhs.getSideAt(1) == rhs.getSideAt(1) && lhs.getSideAt(2) == rhs.getSideAt(2) )
-        return true;
-
-    return false;
-}
-
-Position& Position::operator*=(const FaceSide& rhs){
-    if(rhs == undefside )
-        throw std::runtime_error(__func__ + std::string(": Position multiplication with undefside is not allowed"));
-    for(auto& el:vecSide){
-        el *= rhs;
-    }    
-    return *this;
-}
+template class CollectionWrapper<FaceSide,true>;
+template class CollectionWrapper<FaceSide,false>;
+template bool operator==<FaceSide,true>(const CollectionChild<FaceSide,true>&, const CollectionChild<FaceSide,true>&);
+template bool operator==<FaceSide,false>(const CollectionChild<FaceSide,false>&, const CollectionChild<FaceSide,false>&);
+template std::ostream& operator<< <true>(std::ostream&, CollectionWrapper<FaceSide,true>);
+template std::ostream& operator<< <false>(std::ostream&, CollectionWrapper<FaceSide,false>);

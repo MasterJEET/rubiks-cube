@@ -9,51 +9,10 @@
 #include <iterator>     //std::begin, std::end
 
 
-std::ostream& operator<<(std::ostream& os, CubeletPosition CP){
-    return os << Position(CP.vecSide);
-}
-
-//Equality
-bool operator==(const CubeletPosition& lhs, const CubeletPosition& rhs){
-   ////sorting FaceSides of lhs
-   //FaceSide lfs0 = lhs.getSideAt(0);
-   //FaceSide lfs1 = lhs.getSideAt(1);
-   //FaceSide lfs2 = lhs.getSideAt(2);
-
-   //if( lfs0 > lfs1 )
-   //    std::swap(lfs0, lfs1);
-   //if( lfs1 > lfs2 )
-   //    std::swap(lfs1, lfs2);
-   //if( lfs0 > lfs1 )
-   //    std::swap(lfs0, lfs1);
-   ////sorting FaceSides of rhs
-   //FaceSide rfs0 = rhs.getSideAt(0);
-   //FaceSide rfs1 = rhs.getSideAt(1);
-   //FaceSide rfs2 = rhs.getSideAt(2);
-
-   //if( rfs0 > rfs1 )
-   //    std::swap(rfs0, rfs1);
-   //if( rfs1 > rfs2 )
-   //    std::swap(rfs1, rfs2);
-   //if( rfs0 > rfs1 )
-   //    std::swap(rfs0, rfs1);
-
-   //if( lfs0 != rfs0 || lfs1 != rfs1 || lfs2 != rfs2 )
-   //    return false;
-    std::size_t nLHS = lhs;
-    std::size_t nRHS = rhs;
-    if(nLHS != nRHS)
-        return false;
-
-   return true;
-
-};
-
-
 FaceSide getCommonFace(const CubeletPosition& first, const CubeletPosition& second)
 {
-    for(const auto& f: first.getSide())
-        for(const auto& s: second.getSide())
+    for(const auto& f: first.all())
+        for(const auto& s: second.all())
             if(f == s)
                 return f;
     return undefside;
@@ -63,7 +22,7 @@ FaceSide getCommonFace(const CubeletPosition& first, const CubeletPosition& seco
 bool areClockwise(const CubeletPosition& from, const CubeletPosition& to, const FaceSide& f)
 {
     //Query is valid only for Corner CubeletPositions
-    if(from.size() == 2 && to.size() == 2)
+    if(from.num() == 2 && to.num() == 2)
         return true;
 
     if( !from.isOn(f) || !to.isOn(f) )
@@ -75,13 +34,13 @@ bool areClockwise(const CubeletPosition& from, const CubeletPosition& to, const 
 }
 
 
-ColorSet::ColorSet(Color c1,Color c2, Color c3):
+SetOfColor::SetOfColor(Color c1,Color c2, Color c3):
     col_min(c1), col_mid(c2), col_max(c3)
 {
     init();
 }
 
-ColorSet::ColorSet(std::vector<Color> vColor):
+SetOfColor::SetOfColor(std::vector<Color> vColor):
     col_mid(undefcol), col_max(undefcol)
 {
     if( vColor.size() == 0 || vColor.size() > 3 )
@@ -95,7 +54,7 @@ ColorSet::ColorSet(std::vector<Color> vColor):
     init();
 }
 
-void ColorSet::init(){
+void SetOfColor::init(){
     if( col_min > col_mid )
         std::swap(col_min, col_mid);
     if( col_mid > col_max )
@@ -120,13 +79,13 @@ Cubelet::Cubelet(std::vector<Facelet> _vecFac): vFacelet(_vecFac) {
     switch( _vecFac.size() ){
         case 1:
             {
-            pos = CubeletPosition( _vecFac[0].getPosition() );
+            pos = CubeletPosition( _vecFac[0].getPosition().all() );
             break;
             }
         case 2:
             {
-            CubeletPosition cp1(_vecFac[0].getPosition());
-            CubeletPosition cp2(_vecFac[1].getPosition());
+            CubeletPosition cp1(_vecFac[0].getPosition().all() );
+            CubeletPosition cp2(_vecFac[1].getPosition().all() );
             if(cp1 != cp2)
                 throw std::runtime_error(std::string() + __func__ + ": Two Facelets provided doesnot belong to same Cubelet");
             pos = cp1 ;
@@ -134,9 +93,9 @@ Cubelet::Cubelet(std::vector<Facelet> _vecFac): vFacelet(_vecFac) {
             }
         case 3:
             {
-            CubeletPosition cp1(_vecFac[0].getPosition());
-            CubeletPosition cp2(_vecFac[1].getPosition());
-            CubeletPosition cp3(_vecFac[2].getPosition());
+            CubeletPosition cp1(_vecFac[0].getPosition().all() );
+            CubeletPosition cp2(_vecFac[1].getPosition().all() );
+            CubeletPosition cp3(_vecFac[2].getPosition().all() );
             if(cp1 != cp2 || cp1 != cp3 || cp2 != cp3)
                 throw std::runtime_error(std::string() + __func__ + ": Three Facelets provided doesnot belong to same Cubelet");
             pos = cp1;
@@ -151,18 +110,18 @@ Cubelet::Cubelet(std::vector<Facelet> _vecFac): vFacelet(_vecFac) {
 listFletPos Cubelet::getEquivalentFletPosList() const{
     listFletPos lFaceletPosition;
 
-    if(pos.size() == 1)
-        lFaceletPosition.push_back( pos.getSideAt(0) );
+    if(pos.num() == 1)
+        lFaceletPosition.push_back( pos.first() );
 
-    if(pos.size() == 2){
-        lFaceletPosition.push_back({ pos.getSideAt(0), pos.getSideAt(1) });
-        lFaceletPosition.push_back({ pos.getSideAt(1), pos.getSideAt(0) });
+    if(pos.num() == 2){
+        lFaceletPosition.push_back({ pos.first(), pos.second() });
+        lFaceletPosition.push_back({ pos.second(), pos.first() });
     }
 
-    if(pos.size() == 3){
-        lFaceletPosition.push_back({ pos.getSideAt(0), pos.getSideAt(1), pos.getSideAt(2) });
-        lFaceletPosition.push_back({ pos.getSideAt(1), pos.getSideAt(2), pos.getSideAt(0) });
-        lFaceletPosition.push_back({ pos.getSideAt(2), pos.getSideAt(0), pos.getSideAt(1) });
+    if(pos.num() == 3){
+        lFaceletPosition.push_back({ pos.first(), pos.second(), pos.third() });
+        lFaceletPosition.push_back({ pos.second(), pos.third(), pos.first() });
+        lFaceletPosition.push_back({ pos.third(), pos.first(), pos.second() });
     }
 
     return lFaceletPosition;
@@ -173,7 +132,7 @@ vecFacelet Cubelet::getFacelet() const{
 }
 
 Facelet Cubelet::getFacelet(const FaceletPosition& fp) const{
-    CubeletPosition cp(fp);
+    CubeletPosition cp(fp.all());
     if(cp != pos)
         throw std::out_of_range(std::string() + __func__ + ": Requested Facelet is not in this Cubelet. Check your FaceletPosition.");
 
@@ -220,8 +179,8 @@ bool haveSameColors(const Cubelet& lhs, const Cubelet& rhs)
     for(const auto& fl: rhs.getFacelet())
         rhsCol.push_back(fl.getColor());
 
-    ColorSet lhscs(lhsCol);
-    ColorSet rhscs(rhsCol);
+    SetOfColor lhscs(lhsCol);
+    SetOfColor rhscs(rhsCol);
 
     return lhscs == rhscs;
 
@@ -237,61 +196,4 @@ Cubelet& Cubelet::operator*=(const FaceSide& rhs){
 
     pos *= rhs;
     return *this;
-}
-
-
-CubeletPosition::operator std::size_t() const{
-    if(size() == 0)
-        throw std::runtime_error(std::string() + __func__ + ": CubeletPosition must be instantiated with at least one FaceSide.");
-
-    FaceSide fac0 = getSideAt(0);
-    FaceSide fac1 = getSideAt(1);
-    FaceSide fac2 = getSideAt(2);
-
-    if(fac1 == undefside && fac2 == undefside)
-        return fac0;    //This covers all the Center CubeletPositions, assignment from 0 till 5 is covered here
-
-    if(fac0 > fac1)
-        std::swap(fac0, fac1);
-    if(fac1 > fac2)
-        std::swap(fac1, fac2);
-    if(fac0 > fac1)
-        std::swap(fac0, fac1);
-
-    if(fac1 != undefside && fac2 == undefside){
-
-        if(fac0 == front && fac1 == up) return 6;
-        if(fac0 == front && fac1 == down) return 7;
-        if(fac0 == front && fac1 == left) return 8;
-        if(fac0 == front && fac1 == right) return 9;
-
-        if(fac0 == back && fac1 == up) return 10;
-        if(fac0 == back && fac1 == down) return 11;
-        if(fac0 == back && fac1 == left) return 12;
-        if(fac0 == back && fac1 == right) return 13;
-
-        if(fac0 == up && fac1 == left) return 14;
-        if(fac0 == up && fac1 == right) return 15;
-
-        if(fac0 == down && fac1 == left) return 16;
-        if(fac0 == down && fac1 == right) return 17;
-
-    }
-
-    if(fac1 != undefside && fac2 != undefside){
-
-        if(fac0 == front && fac1 == up && fac2 == left) return 18;
-        if(fac0 == front && fac1 == up && fac2 == right) return 19;
-        if(fac0 == front && fac1 == down && fac2 == left) return 20;
-        if(fac0 == front && fac1 == down && fac2 == right) return 21;
-
-        if(fac0 == back && fac1 == up && fac2 == left) return 22;
-        if(fac0 == back && fac1 == up && fac2 == right) return 23;
-        if(fac0 == back && fac1 == down && fac2 == left) return 24;
-        if(fac0 == back && fac1 == down && fac2 == right) return 25;
-
-    }
-
-    //Execution should never reach this point
-    return -1;
 }

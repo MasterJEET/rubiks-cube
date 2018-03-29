@@ -128,30 +128,6 @@ class AlgoBase::Primitive
          * 
          * */
         StepSequence getSequence(FaceletPosition P_start, FaceletPosition P_end);
-
-
-        // Get sequence of Steps required to bring a standard pair of Cubelets to reference orientation.
-        // Using methods of rotation for whole Cube and not for a single face
-        //
-        // What is <i>standard pair</i> of Cubelets?
-        //
-        // A pair of Cubelets is a <i>standard pair</i> if they have a common face and the Cubelets are not
-        // positioned in digonally opposite position on the common face.
-        //
-        // What is reference orientation for a pair of Cubelets?
-        //
-        // Reference orientation of Cube for a standard pair of Cubelets, pair(C1,C2), where C1 would be moved to
-        // the position of C2 is the orientation where,
-        //      * Their common face faces downside,
-        //      * C1 is on back and C2 on front FaceSide, and
-        //      * Both are on left FaceSide, if they are corner Cubelets.
-        //
-        // All the primitive sequence of Steps have been defined for reference orientation. Since all the other orientations
-        // of Cube can be brought to reference orientation, one can find equivalent movements for all, based on how they can
-        // be brought to reference orientation.
-        //
-        //
-        //StepSequence getStepsToReference(const CubeletPosition& from, const CubeletPosition& to);
         
 
         /*! Retruns rotational reverse sequence for given sequence.

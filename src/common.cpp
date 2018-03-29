@@ -15,24 +15,32 @@ std::unordered_map<std::string, Color> toColor;                                 
 std::unordered_map<std::string, FaceSide> toFaceSide;                                             //Maps first letter of FaceSide to FaceSide itself
 
 //============ Define <index,type> pair start ===========
-#   define X(a,b) b,
 const char *Color_str[] = {
-#   include "Color.def"
+    "W",
+    "Y",
+    "O",
+    "R",
+    "G",
+    "B",
     "C_UNDEFINED"
 };
-#   undef X
 
-#   define X(a,b) #a,
 const char *FaceSide_str[] = {
-#   include "FaceSide.def"
+    "Front",
+    "Back",
+    "Up",
+    "Down",
+    "Left",
+    "Right",
     "F_UNDEFINED"
 };
 
 const char *PositionType_str[] = {
-#   include "PositionType.def"
+    "Center",
+    "Edge",
+    "Corner",
     "P_UNDEFINED"
 };
-#   undef X
 //==================== Define end ======================
 
 std::ostream& operator <<(std::ostream& os, Color col){
@@ -89,7 +97,7 @@ Refer \"Cube.dat\" and \"<to be added>\" for sample input."
     if(!ColorFromLetter(l, col))
         throw std::runtime_error(\
 std::string() + __func__ + ": Invalid Color specification found: \
-check b in X(a,b) of \"Color.def\" for allowed valid arguments. \
+check keys of 'toColor' map for allowed valid arguments. \
 Refer \"Cube.dat\" and \"<to be added>\" for sample input."
 );
 
@@ -110,7 +118,7 @@ Refer \"Cube.dat\" and \"<to be added>\" for sample input."
     if(!FaceSideFromLetter(l, fs))
         throw std::runtime_error(\
 std::string() + __func__ + ": Invalid FaceSide specification found: \
-check b in X(a,b) of \"Color.def\" for allowed valid arguments. \
+check keys in 'toColor' map for allowed valid arguments. \
 Refer \"Cube.dat\" and \"<to be added>\" for sample input."
 );
 
@@ -291,17 +299,23 @@ FaceSide getRelativeFaceSide(const FaceSide& first, const FaceSide& second){
 void createmapColor(){
     if(toColor.size())
         return;
-#   define X(a,b)   toColor.insert( std::pair<std::string,Color>(b,a) );
-#   include "Color.def"
-#   undef X
+    toColor.insert( std::pair<std::string,Color>("W",White) );
+    toColor.insert( std::pair<std::string,Color>("Y",Yellow) );
+    toColor.insert( std::pair<std::string,Color>("O",Orange) );
+    toColor.insert( std::pair<std::string,Color>("R",Red) );
+    toColor.insert( std::pair<std::string,Color>("G",Green) );
+    toColor.insert( std::pair<std::string,Color>("B",Blue) );
 }
 
 void createmapFaceSide(){
     if(toFaceSide.size())
         return;
-#   define X(a,b)   toFaceSide.insert( std::pair<std::string,FaceSide>(b,a) );
-#   include "FaceSide.def"
-#   undef X
+    toFaceSide.insert( std::pair<std::string,FaceSide>("F",Front) );
+    toFaceSide.insert( std::pair<std::string,FaceSide>("B",Back) );
+    toFaceSide.insert( std::pair<std::string,FaceSide>("U",Up) );
+    toFaceSide.insert( std::pair<std::string,FaceSide>("D",Down) );
+    toFaceSide.insert( std::pair<std::string,FaceSide>("L",Left) );
+    toFaceSide.insert( std::pair<std::string,FaceSide>("R",Right) );
 }
 //======== Create maps | End =========
 
@@ -340,8 +354,44 @@ bool FaceSideFromLetter(const std::string& s, FaceSide& fs){
         return false;
     fs = it->second;
     return true;
-        //throw std::invalid_argument("Invalid Argument: check b in X(a,b) of \"FaceSide.def\" for allowed arguments");
+        //throw std::invalid_argument("Invalid Argument: check keys of 'toFaceSide' map for allowed arguments");
 };
+
+template<>
+std::vector<FaceSide> elements()
+{
+    std::vector<FaceSide> v(__NUM_FACE__);
+    v[up] = up;
+    v[down] = down;
+    v[front] = front;
+    v[back] = back;
+    v[left] = left;
+    v[right] = right;
+    return v;
+}
+
+template<>
+std::vector<Color> elements()
+{
+    std::vector<Color> v(__NUM_FACE__);
+    v[white] = white;
+    v[orange] = orange;
+    v[yellow] = yellow;
+    v[red] = red;
+    v[green] = green;
+    v[blue] = blue;
+    return v;
+}
+
+template<>
+std::vector<PositionType> elements()
+{
+    std::vector<PositionType> v(3);
+    v[center] = center;
+    v[edge] = edge;
+    v[corner] = corner;
+    return v;
+}
 
 //Handler for signal SIGABRT
 void handler(int sig) {

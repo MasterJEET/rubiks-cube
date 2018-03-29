@@ -10,6 +10,9 @@
 #ifndef COMMON_H
 #define COMMON_H
 
+///Number of faces in 3x3x3 cube
+#define __NUM_FACE__        6
+
 #include <iostream>
 #include <map>
 #include <sstream>
@@ -30,27 +33,36 @@
 
 
 //============ Define enum start ===========
-#   define X(a,b) a,
 enum Color {
-#   include "Color.def"
+    White,
+    Yellow,
+    Orange,
+    Red,
+    Green,
+    Blue,
     C_UNDEFINED
 };
 
 enum FaceSide {
-#   include "FaceSide.def"
+    Front,
+    Back,
+    Up,
+    Down,
+    Left,
+    Right,
     F_UNDEFINED
 };
 
 enum PositionType {
-#   include "PositionType.def"
+    Center,
+    Edge,
+    Corner,
     P_UNDEFINED
 };
-#   undef X
 //=========== Define enum end =============
 
 
 typedef std::list<std::vector<FaceSide>> listVecFaceSide;
-
 
 
 extern const char *Color_str[];
@@ -234,6 +246,12 @@ bool ColorFromLetter(const std::string& s, Color& col);
 bool FaceSideFromLetter(const char c, FaceSide& fs);
 bool FaceSideFromLetter(const std::string& s, FaceSide& fs);
 
+
+/*! Get array containing ll FaceSides
+ *
+ * */
+template<typename E>
+std::vector<E> elements();
 
 /*! \fn void handler(int sig)
  *  \brief  SIGTERM handler

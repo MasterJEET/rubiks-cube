@@ -55,9 +55,9 @@ TEST_F(PrimitiveTest, Cell)
     \
     FaceletPosition fp(f1, f2, f3);\
     StepSequence seq = P.getSequence( fp, fp0 );\
-    Cubelet cl = C.getCubelet(fp);\
+    Cubelet cl = C.getCubelet(fp.all());\
     C.update(seq);\
-    Cubelet cl_new( C.getCubelet(fp0));\
+    Cubelet cl_new( C.getCubelet(fp0.all()));\
     EXPECT_TRUE( haveSameColors(cl, cl_new) );\
     EXPECT_EQ( cl.getFacelet(fp).getColor(), cl_new.getFacelet(fp0).getColor() );
 
@@ -73,9 +73,9 @@ TEST_F(PrimitiveTest, Cell)
     \
     FaceletPosition efp(down, back);\
     StepSequence eseq = P.getSequence( efp, fp );\
-    Cubelet ecl = C.getCubelet(efp);\
+    Cubelet ecl = C.getCubelet(efp.all());\
     C.update(eseq);\
-    Cubelet ecl_new( C.getCubelet(fp));\
+    Cubelet ecl_new( C.getCubelet(fp.all()));\
     EXPECT_TRUE( haveSameColors(ecl, ecl_new) );\
     EXPECT_EQ( ecl.getFacelet(efp).getColor(), ecl_new.getFacelet(fp).getColor() );
 
@@ -100,9 +100,9 @@ TEST_F(PrimitiveTest, Basics)
     \
     FaceletPosition fp(f1, f2, f3);\
     StepSequence seq = P.getSequence(fp,fp_to_corner);\
-    Cubelet cl = C.getCubelet(fp);\
+    Cubelet cl = C.getCubelet(fp.all());\
     C.update(seq);\
-    Cubelet cl_new( C.getCubelet(fp_to_corner) );\
+    Cubelet cl_new( C.getCubelet(fp_to_corner.all()) );\
     EXPECT_TRUE( haveSameColors(cl, cl_new) );\
     EXPECT_EQ( cl.getFacelet(fp).getColor(), cl_new.getFacelet(fp_to_corner).getColor());
 
@@ -128,9 +128,9 @@ TEST_F(PrimitiveTest, Basics)
     \
     FaceletPosition fp(f1, f2);\
     StepSequence seq = P.getSequence(fp,fp_to_edge);\
-    Cubelet cl = C.getCubelet(fp);\
+    Cubelet cl = C.getCubelet(fp.all());\
     C.update(seq);\
-    Cubelet cl_new( C.getCubelet(fp_to_edge));\
+    Cubelet cl_new( C.getCubelet(fp_to_edge.all()));\
     EXPECT_TRUE( haveSameColors(cl, cl_new));\
     EXPECT_EQ( cl.getFacelet(fp).getColor(), cl_new.getFacelet(fp_to_edge).getColor() );
 
@@ -160,10 +160,10 @@ TEST_F(PrimitiveTest, AnyToAny)
 #   define  ANYCORNER_TEST(f1,f2,f3, t1,t2,t3, from,to,cl,seq,cl_new)\
     FaceletPosition from(f1,f2,f3);\
     FaceletPosition to(t1,t2,t3);\
-    Cubelet cl = C.getCubelet(from);\
+    Cubelet cl = C.getCubelet(from.all());\
     StepSequence seq = P.getSequence(from, to);\
     C.update(seq);\
-    Cubelet cl_new = C.getCubelet(to);\
+    Cubelet cl_new = C.getCubelet(to.all());\
     EXPECT_TRUE( haveSameColors(cl, cl_new));\
     EXPECT_EQ( cl.getFacelet(from).getColor(), cl_new.getFacelet(to).getColor() );
 
@@ -176,10 +176,10 @@ TEST_F(PrimitiveTest, AnyToAny)
 #   define  ANYEDGE_TEST(f1,f2, t1,t2, from,to,cl,seq,cl_new)\
     FaceletPosition from(f1,f2);\
     FaceletPosition to(t1,t2);\
-    Cubelet cl = C.getCubelet(from);\
+    Cubelet cl = C.getCubelet(from.all());\
     StepSequence seq = P.getSequence(from, to);\
     C.update(seq);\
-    Cubelet cl_new = C.getCubelet(to);\
+    Cubelet cl_new = C.getCubelet(to.all());\
     EXPECT_TRUE( haveSameColors(cl, cl_new));\
     EXPECT_EQ( cl.getFacelet(from).getColor(), cl_new.getFacelet(to).getColor() );
 
@@ -257,10 +257,10 @@ TEST_F(PrimitiveTest, getSeqToStandard)
 {
 #   define SEQSTD_TEST(fp,cl,seq,cl_new, ...)\
     FaceletPosition fp( __VA_ARGS__ );\
-    Cubelet cl = C.getCubelet(fp);\
+    Cubelet cl = C.getCubelet(fp.all());\
     StepSequence seq = P.getSeqToStandard(fp);\
     C.rotate(seq);\
-    Cubelet cl_new = C.getCubelet(fpto);\
+    Cubelet cl_new = C.getCubelet(fpto.all());\
     EXPECT_TRUE( haveSameColors(cl, cl_new));\
     EXPECT_EQ( cl.getFacelet(fp).getColor(), cl_new.getFacelet(fpto).getColor() );
 
@@ -328,11 +328,11 @@ TEST_F(PrimitiveTest, getRotationalReverseSeq)
 
 #   define  REVERSE_TEST(fp,seq,cl,rev,cl_new, ...)\
     FaceletPosition fp(__VA_ARGS__);\
-    Cubelet cl = C.getCubelet(fp);\
+    Cubelet cl = C.getCubelet(fp.all());\
     C.rotate(seq);\
     StepSequence rev = P.getRotationalReverseSeq(seq);\
     C.rotate(rev);\
-    Cubelet cl_new = C.getCubelet(fp);\
+    Cubelet cl_new = C.getCubelet(fp.all());\
     EXPECT_TRUE( haveSameColors(cl, cl_new));\
     EXPECT_EQ( cl.getFacelet(fp).getColor(), cl_new.getFacelet(fp).getColor() );
 

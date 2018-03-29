@@ -4,6 +4,7 @@
 bin/*
 obj/*
 *.swp
+*.swo
 common*
 facelet*
 cubelet*
