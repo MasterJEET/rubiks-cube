@@ -342,72 +342,8 @@ bool Cube::anyOppColor(const Color& c1, const Color& c2, const Color& c3) const{
 }
 
 
-//FaceSide Cube::getSideOfColor(const Color& c){
-//    if(c == undefcol)
-//        return undefside;
-//    return aFaceSide[ c ];
-//}
-
-
 std::size_t Cube::ColorSetToInt(const SetOfColor& cs) const{
-
-    //if only one Color is defined, return it
-    if(cs.mid() == undefcol && cs.max() == undefcol)
-        return cs.min();
-
-
-    //When only two Colors defined
-    if( cs.mid() != undefcol && cs.max() == undefcol )
-    {
-        if( areOppColor(cs.min(), cs.mid() ) )
-            throw std::runtime_error(std::string() + __func__+ ": Two defined Colors in SetOfColor are opposite.");
-
-
-        //No need to sort elements as the elements are already
-        //sorted in ColorSet
-
-        std::size_t ret = 0;
-        for( std::size_t min = 0; min < __NUM_FACE__ ; min++ )
-            for( std::size_t mid = min + 1; mid < __NUM_FACE__ ; mid++ )
-            {
-                if( !areOppColor( vCol[min], vCol[mid] ) && mid != min )
-                    ret++;
-
-                if( vCol[mid] == cs.mid() && vCol[min] == cs.min() )
-                    return 5 + ret;
-            }
-
-    }
-
-
-    //When all the three Colors are defined in ColorSet
-    if( cs.mid() != undefcol && cs.max() != undefcol )
-    {
-        if( anyOppColor(cs.min(), cs.mid(), cs.max()) )
-            throw std::runtime_error(std::string() + __func__ + ": At least two among three defined Colors are opposite.");
-
-        //No need to sort elements as the elements are already
-        //sorted in ColorSet
-
-        std::size_t ret = 0;
-        for( std::size_t min = 0; min < __NUM_FACE__ ; min++ )
-            for( std::size_t mid = min + 1; mid < __NUM_FACE__ ; mid++ )
-                for( std::size_t max = mid + 1; max < __NUM_FACE__ ; max++ )
-                {
-                    //If there are no opposite or same Colors, increment count
-                    if( !anyOppColor( vCol[min], vCol[mid], vCol[max] ) &&\
-                            ( vCol[min] != vCol[mid] && vCol[mid] != vCol[max] && vCol[max] != vCol[min] ) )
-                        ret++;
-
-                    if( vCol[min] == cs.min() && vCol[mid] == cs.mid() && vCol[max] == cs.max() )
-                        return 17 + ret;
-                }
-
-    }
-
-
-    //Execution will never reach here
-    return -1;
+    return CubeletColor(this, cs.min(), cs.mid(), cs.max());
 }
 
 
@@ -419,39 +355,6 @@ std::size_t Cube::ColorSetToInt(const CubeletPosition& cp) const
 
     return ColorSetToInt(vColor);
 }
-
-
-//void Cube::setEquivalentColor(
-//        const Color& cFront,
-//        Color& cUp,
-//        Color& cRight,
-//        Color& cDown,
-//        Color& cLeft
-//        )
-//{
-//    FaceSide f = getSideOfColor( cFront );
-//    FaceSide u,r,d,l;
-//    setEquivalentFaceSide(f,u,r,d,l);
-//    cUp     = getFacelet( u ).getColor();
-//    cRight  = getFacelet( r ).getColor();
-//    cDown   = getFacelet( d ).getColor();
-//    cLeft   = getFacelet( l ).getColor();
-//}
-
-
-//std::size_t Cube::ColorSetToInt(const SetOfColor& cs){
-//    
-//    if(cs.mid() == undefside && cs.max() == undefside)
-//        return cs.min();
-//
-//    if(cs.mid() != undefside && cs.max() == undefside)
-//    {
-//        bool are_opp = areOppColor( cs.min(), cs.mid() );
-//        if(are_opp)
-//            throw std::runtime_error(std::string() + __func__ + "Two defined Colors,in SetOfColor, are opposite.");
-//        if(cs.min()
-//    }
-//}
 
 
 void Cube::createCube(vecFacelet& vFacelet){
@@ -544,17 +447,6 @@ lFletPos Cube::getFaceletPositions(CubeletPosition cp)
     //Can reach here if no valid FaceSide are defined for given CubeletPosition
     return lfp;
 }
-
-//void Cube::show(const FaceSide& f){
-//    auto tlist = getEquivalentFletPos(f);
-//    auto it = tlist.begin();
-//    while( it != tlist.end()){
-//        for(int i=0;i<3;i++,it++){
-//            std::cout << getFacelet(*it).colorFormat() << " " ;
-//        }
-//        std::cout << std::endl;
-//    }
-//}
 
 
 void Cube::helper(const CubeletPosition& cp, FaceSide f, std::size_t n)

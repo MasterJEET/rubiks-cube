@@ -35,7 +35,6 @@ struct Step
 
 
     Step(): f(undefside){}
-    //Step(): f(front), is_clockwise(true), no_of_turns(1), is_mid(false){}
 
     Step(const FaceSide& f): f(f), is_clockwise(true), no_of_turns(1), is_mid(false){}
 
@@ -135,7 +134,7 @@ class CollectionChild : public CollectionBase {
     CollectionChild (E e1 = upper_limit<E>(), E e2 = upper_limit<E>(), E e3 = upper_limit<E>());
     CollectionChild (std::vector<E>);
 
-    /*! This assigns a unique positive integer to each unique Collection
+    /*! This assigns a unique positive integer to each unique valid Collection
      *
      * Uniqueness is defined by first element and set of last tow[optional] elements.
      * Let N ( 0 <= N <=3 ) be the total number of elements defined in this Collection.
@@ -172,10 +171,10 @@ class CollectionChild : public CollectionBase {
      *      -# doesn't contain opposite or same elements,
      *      -# have first element always defined.
      *
-     * All unique valid Collections are assigned unique positive integer within the range [0, max)
-     * and all non-valid Collections are assigned -1. Note here that the 'max' is not inclusive.
-     * The 'max' value is __NUM_FACELET__ i.e. 54 if _isFaceletType is true and __NUM_CUBELET__
-     * i.e. 26 if _isFaceletType is false.
+     * All unique valid Collections are assigned unique positive integer within the range [0, max).
+     * If invoked with a non-valid Collection, it throws std::runtime_error.
+     * Note here that the 'max' is not inclusive.The 'max' value is __NUM_FACELET__ i.e. 54
+     * if _isFaceletType is true and __NUM_CUBELET__ i.e. 26 if _isFaceletType is false.
      *
      * */
     virtual operator std::size_t() const;

@@ -276,7 +276,6 @@ TEST(CollectionWrapper, stdsizet)
     EXPECT_EQ(x,n);
 
     //CubeletType, single FaceSide
-    WRAPPERSIZE_TEST(FaceSide,false,cwfn,-1,undefside);
     WRAPPERSIZE_TEST(FaceSide,false,cwfn0,0,front);
     WRAPPERSIZE_TEST(FaceSide,false,cwfn1,1,back);
     WRAPPERSIZE_TEST(FaceSide,false,cwfn2,2,up);
@@ -319,7 +318,6 @@ TEST(CollectionWrapper, stdsizet)
 
 
     //FaceletType, single FaceSide
-    WRAPPERSIZE_TEST(FaceSide,true,cwff,-1,undefside);
     WRAPPERSIZE_TEST(FaceSide,true,cwff0,0,front);
     WRAPPERSIZE_TEST(FaceSide,true,cwff1,1,back);
     WRAPPERSIZE_TEST(FaceSide,true,cwff2,2,up);
@@ -405,7 +403,7 @@ TEST(CollectionWrapper, equality)
 
     CC_EQUALITY(false,lcc1,rcc1,front,front);
     CC_EQUALITY(true,lcc2,rcc2,front,front);
-    CC_EQUALITY(true,lcc3,rcc3,undefside,undefside);
+    //CC_EQUALITY(true,lcc3,rcc3,undefside,undefside);
 
 #undef  CC_EQUALITY
 
@@ -419,7 +417,7 @@ TEST(CollectionWrapper, equality)
     CCD_EQUALITY(false,==,ldcc3,rdcc3,right,down,down,right,undefside);
     CCD_EQUALITY(false,==,ldcc4,rdcc4,back,left,left,undefside,back);
     CCD_EQUALITY(true,!=,ldcc4_1,rdcc4_1,back,left,left,undefside,back);
-    CCD_EQUALITY(false,!=,ldcc5,rdcc5,front,down,undefside,down,front);
+    //CCD_EQUALITY(false,!=,ldcc5,rdcc5,front,down,undefside,down,front);
 
 #undef  CCD_EQUALITY
 

@@ -52,7 +52,8 @@ CollectionChild<E,_isFaceletType>::operator std::size_t () const
 
     std::size_t max_limit = upper_limit<E>();
     if(_first == max_limit)
-        return -1;
+        throw std::runtime_error(std::string() + __func__ +\
+                ": Invalid Collection, first element must be defined.");
 
     std::vector<E> vecE({_first,_second,_third});
     if(isFaceletType)
@@ -67,23 +68,43 @@ CollectionChild<E,_isFaceletType>::operator std::size_t () const
         for(ITR it0 = vall.begin(); it0 != vall.end(); it0++)
         {
             count++;
-            if(*it0 == vecE[0])     return count;
+            if(*it0 == vecE[0])
+                return count;
         }
     }
 
     if(vecE[1]!=max_limit && vecE[2]==max_limit)
     {
+        if(_first == _second)
+        {
+            std::stringstream ss;
+            ss << __func__ << ": Invalid Collection, pair of elements {";
+            ss << _first << "," << _second << "} are same.";
+            throw std::runtime_error(ss.str());
+        }
+        if(are_opposite(_first,_second))
+        {
+            std::stringstream ss;
+            ss << __func__ << ": Invalid Collection, pair of elements {";
+            ss << _first << "," << _second << "} are opposite.";
+            throw std::runtime_error(ss.str());
+        }
+
         std::size_t count = 5;
         for(ITR it0 = vall.begin(); it0 != vall.end(); it0++)
         {
             ITR it1;
-            if(isFaceletType)   it1 = vall.begin();
-            else    it1 = it0+1;
+            if(isFaceletType)
+                it1 = vall.begin();
+            else
+                it1 = it0+1;
 
             for(;it1 != vall.end(); it1 ++)
             {
-                if(*it0 != *it1 && !are_opposite(*it0, *it1))   count++;
-                if(vecE[0] == *it0 && vecE[1] == *it1)          return count;
+                if(*it0 != *it1 && !are_opposite(*it0, *it1))
+                    count++;
+                if(vecE[0] == *it0 && vecE[1] == *it1)
+                    return count;
             }
         }
 
@@ -91,28 +112,49 @@ CollectionChild<E,_isFaceletType>::operator std::size_t () const
 
     if(vecE[1]!=max_limit && vecE[2]!=max_limit)
     {
+        if(any_same(_first,_second,_third))
+        {
+            std::stringstream ss;
+            ss << __func__ << ": Invalid Collection, trio of elements {";
+            ss << _first << "," << _second << "} are same.";
+            throw std::runtime_error(ss.str());
+        }
+        if(any_opposite(_first,_second,_third))
+        {
+            std::stringstream ss;
+            ss << __func__ << ": Invalid Collection, trio of elements {";
+            ss << _first << "," << _second << "} are opposite.";
+            throw std::runtime_error(ss.str());
+        }
+
         std::size_t count;
-        if(isFaceletType)   count = 29;
-        else                count = 17;
+        if(isFaceletType)
+            count = 29;
+        else
+            count = 17;
         for(ITR it0 = vall.begin(); it0 != vall.end(); it0++)
         {
             ITR it1;
-            if(isFaceletType)   it1 = vall.begin();
-            else                it1 = it0+1;
+            if(isFaceletType)
+                it1 = vall.begin();
+            else
+                it1 = it0+1;
 
             for(;it1 != vall.end(); it1 ++)
             {
                 for(ITR it2 = it1+1; it2 != vall.end(); it2++)
                 {
-                    if(!any_same(*it0,*it1,*it2) && !any_opposite(*it0,*it1,*it2))  count++;
-                    if(vecE[0] == *it0 && vecE[1] == *it1 && vecE[2] == *it2)       return count;
+                    if(!any_same(*it0,*it1,*it2) && !any_opposite(*it0,*it1,*it2))
+                        count++;
+                    if(vecE[0] == *it0 && vecE[1] == *it1 && vecE[2] == *it2)
+                        return count;
                 }
             }
         }
     }
-        
 
-    return -1;
+    throw std::runtime_error(std::string()+__func__+\
+            ": Invalid Collection, contains either same or opposite elements.");
 
 #undef  ITR
 

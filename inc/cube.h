@@ -34,6 +34,7 @@ typedef std::array<bool, __NUM_FACE__> arrBool;
 typedef std::array<Color, __NUM_FACE__> arrColor;
 typedef std::array<FaceSide, __NUM_FACE__> arrFaceSide;
 typedef std::list<FaceletPosition> lFletPos;
+typedef CollectionWrapper<Color,false> CubeletColor;
 
 
 namespace AlgoBase {
@@ -56,10 +57,10 @@ template <bool _isFaceletType>
 class CollectionWrapper<Color, _isFaceletType> : public CollectionChild<Color, _isFaceletType>
 {
 
-    Cube *pCube;
+    const Cube * pCube;
 
     public:
-    CollectionWrapper( Cube* p, Color c1 = undefcol, Color c2 = undefcol, Color c3 = undefcol ):
+    CollectionWrapper( const Cube* p, Color c1 = undefcol, Color c2 = undefcol, Color c3 = undefcol ):
         CollectionChild<Color, _isFaceletType>( c1, c2, c3 ), pCube(p)
     {}
 
@@ -338,12 +339,6 @@ class Cube {
         bool anyOppColor(const Color& first, const Color& second, const Color& third) const;
 
 
-        //! Return the side where given Color is present at center
-        //
-        //
-        //FaceSide getSideOfColor(const Color& c);
-
-
         /*! Map each SetOfColor to an int
          *
          * The purpose of this mapping is, with this every combination of three or less Colors
@@ -353,48 +348,14 @@ class Cube {
          * */
         std::size_t ColorSetToInt(const SetOfColor& cs) const;
         std::size_t ColorSetToInt(const CubeletPosition& cp) const;
-        std::size_t ColorSetToInt(const Color& c1, const Color& c2)const {return ColorSetToInt({c1,c2});};
-        std::size_t ColorSetToInt(const Color& c1, const Color& c2, const Color& c3) const{
+        //std::size_t ColorSetToInt(const Color& c1, const Color& c2)const {return ColorSetToInt({c1,c2});};
+        std::size_t ColorSetToInt(
+                const Color& c1,
+                const Color& c2 = undefcol,
+                const Color& c3 = undefcol
+                ) const{
             return ColorSetToInt({c1,c2,c3});
         }
-
-
-        // Set equivalent Colors
-        //
-        // What are equivalent Colors?
-        //
-        // For a Color <i>col</i> which is located at center of FaceSide <i>f</i>, and for an arbitrary
-        // FaceSide <i>x</i>; we define <i>x</i> equivalence of <i>col</i>, x(col), as:
-        //
-        //      x(col) = center_color( x(f) )
-        //
-        // where center_color(FaceSide) is Color located at center of given FaceSide. For definition of
-        // of <i>x equivalence of f</i> i.e. x(f), see setEquivalentFaceSide declared in common.h .
-        //
-        // Let's say red Color is at the center of top face. Right face is right equivalent of up,
-        // let's say yellow Color is at the center of right face. Then right equivalent of red Color
-        // would be yellow:
-        //
-        //      col = red, f = up, x = right
-        //      Now x(col)  = center_color( x(f) )
-        //      =>  right(red) = center_color( right(up) ) = center_color( right )
-        //      =>  right(red) = yellow
-        //
-        // This function sets up, right, down & left equivalent Color of cFront to
-        // cUp, cRight, cDown & cLeft respectively.
-        //
-        //
-        //void setEquivalentColor(
-        //        const Color& cFront,
-        //        Color& cUp,
-        //        Color& cRight,
-        //        Color& cDown,
-        //        Color& cLeft
-        //        );
-
-
-        //display a given face (position and color)
-        //void show(const FaceSide& f);
 
 
         /*! Rotate any specified side of Cube

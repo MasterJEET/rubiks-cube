@@ -221,60 +221,6 @@ TEST_F(CubeTest, cubelet){
 }
 
 
-//TEST_F(CubeTest, show){
-//    cube.show(front);
-//    cube.show(back);
-//    cube.show(left);
-//    cube.show(right);
-//    cube.show(up);
-//    cube.show(down);
-//}
-
-//TEST_F(CubeTest, getSideOfColor){
-//    Color cUp       = cube.getFacelet(up).getColor();
-//    Color cRight    = cube.getFacelet(right).getColor();
-//    Color cDown     = cube.getFacelet(down).getColor();
-//    Color cLeft     = cube.getFacelet(left).getColor();
-//    Color cFront    = cube.getFacelet(front).getColor();
-//    Color cBack     = cube.getFacelet(back).getColor();
-//
-//    cube.rotate(front);
-//
-//    EXPECT_EQ(cube.getSideOfColor(cUp),     right);
-//    EXPECT_EQ(cube.getSideOfColor(cRight),  down);
-//    EXPECT_EQ(cube.getSideOfColor(cDown),   left);
-//    EXPECT_EQ(cube.getSideOfColor(cLeft),   up);
-//    EXPECT_EQ(cube.getSideOfColor(cFront),  front);
-//    EXPECT_EQ(cube.getSideOfColor(cBack),   back);
-//
-//    cube.rotateMid(front,3);
-//
-//    EXPECT_EQ(cube.getSideOfColor(cUp),     up);
-//    EXPECT_EQ(cube.getSideOfColor(cRight),  right);
-//    EXPECT_EQ(cube.getSideOfColor(cDown),   down);
-//    EXPECT_EQ(cube.getSideOfColor(cLeft),   left);
-//    EXPECT_EQ(cube.getSideOfColor(cFront),  front);
-//    EXPECT_EQ(cube.getSideOfColor(cBack),   back);
-//
-//}
-
-
-//TEST_F(CubeTest, setEquivalentColor){
-//    Color cf = green;
-//    Color cu, cr, cd, cl;
-//    cube.setEquivalentColor(cf, cu, cr, cd, cl);
-//
-//    FaceSide f = cube.getSideOfColor(cf);
-//    FaceSide u,r,d,l;
-//    setEquivalentFaceSide(f,u,r,d,l);
-//
-//    EXPECT_EQ(cu,   cube.getFacelet(u).getColor());
-//    EXPECT_EQ(cr,   cube.getFacelet(r).getColor());
-//    EXPECT_EQ(cd,   cube.getFacelet(d).getColor());
-//    EXPECT_EQ(cl,   cube.getFacelet(l).getColor());
-//}
-
-
 TEST_F(CubeTest, rotateSide){
     Cube cube_old(cube);
     cube.rotateSide(back);
@@ -895,7 +841,6 @@ TEST_F(CubeTest, CollectionWrapper__size_t)
 
 
     //CubeletType, single Color
-    WRAPPERSIZE_TEST(Color,false,cwcn,-1,&cube,undefcol);
     WRAPPERSIZE_TEST(Color,false,cwcn0,0,&cube,white);
     WRAPPERSIZE_TEST(Color,false,cwcn1,1,&cube,yellow);
     WRAPPERSIZE_TEST(Color,false,cwcn2,2,&cube,orange);
@@ -906,7 +851,6 @@ TEST_F(CubeTest, CollectionWrapper__size_t)
     WRAPPERSIZE_TEST(Color,false,cwcn4_1,4,&cube,green,undefcol,undefcol);
 
     //CubeletType, double Color
-    WRAPPERSIZE_TEST(Color,false,cwcn_1,-1,&cube,undefcol,undefcol);
     WRAPPERSIZE_TEST(Color,false,cwcn6,6,&cube,white,orange);
     WRAPPERSIZE_TEST(Color,false,cwcn7,7,&cube,white,red);
     WRAPPERSIZE_TEST(Color,false,cwcn7_1,7,&cube,red,white);
@@ -927,7 +871,6 @@ TEST_F(CubeTest, CollectionWrapper__size_t)
     WRAPPERSIZE_TEST(Color,false,cwcn17_1,17,&cube,blue,red);
 
     //CubeletType, triple Color
-    WRAPPERSIZE_TEST(Color,false,cwcn_2,-1,&cube,undefcol,undefcol,undefcol);
     WRAPPERSIZE_TEST(Color,false,cwcn18,18,&cube,white,orange,green);
     WRAPPERSIZE_TEST(Color,false,cwcn19,19,&cube,white,orange,blue);
     WRAPPERSIZE_TEST(Color,false,cwcn20,20,&cube,white,red,green);
@@ -939,7 +882,6 @@ TEST_F(CubeTest, CollectionWrapper__size_t)
 
 
     //FaceletType, single Color
-    WRAPPERSIZE_TEST(Color,true,cwcf,-1,&cube,undefcol);
     WRAPPERSIZE_TEST(Color,true,cwcf0,0,&cube,white);
     WRAPPERSIZE_TEST(Color,true,cwcf1,1,&cube,yellow);
     WRAPPERSIZE_TEST(Color,true,cwcf2,2,&cube,orange);
