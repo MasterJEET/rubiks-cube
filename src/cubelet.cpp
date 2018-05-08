@@ -33,48 +33,6 @@ bool areClockwise(const CubeletPosition& from, const CubeletPosition& to, const 
     return (cpTmp == to);
 }
 
-
-SetOfColor::SetOfColor(Color c1,Color c2, Color c3):
-    col_min(c1), col_mid(c2), col_max(c3)
-{
-    init();
-}
-
-SetOfColor::SetOfColor(std::vector<Color> vColor):
-    col_mid(undefcol), col_max(undefcol)
-{
-    if( vColor.size() == 0 || vColor.size() > 3 )
-        throw std::runtime_error(std::string() + __func__ + ": vector<Color> size can only be 1, 2 or 3." );
-    col_min = vColor[0];
-    if(vColor.size() > 1)
-        col_mid = vColor[1];
-    if(vColor.size() == 3)
-        col_max = vColor[2];
-
-    init();
-}
-
-void SetOfColor::init(){
-    if( col_min > col_mid )
-        std::swap(col_min, col_mid);
-    if( col_mid > col_max )
-        std::swap(col_mid, col_max);
-    if( col_min > col_mid )
-        std::swap(col_min, col_mid);
-
-    //At least one Color must be defined, it'll automatically
-    //be present in col_min due above check & swap
-    if( col_min == undefcol )
-        throw std::runtime_error(std::string() + __func__ + ": At least one Color must be defined.");
-
-    //Color must not be same
-    if( col_mid != undefcol && col_max == undefcol && col_min == col_mid)
-        throw std::runtime_error(std::string() + __func__ + ": Two defined Colors are same.");
-    if( ( col_mid != undefcol && col_max != undefcol ) &&\
-            ( col_min == col_mid || col_mid == col_max || col_max == col_min ) )
-        throw std::runtime_error(std::string() + __func__ + ": At least two among three defined Colors are same.");
-}
-
 Cubelet::Cubelet(std::vector<Facelet> _vecFac): vFacelet(_vecFac) {
     switch( _vecFac.size() ){
         case 1:
@@ -179,10 +137,10 @@ bool haveSameColors(const Cubelet& lhs, const Cubelet& rhs)
     for(const auto& fl: rhs.getFacelet())
         rhsCol.push_back(fl.getColor());
 
-    SetOfColor lhscs(lhsCol);
-    SetOfColor rhscs(rhsCol);
+    std::sort(lhsCol.begin(),lhsCol.end());
+    std::sort(rhsCol.begin(),rhsCol.end());
 
-    return lhscs == rhscs;
+    return lhsCol == rhsCol;
 
 }
 

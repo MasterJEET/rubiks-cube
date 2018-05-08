@@ -381,38 +381,16 @@ TEST_F(CubeTest, ColorSetToInt){
     EXPECT_THROW(cube.ColorSetToInt(white, yellow), std::runtime_error);
 
 
-    SetOfColor cWOB( white, orange, blue );
-    std::size_t tWOB = cube.ColorSetToInt(cWOB);
-    std::size_t tOBW = cube.ColorSetToInt(orange, blue, white);
-    std::size_t tBWO = cube.ColorSetToInt(blue, white, orange);
     std::size_t tYRB = cube.ColorSetToInt(yellow, red, blue);
     std::size_t tWOG = cube.ColorSetToInt(white, orange, green);
 
 
     cube.rotate(back);
-    EXPECT_EQ(tWOB, tOBW);
-    EXPECT_EQ(tWOB, tBWO);
     EXPECT_EQ(tYRB, 25);    cube.rotateMid(left);
     EXPECT_EQ(tWOG, 18);
     EXPECT_THROW(cube.ColorSetToInt(white, red, red), std::runtime_error);  //same Color
     EXPECT_THROW(cube.ColorSetToInt(green, red, orange), std::runtime_error);  //opposite Color
 
-    CubeletPosition cp(up, back, left);
-    vecFacelet vFac = cube.getCubelet(cp).getFacelet();
-    Color c1 = vFac[0].getColor();
-    Color c2 = vFac[1].getColor();
-    Color c3 = vFac[2].getColor();
-    SetOfColor cs1(c1, c2, c3);
-    
-    EXPECT_EQ( cube.ColorSetToInt(cs1), cube.ColorSetToInt(cp) );
-
-
-    CubeletPosition cp2(front);
-    vecFacelet vFac2 = cube.getCubelet(cp2).getFacelet();
-    Color c4 = vFac2[0].getColor();
-    SetOfColor cs2(c4);
-
-    EXPECT_EQ( cube.ColorSetToInt(cs2), cube.ColorSetToInt(cp2) );
 }
 
 

@@ -292,19 +292,11 @@ class Cube {
         }
 
         ///get Cubelet from three Colors
-        Cubelet getCubelet(const Color& c1, const Color& c2, const Color& c3) const{
-            return getCubelet({c1, c2, c3});
-        }
-
-        ///get Cubelet from two Colors
-        Cubelet getCubelet(const Color& c1, const Color& c2) const{
-            return getCubelet({c1, c2});
-        }
-
-        ///get Cubelet from ColorSet
-        Cubelet getCubelet(const SetOfColor& cs) const{
-            return getCubelet( aCletPos.at( ColorSetToInt(cs) ) );
-        }
+        Cubelet getCubelet(
+                const Color& c1,
+                const Color& c2 = undefcol,
+                const Color& c3 = undefcol
+                ) const;
 
         ///get Cubelet from CubeletPosition
         Cubelet getCubelet(const CubeletPosition pos) const{ return aCubelet.at( pos ); }
@@ -339,22 +331,20 @@ class Cube {
         bool anyOppColor(const Color& first, const Color& second, const Color& third) const;
 
 
-        /*! Map each SetOfColor to an int
+        /*! Map each set of color to an int
          *
          * The purpose of this mapping is, with this every combination of three or less Colors
          * can be associated with an integer. This integer can be used as a key for array
          * of CubeletPositions, effectively we'll have one-to-one correspondence between
          * set of three or less Colors and CubeletPositions.
          * */
-        std::size_t ColorSetToInt(const SetOfColor& cs) const;
-        std::size_t ColorSetToInt(const CubeletPosition& cp) const;
-        //std::size_t ColorSetToInt(const Color& c1, const Color& c2)const {return ColorSetToInt({c1,c2});};
+        std::size_t FaceSideToColor(const CubeletPosition& cp) const;
         std::size_t ColorSetToInt(
                 const Color& c1,
                 const Color& c2 = undefcol,
                 const Color& c3 = undefcol
                 ) const{
-            return ColorSetToInt({c1,c2,c3});
+            return CubeletColor(this,c1,c2,c3);
         }
 
 
@@ -363,7 +353,7 @@ class Cube {
          * Rotate the given Face of the Cube in clockwise [default] or anticlockwise
          * fashion as viewed from that (given FaceSide) side
          *
-         */
+         * */
         void rotateSide();
         void rotateSide(const FaceSide& f);
         void rotateSide(const FaceSide& f, std::size_t no_of_turns);

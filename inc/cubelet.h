@@ -22,30 +22,6 @@ typedef std::list<FaceletPosition> listFletPos;
 typedef CollectionWrapper<FaceSide,false> CubeletPosition;
 
 
-/*! \brief Set of Color
- *
- * It can hold a maximum of three Colors, which can be used to refer
- * a Cubelet which have these Colors on its Facelets
- *
- * */
-struct SetOfColor{
-    SetOfColor(Color c1, Color c2 = undefcol, Color c3 = undefcol);
-    SetOfColor(std::vector<Color> vColor);
-    Color min() const{ return col_min;};
-    Color mid() const{ return col_mid;};
-    Color max() const{ return col_max;};
-    friend bool operator==(const SetOfColor& lhs, const SetOfColor& rhs){
-        return lhs.min() == rhs.min() && lhs.mid() == rhs.mid() && lhs.max() == rhs.max();
-    }
-
-    private:
-    Color col_min;
-    Color col_mid;
-    Color col_max;
-    void init();
-};
-
-
 ///Returns one FaceSide shared by both the CubeletPositions
 FaceSide getCommonFace(const CubeletPosition&, const CubeletPosition&);
 

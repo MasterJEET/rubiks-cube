@@ -287,7 +287,6 @@ void Cube::createFaceFromLinearInput(
         switch(fp.ptype()){
             case center:
                 aNumOfCenterCol[col] ++;
-                //aFaceSide[col] = fp.first();
                 break;
             case edge:
                 aNumOfEdgeCol[col] ++;
@@ -304,6 +303,12 @@ void Cube::createFaceFromLinearInput(
 
 };
 
+Cubelet Cube::getCubelet(const Color& c1, const Color& c2, const Color& c3) const
+{
+    CubeletColor cc(this,c1,c2,c3);
+    CubeletPosition cp(aCletPos[cc]);
+    return aCubelet[cp];
+}
 
 void Cube::setOppColor(vecFacelet& vFacelet){
 
@@ -342,18 +347,20 @@ bool Cube::anyOppColor(const Color& c1, const Color& c2, const Color& c3) const{
 }
 
 
-std::size_t Cube::ColorSetToInt(const SetOfColor& cs) const{
-    return CubeletColor(this, cs.min(), cs.mid(), cs.max());
-}
-
-
-std::size_t Cube::ColorSetToInt(const CubeletPosition& cp) const
+std::size_t Cube::FaceSideToColor(const CubeletPosition& cp) const
 {
     std::vector<Color> vColor;
     for(const auto& fl: aCubelet[cp].getFacelet() )
         vColor.push_back( fl.getColor() );
 
-    return ColorSetToInt(vColor);
+    if(vColor.size() == 1)
+        return CubeletColor(this,vColor[0]);
+    if(vColor.size() == 2)
+        return CubeletColor(this,vColor[0],vColor[1]);
+    if(vColor.size() == 3)
+        return CubeletColor(this,vColor[0],vColor[1],vColor[2]);
+
+    throw std::runtime_error(std::string()+__func__+": vColor size must be either 1,2 or 3.");
 }
 
 
@@ -364,7 +371,7 @@ void Cube::createCube(vecFacelet& vFacelet){
         FaceletPosition fp(fs);
         CubeletPosition cp(fs);
         aCubelet[ cp ] = Cubelet( vFacelet[fp] );
-        aCletPos[ ColorSetToInt(cp) ] = cp;
+        aCletPos[ FaceSideToColor(cp) ] = cp;
     }
 
 
@@ -374,7 +381,7 @@ void Cube::createCube(vecFacelet& vFacelet){
         FaceletPosition fp2(vfs[1], vfs[0]);
         CubeletPosition cp(vfs);
         aCubelet[ cp ] = Cubelet( vFacelet[fp1], vFacelet[fp2] );
-        aCletPos[ ColorSetToInt(cp) ] = cp;
+        aCletPos[ FaceSideToColor(cp) ] = cp;
     }
 
 
@@ -385,7 +392,7 @@ void Cube::createCube(vecFacelet& vFacelet){
         FaceletPosition fp3(vfs[2], vfs[0], vfs[1]);
         CubeletPosition cp(vfs);
         aCubelet[ cp ] = Cubelet( vFacelet[fp1], vFacelet[fp2], vFacelet[fp3] );
-        aCletPos[ ColorSetToInt(cp) ] = cp;
+        aCletPos[ FaceSideToColor(cp) ] = cp;
     }
 }
 
@@ -454,7 +461,7 @@ void Cube::helper(const CubeletPosition& cp, FaceSide f, std::size_t n)
     for(std::size_t i = 0; i<n; i++)
     {
         aCubelet[cp] *= f;
-        aCletPos[ ColorSetToInt(cp) ] *= f;
+        aCletPos[ FaceSideToColor(cp) ] *= f;
     }
 }
 
